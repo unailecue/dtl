@@ -24,7 +24,6 @@ class App extends Component {
           <Header />
         </header>
         <TradingData />
-        <button onClick={this.clickEvent}>clickme</button>
       </div>
     );
   }
