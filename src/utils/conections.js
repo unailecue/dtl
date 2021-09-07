@@ -1,4 +1,4 @@
-const yahooCredentials = true;
+const yahooCredentials = false;
 module.exports = {
 
     checkValue(value) {

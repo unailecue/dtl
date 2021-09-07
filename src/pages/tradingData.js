@@ -1,5 +1,7 @@
 import React, { Component, useEffect } from "react";
 import Conect from "./../utils/conections";
+import { FaPlayCircle, FaPlay, FaStop, FaStopCircle } from 'react-icons/fa';
+import { AiFillPlayCircle, AiFillPauseCircle } from 'react-icons/ai';
 class TradingData extends Component {
     constructor(props) {
         super(props);
@@ -15,12 +17,14 @@ class TradingData extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.clickEvent = this.clickEvent.bind(this);
     }
+
+
     toggleExecuteValues() {
         //this funciton changes the values of the buttons and inputs after making a change
         if (this.state.executing) {
-            this.setState({ clickButtonText: "Buscar Precio", disableForm: !this.state.executing })
+            this.setState({ clickButtonText: "Buscar Precio", executing: !this.state.executing })
         } else {
-            this.setState({ clickButtonText: "Detener busqueda", disableForm: !this.state.executing })
+            this.setState({ clickButtonText: "Detener busqueda", executing: !this.state.executing })
         }
     }
 
@@ -31,9 +35,14 @@ class TradingData extends Component {
     async clickEvent(e) {
         //event when the main button is clicked
         e.preventDefault();
-        this.toggleExecuteValues()
+        console.log("estos son los valores del state", this.state);
         let valueToSend = this.state.value || e.target.value;
-        this.oldlooper(valueToSend)
+        if (valueToSend) {
+            this.toggleExecuteValues();
+            this.oldlooper(valueToSend);
+        } else {
+            alert("Debes seleccionar una opción, este no es el tipo de alerta que se requiere pero hay que avisar")
+        }
     }
 
     async oldlooper(valueToSend) {
@@ -41,7 +50,7 @@ class TradingData extends Component {
         let oldthis = this;
         var refreshIntervalId = setInterval(async function () {
 
-            if (oldthis.state.disableForm) {
+            if (oldthis.state.executing) {
                 let priceValue = await Conect.getPrice(valueToSend);
                 if (priceValue !== undefined) {
                     oldthis.setState({ priceValue })
@@ -58,15 +67,37 @@ class TradingData extends Component {
 
     render() {
         return (
-            <form>
-                <label>
-                    Nombre de la acción:
-                    <input type="text" disabled={this.state.executing} value={this.state.value} onChange={this.handleChange} />
-                </label>
-                <button onClick={this.clickEvent}>{this.state.clickButtonText}</button>
-                <div hidden={this.state.priceValue == null}>Precio de :{this.state.priceValue}</div>
-                <div hidden={!this.state.error}>Existio un error, por favor intenta mas tarde</div>
-            </form>
+            <div className="search-input container">
+                <form>
+                    <label>
+                        <span>
+                            Nombre de la acción:
+                            {/* <FaPlayCircle />
+                            <FaPlay />
+                            <FaStop />
+                            <FaStopCircle />
+                            <AiFillPlayCircle />
+                            <AiFillPauseCircle /> */}
+                        </span>
+                        <input type="text" disabled={this.state.executing} value={this.state.value} onChange={this.handleChange} />
+                    </label>
+                    <button onClick={this.clickEvent} className={!this.state.executing ? "button execute" : "button error"}>
+                        {/* {this.state.clickButtonText} */}
+                        <span className="tooltiptext">{this.state.executing ? "Pausar petición" : "Realizar petición"}</span>
+                        <div className="button-container">
+
+                            {this.state.executing ?
+
+                                <FaStop /> :
+                                <FaPlay />
+                            }
+                        </div>
+                    </button>
+
+                    <div hidden={this.state.priceValue == null}>Precio de :{this.state.priceValue}</div>
+                    <div hidden={!this.state.error}>Existio un error, por favor intenta mas tarde</div>
+                </form>
+            </div>
         );
     }
 }
