@@ -53,6 +53,7 @@ class PostionSizing extends Component {
 
         //operations
         this.excuteTransaction = this.excuteTransaction.bind(this);
+        this.updateRiskReward = this.updateRiskReward.bind(this);
 
 
 
@@ -63,23 +64,30 @@ class PostionSizing extends Component {
     }
     updateValues() {
         console.log("updatevalues");
+        let oldthis = this;
+        // esta funcion no deberia ser por timeout pero es la solucion que consigui por ahora
+        setTimeout(
+            () => {
+                oldthis.updateRiskReward();
+                oldthis.updateLoss();
+                oldthis.updateRiskPercent();
+                oldthis.updateReferenceShare();
+                oldthis.updateRewardPercent();
+
+            }, 100);
     }
 
     excuteTransaction() {
         console.log("execute Transaction");
         let sharesAmmount = this.state.sharesAmmount;
         let sharesPrice = this.state.sharesPrice;
-
         if (this.validateNumberValue(sharesAmmount) && this.validateNumberValue(sharesPrice)) {
-
             if (this.updateShares(sharesAmmount)) {
-
                 (sharesAmmount > 0) && this.updatePrice(sharesAmmount, sharesPrice);
                 this.setState({
                     transactions: [...this.state.transactions, { sharesAmmount, sharesPrice }]
                 })
             }
-
         } else {
             console.warn("se debe agregar una alerta, que si no funciona hay que mejorar aqui")
         }
@@ -95,14 +103,10 @@ class PostionSizing extends Component {
             addedShares += transactions[i].sharesAmmount;
         }
 
-        console.log({ addedSharesTimesPrice });
-        console.log({ addedShares });
         let averagePrice = this.numFormat(addedSharesTimesPrice / addedShares)
-        this.setState({ averagePrice })
-
-
+        this.setState({ averagePrice });
+        this.updateValues()
     }
-
 
 
     updateShares(sharesAmmount) {
@@ -112,26 +116,94 @@ class PostionSizing extends Component {
         for (var i = 0; i < transactions.length; i++) {
             shares += transactions[i].sharesAmmount;
         }
-
-
         if (long) {
             if (shares >= 0) {
-                this.setState({ shares })
+                this.setState({ shares });
+                this.updateValues();
                 return true
             } else {
-                console.warn("Para long no puedes tener numeros negativos");
+                console.error("Para long no puedes tener numeros negativos");
                 return false;
             }
         } else {
             if (shares <= 0) {
-                this.setState({ shares })
+                this.setState({ shares });
+                this.updateValues();
                 return true
             } else {
-                console.warn("Para short no puedes tener numeros positivos");
+                console.error("Para short no puedes tener numeros positivos");
                 return false;
             }
         }
 
+    }
+    updateRiskReward() {
+        let risk = this.state.risk;
+        let reward = this.state.reward;
+        let averagePrice = this.state.averagePrice;
+        if (risk && reward && averagePrice) {
+            let riskRewards = this.numFormat((reward - averagePrice) / (averagePrice - risk));
+            this.setState({ riskRewards })
+        } else {
+            console.warn("Por el momento no podemos sacar el riskReward por:")
+            risk == null && console.warn("No tenemos risk");
+            reward == null && console.warn("No tenemos reward");
+            averagePrice == null && console.warn("No tenemos averagePrice");
+        }
+    }
+    updateLoss() {
+        let risk = this.state.risk;
+        let shares = this.state.shares;
+        let averagePrice = this.state.averagePrice;
+        if (risk && shares && averagePrice) {
+            let loss = this.numFormat((averagePrice - risk) * shares);
+            this.setState({ loss })
+        } else {
+            console.warn("Por el momento no podemos sacar el updateLoss por:")
+            risk == null && console.warn("No tenemos risk");
+            shares == null && console.warn("No tenemos shares");
+            averagePrice == null && console.warn("No tenemos averagePrice");
+        }
+    }
+    updateRiskPercent() {
+        let risk = this.state.risk;
+        let averagePrice = this.state.averagePrice;
+        if (risk && averagePrice) {
+            let riskPercent = this.numFormat((risk - averagePrice) / averagePrice);
+            this.setState({ riskPercent })
+        } else {
+            console.warn("Por el momento no podemos sacar el RiskPercent por:")
+            risk == null && console.warn("No tenemos risk");
+            averagePrice == null && console.warn("No tenemos averagePrice");
+        }
+    }
+    updateRewardPercent() {
+        let reward = this.state.reward;
+        let averagePrice = this.state.averagePrice;
+        if (reward && averagePrice) {
+            let rewardPercent = this.numFormat((averagePrice - reward) / averagePrice);
+            this.setState({ rewardPercent })
+        } else {
+            console.warn("Por el momento no podemos sacar el RewardPercent por:")
+            reward == null && console.warn("No tenemos reward");
+            averagePrice == null && console.warn("No tenemos averagePrice");
+        }
+    }
+    updateReferenceShare() {
+        let maxLoss = this.state.maxLoss;
+        let loss = this.state.loss;
+        let referenceEntry = this.state.referenceEntry;
+        let risk = this.state.risk;
+        if (maxLoss && loss && referenceEntry && risk) {
+            let referenceShare = this.numFormat((maxLoss - loss) / (referenceEntry - risk));
+            this.setState({ referenceShare })
+        } else {
+            console.warn("Por el momento no podemos sacar el ReferenceShare por:")
+            maxLoss == null && console.warn("No tenemos maxLoss");
+            loss == null && console.warn("No tenemos loss");
+            referenceEntry == null && console.warn("No tenemos referenceEntry");
+            risk == null && console.warn("No tenemos risk");
+        }
     }
     numFormat(num) {
         return num.toFixed(3)
@@ -253,19 +325,19 @@ class PostionSizing extends Component {
                             <hr />
                             <Form.Group as={Row} className="mb-3">
                                 <Form.Label column sm="6">
-                                    Risk:
+                                    Reward:
                                 </Form.Label>
                                 <Col sm="6">
-                                    <Form.Control type="number" placeholder="Risk" onChange={this.getRisk} />
+                                    <Form.Control type="number" placeholder="Reward" onChange={this.getReward} />
                                 </Col>
                             </Form.Group>
                             <hr />
                             <Form.Group as={Row} className="mb-3">
                                 <Form.Label column sm="6">
-                                    Reward:
+                                    Risk:
                                 </Form.Label>
                                 <Col sm="6">
-                                    <Form.Control type="number" placeholder="Reward" onChange={this.getReward} />
+                                    <Form.Control type="number" placeholder="Risk" onChange={this.getRisk} />
                                 </Col>
                             </Form.Group>
                             <hr />
@@ -319,33 +391,7 @@ class PostionSizing extends Component {
                                             })}
                                         </tbody>
                                     </Table>
-
-
-
-
                                 }
-
-
-
-
-                                {/* {
-
-                                    console.log("transactions", this.state.transactions),
-
-
-                                    this.state.transactions.map(function (item, i) {
-                                        console.log('test');
-                                        return (
-
-
-                                            <Row key={i}>
-                                                <Col sm="6">{item?.sharesAmmount}</Col>
-                                                <Col sm="6">{item?.sharesPrice}</Col>
-                                            </Row>
-                                        )
-                                    })
-                                } */}
-
                                 <Form.Group as={Row} className="mb-12" >
                                     <Form.Label column sm="3">
                                         Shares in/out
@@ -377,10 +423,11 @@ class PostionSizing extends Component {
                         <p>Reward%:{this.state.rewardPercent}</p>
 
 
-                        <p>Reference shares:</p>
+                        <p>Reference shares:{this.state.referenceShare}</p>
                     </div>
                 </div>
                 <Button variant="dark" onClick={this.checkState}>Check State</Button>
+                {/* <Button variant="dark" onClick={this.updateRiskReward}>update</Button> */}
             </div>
         );
     }
