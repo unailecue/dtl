@@ -28,7 +28,7 @@ class PostionSizing extends Component {
             referenceShare: null,
 
             //records
-            transactions: [{ sharesAmmount: 100, sharesPrice: 3.9 }]
+            transactions: []
             //   
         };
 
@@ -40,7 +40,7 @@ class PostionSizing extends Component {
         this.onLongType = this.onLongType.bind(this);
         this.onShortType = this.onShortType.bind(this);
 
-        //inputs
+        //inputsc
         this.getMaxSize = this.getMaxSize.bind(this);
         this.getMaxLoss = this.getMaxLoss.bind(this);
         this.getRisk = this.getRisk.bind(this);
@@ -55,7 +55,11 @@ class PostionSizing extends Component {
         this.excuteTransaction = this.excuteTransaction.bind(this);
         this.updateRiskReward = this.updateRiskReward.bind(this);
 
-
+        // arreglar visualizacion de cajas
+        // archivo translate
+        // boton que maneje translate
+        // Buscar poder exportar el proyecto
+        // Revisar formulas
 
 
     }
@@ -169,7 +173,7 @@ class PostionSizing extends Component {
         let risk = this.state.risk;
         let averagePrice = this.state.averagePrice;
         if (risk && averagePrice) {
-            let riskPercent = this.numFormat((risk - averagePrice) / averagePrice);
+            let riskPercent = this.numFormat((risk - averagePrice) * 100 / averagePrice);
             this.setState({ riskPercent })
         } else {
             console.warn("Por el momento no podemos sacar el RiskPercent por:")
@@ -181,7 +185,7 @@ class PostionSizing extends Component {
         let reward = this.state.reward;
         let averagePrice = this.state.averagePrice;
         if (reward && averagePrice) {
-            let rewardPercent = this.numFormat((averagePrice - reward) / averagePrice);
+            let rewardPercent = this.numFormat((averagePrice - reward) * 100 / averagePrice);
             this.setState({ rewardPercent })
         } else {
             console.warn("Por el momento no podemos sacar el RewardPercent por:")
@@ -286,9 +290,17 @@ class PostionSizing extends Component {
     }
 
     onLongType() {
+        //hay que quitar los valores de acciones compradas
+        //cambios mas visuales cuando existan cambios aqui
+        //long tiene riesgo abajo y reward arriba
+        //short tiene riesgo arriba y reward abajo
         this.setState({ typeLong: true });
     }
     onShortType() {
+        //hay que quitar los valores de acciones compradas
+        //cambios mas visuales cuando existan cambios aqui
+        //long tiene riesgo abajo y reward arriba
+        //short tiene riesgo arriba y reward abajo
         this.setState({ typeLong: false });
     }
 
@@ -298,7 +310,8 @@ class PostionSizing extends Component {
                 <div className="space"></div>
                 <div className="row">
                     <div className="col-3">
-                        <div className="basic-parameters">
+                        <div className="basic-parameters grey">
+                            <h3>Rules</h3>
                             <ButtonGroup aria-label="Basic example">
                                 <ToggleButton type="checkbox" variant="outline-success" value={true} onClick={this.onLongType} checked={true === this.state.typeLong} >Long</ToggleButton>
                                 <ToggleButton type="checkbox" variant="outline-danger" value={false} onClick={this.onShortType} checked={false === this.state.typeLong} >Short</ToggleButton>
@@ -306,54 +319,77 @@ class PostionSizing extends Component {
                             <div className="space"></div>
 
                             <Form.Group as={Row} className="mb-3">
-                                <Form.Label column sm="6">
+                                <Form.Label column sm="5">
                                     Max Size:
                                 </Form.Label>
-                                <Col sm="6">
+                                <Col sm="5">
                                     <Form.Control type="number" placeholder="Max Size" onChange={this.getMaxSize} />
                                 </Col>
+                                <Form.Label column sm="2">
+                                    $
+                                </Form.Label>
                             </Form.Group>
                             <hr />
                             <Form.Group as={Row} className="mb-3">
-                                <Form.Label column sm="6">
+                                <Form.Label column sm="5">
                                     Max Loss:
                                 </Form.Label>
-                                <Col sm="6">
+                                <Col sm="5">
                                     <Form.Control type="number" placeholder="Max Loss" onChange={this.getMaxLoss} />
                                 </Col>
+                                <Form.Label column sm="2">
+                                    $
+                                </Form.Label>
                             </Form.Group>
                             <hr />
                             <Form.Group as={Row} className="mb-3">
-                                <Form.Label column sm="6">
+                                <Form.Label column sm="5">
                                     Reward:
                                 </Form.Label>
-                                <Col sm="6">
+                                <Col sm="5">
                                     <Form.Control type="number" placeholder="Reward" onChange={this.getReward} />
                                 </Col>
+                                <Form.Label column sm="2">
+                                    $/share
+                                </Form.Label>
                             </Form.Group>
                             <hr />
                             <Form.Group as={Row} className="mb-3">
-                                <Form.Label column sm="6">
+                                <Form.Label column sm="5">
                                     Risk:
                                 </Form.Label>
-                                <Col sm="6">
+                                <Col sm="5">
                                     <Form.Control type="number" placeholder="Risk" onChange={this.getRisk} />
                                 </Col>
+                                <Form.Label column sm="2">
+                                    $/share
+                                </Form.Label>
                             </Form.Group>
                             <hr />
                             <div className="space"></div>
                             <hr />
                             <Form.Group as={Row} className="mb-3">
-                                <Form.Label column sm="6">
+                                <Form.Label column sm="5">
                                     Reference entry:
                                 </Form.Label>
-                                <Col sm="6">
+                                <Col sm="5">
                                     <Form.Control type="number" placeholder="Reference entry" onChange={this.getReferenceEntry} />
                                 </Col>
+                                <Form.Label column sm="2">
+                                    $/share
+                                </Form.Label>
                             </Form.Group>
                             <hr />
                         </div>
 
+
+                    </div>
+
+
+
+
+
+                    <div className="col-10 grey">
 
                     </div>
                     <div className="col-5">
@@ -411,12 +447,13 @@ class PostionSizing extends Component {
                             </div>
                         </div>
                     </div>
-
+                    {/* Acomodar posiciones de cajas */}
 
                     <div className="col-4">
 
                         <p>Average Price:{this.state.averagePrice}</p>
                         <p>Shares: {this.state.shares}</p>
+                        <br />
                         <p>Risk Reward: {this.state.riskRewards}</p>
                         <p>Loss:{this.state.loss}</p>
                         <p>Risk%:{this.state.riskPercent}</p>

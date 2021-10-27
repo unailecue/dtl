@@ -1,5 +1,5 @@
 import React, { Component, useEffect } from "react";
-import Conect from "./../utils/conections";
+import * as Conect from "./../utils/conections";
 import { FaPlay, FaStop } from 'react-icons/fa';
 class TradingData extends Component {
     constructor(props) {
