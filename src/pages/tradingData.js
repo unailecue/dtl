@@ -1,12 +1,12 @@
 import React, { Component, useEffect } from "react";
-import Conect from "./../utils/conections";
-import { FaPlayCircle, FaPlay, FaStop, FaStopCircle } from 'react-icons/fa';
-import { AiFillPlayCircle, AiFillPauseCircle } from 'react-icons/ai';
+import * as Conect from "./../utils/conections";
+import { FaPlay, FaStop } from 'react-icons/fa';
 class TradingData extends Component {
     constructor(props) {
         super(props);
         this.state = {
             error: false,
+            resetFrequency: 1000,
             errorMessage: "",
             value: '',
             executing: false,
@@ -62,7 +62,7 @@ class TradingData extends Component {
             } else {
                 clearInterval(refreshIntervalId);
             }
-        }, 5000);
+        }, oldthis.state.resetFrequency);
     }
 
     render() {
@@ -72,12 +72,6 @@ class TradingData extends Component {
                     <label>
                         <span>
                             Nombre de la acción:
-                            {/* <FaPlayCircle />
-                            <FaPlay />
-                            <FaStop />
-                            <FaStopCircle />
-                            <AiFillPlayCircle />
-                            <AiFillPauseCircle /> */}
                         </span>
                         <input type="text" disabled={this.state.executing} value={this.state.value} onChange={this.handleChange} />
                     </label>
@@ -85,9 +79,7 @@ class TradingData extends Component {
                         {/* {this.state.clickButtonText} */}
                         <span className="tooltiptext">{this.state.executing ? "Pausar petición" : "Realizar petición"}</span>
                         <div className="button-container">
-
                             {this.state.executing ?
-
                                 <FaStop /> :
                                 <FaPlay />
                             }

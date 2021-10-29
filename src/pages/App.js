@@ -4,6 +4,7 @@ import "./../assets/style/components.css";
 
 
 import Header from "./../components/header";
+import PostionSizing from "./position-sizing";
 import TradingData from "./tradingData";
 
 class App extends Component {
@@ -23,7 +24,8 @@ class App extends Component {
         <header className="App-header">
           <Header />
         </header>
-        <TradingData />
+        {/* <TradingData /> */}
+        <PostionSizing />
       </div>
     );
   }
