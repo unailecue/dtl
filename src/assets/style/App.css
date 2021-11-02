@@ -38,9 +38,11 @@
   }
 }
 
+.box,
 .grey {
   background-color: rgb(234 231 231);
   width: 100%;
   padding: 15px;
   border-radius: 3px;
+  margin: 3px;
 }

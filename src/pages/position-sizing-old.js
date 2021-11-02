@@ -2,7 +2,7 @@ import React, { Component, useEffect } from "react";
 import "./../assets/style/components.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table } from 'react-bootstrap';
-class PostionSizing extends Component {
+class PostionSizingOld extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -469,4 +469,4 @@ class PostionSizing extends Component {
         );
     }
 }
-export default PostionSizing;
+export default PostionSizingOld;
