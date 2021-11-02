@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import PositionType from './PositionType'
 import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
 import PositionRulesInput from './PositionRulesInput';
-import { v4 as uniqueId } from "uuid";
+
 
 export default function PositionRules({ positionRules }) {
 
