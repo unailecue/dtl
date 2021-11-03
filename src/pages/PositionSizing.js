@@ -29,15 +29,15 @@ export default function PositionSizing() {
     const PositionTypeObj = { name: "Position Type", islong: isLong, setState: setIsLongChange, nameShortValue: "Short", nameLongValue: "Long" };
     const MaxSizeObj = { name: "Max Size", onlyDolarSymbol: true, setState: setMaxSize };
     const MaxLossOBJ = { name: "Max Loss", onlyDolarSymbol: true, setState: setMaxLoss };
-    const RewardOBJ = { name: "Reward", onlyDolarSymbol: false, setState: setReward };
-    const RiskOBJ = { name: "Risk", onlyDolarSymbol: false, setState: setRisk };
+    const RewardOBJ = { name: "Planned reward level", onlyDolarSymbol: false, setState: setReward };
+    const RiskOBJ = { name: "Planned risk level", onlyDolarSymbol: false, setState: setRisk };
 
     const averagePrice = { name: "Average price", onlyDolarSymbol: "$/sh", val: AvergaPrice };
-    const sharesTotals = { name: "Shares Totals", onlyDolarSymbol: "Sh", val: SharesTotals };
-    const sizeAvgPrice = { name: "Size Avg Price", onlyDolarSymbol: "$", val: SizeAvgPrice };
+    const sharesTotals = { name: "Total shares", onlyDolarSymbol: "Sh", val: SharesTotals };
+    const sizeAvgPrice = { name: "Average Price", onlyDolarSymbol: "$", val: SizeAvgPrice };
     const plannedReward = { name: "Planned Reward", onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
     const plannedLoss = { name: "Planned Loss", onlyDolarSymbol: false, dolars: PlannedLoss, percent: PlannedLossPerc };
-    const relationRiskReward = { name: "Relation Risk Reward", onlyDolarSymbol: ":1", val: RelationRiskReward };
+    const relationRiskReward = { name: "Risk Reward", onlyDolarSymbol: ":1", val: RelationRiskReward };
 
 
     const referenceEntry = { name: "Reference Entry", setState: setReferenceEntry };

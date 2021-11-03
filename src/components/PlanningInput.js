@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
+import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
 
 
 export default function PlanningInput({ planningInput }) {
@@ -25,8 +25,11 @@ export default function PlanningInput({ planningInput }) {
                             {planningInput.referenceEntry.name || "planningInput.referenceEntry.name"}
                         </Form.Label>
                         <Col xs="6">
+                            <InputGroup>
 
-                            <Form.Control type="number" ref={refEntry} onChange={handleChangeRefenceEntry} placeholder="$/sh" />
+                                <Form.Control type="number" ref={refEntry} onChange={handleChangeRefenceEntry} />
+                                <InputGroup.Text> $/sh</InputGroup.Text>
+                            </InputGroup>
                         </Col>
                     </Form.Group>
                 </Col>
@@ -36,7 +39,11 @@ export default function PlanningInput({ planningInput }) {
                             {planningInput.referenceShares.name || "planningInput.referenceEntry.name"}
                         </Form.Label>
                         <Col xs="6">
-                            <Form.Control type="number" ref={refShare} onChange={handleChangeRefenceShares} placeholder="sh" />
+                            <InputGroup>
+
+                                <Form.Control type="number" ref={refShare} onChange={handleChangeRefenceShares} />
+                                <InputGroup.Text> sh</InputGroup.Text>
+                            </InputGroup>
                         </Col>
                     </Form.Group>
                 </Col>

@@ -3,7 +3,7 @@ import React from 'react'
 export default function PositionExecute() {
     return (
         <div className="box">
-            Execute component positinos
+            Execute component positions
         </div>
     )
 }
