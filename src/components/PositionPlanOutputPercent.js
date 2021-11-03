@@ -10,13 +10,13 @@ export default function PositionPlanOutputPercent({ data }) {
             <Col xs="4">
 
                 <InputGroup>
-                    <Form.Control type="number" defaultValue={data.dolars} readOnly />
+                    <Form.Control type="number" value={data.dolars || 0} readOnly />
                     <InputGroup.Text>$</InputGroup.Text>
                 </InputGroup>
             </Col>
             <Col xs="4">
                 <InputGroup>
-                    <Form.Control type="number" defaultValue={data.percent} readOnly />
+                    <Form.Control type="number" value={data.percent || 0} readOnly />
                     <InputGroup.Text>%</InputGroup.Text>
                 </InputGroup>
             </Col>

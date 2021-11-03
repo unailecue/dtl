@@ -13,14 +13,17 @@ export default function PositionSizing() {
     const [Reward, setReward] = useState();
     const [Risk, setRisk] = useState();
 
-    const [AvergaPrice, setAvergaPrice] = useState(1);
-    const [SharesTotals, setSharesTotals] = useState(2);
-    const [SizeAvgPrice, setSizeAvgPrice] = useState(3);
-    const [PlannedReward, setPlannedReward] = useState(4);
-    const [PlannedLoss, setPlannedLoss] = useState(5);
-    const [PlannedRewardPerc, setPlannedRewardPerc] = useState(46);
-    const [PlannedLossPerc, setPlannedLossPerc] = useState(50);
-    const [RelationRiskReward, setRelationRiskReward] = useState(5);
+    const [AvergaPrice, setAvergaPrice] = useState();
+    const [SharesTotals, setSharesTotals] = useState();
+    const [SizeAvgPrice, setSizeAvgPrice] = useState();
+    const [PlannedReward, setPlannedReward] = useState();
+    const [PlannedLoss, setPlannedLoss] = useState();
+    const [PlannedRewardPerc, setPlannedRewardPerc] = useState();
+    const [PlannedLossPerc, setPlannedLossPerc] = useState();
+    const [RelationRiskReward, setRelationRiskReward] = useState();
+
+    const [ReferenceEntry, setReferenceEntry] = useState();
+    const [ReferenceShares, setReferenceShares] = useState();
 
     //Object construction
     const PositionTypeObj = { name: "Position Type", islong: isLong, setState: setIsLongChange, nameShortValue: "Short", nameLongValue: "Long" };
@@ -30,12 +33,17 @@ export default function PositionSizing() {
     const RiskOBJ = { name: "Risk", onlyDolarSymbol: false, setState: setRisk };
 
     const averagePrice = { name: "Average price", onlyDolarSymbol: "$/sh", val: AvergaPrice };
-    const sharesTotals = { name: "SharesTotals", onlyDolarSymbol: "Sh", val: SharesTotals };
-    const sizeAvgPrice = { name: "SizeAvgPrice", onlyDolarSymbol: "$", val: SizeAvgPrice };
-    const plannedReward = { name: "PlannedReward", onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
-    const plannedLoss = { name: "PlannedLoss", onlyDolarSymbol: false, dolars: PlannedLoss, percent: PlannedLossPerc };
+    const sharesTotals = { name: "Shares Totals", onlyDolarSymbol: "Sh", val: SharesTotals };
+    const sizeAvgPrice = { name: "Size Avg Price", onlyDolarSymbol: "$", val: SizeAvgPrice };
+    const plannedReward = { name: "Planned Reward", onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
+    const plannedLoss = { name: "Planned Loss", onlyDolarSymbol: false, dolars: PlannedLoss, percent: PlannedLossPerc };
+    const relationRiskReward = { name: "Relation Risk Reward", onlyDolarSymbol: ":1", val: RelationRiskReward };
 
-    const relationRiskReward = { name: "RelationRiskReward", onlyDolarSymbol: ":1", val: RelationRiskReward };
+
+    const referenceEntry = { name: "Reference Entry", setState: setReferenceEntry };
+    const referenceShares = { name: " Reference Shares", setState: setReferenceShares };
+
+
 
 
     //Unify objects by component
@@ -48,18 +56,32 @@ export default function PositionSizing() {
             plannedReward: plannedReward,
             plannedLoss: plannedLoss,
             relationRiskReward: relationRiskReward
+        },
+        planningInput: {
+            referenceEntry: referenceEntry,
+            referenceShares: referenceShares
         }
     }
 
     //Example of useEffect
     useEffect(() => {
 
-        console.log("Execute formulas validations", { MaxSize })
-        console.log("Execute formulas validations", { MaxLoss })
-        console.log("Execute formulas validations", { Reward })
-
+        // console.log("Execute formulas validations", { MaxSize })
+        // console.log("Execute formulas validations", { MaxLoss })
+        // console.log("Execute formulas validations", { Reward })
 
     }, [MaxLoss, isLong, MaxSize, Risk, Reward])
+    useEffect(() => {
+
+        // console.log("Execute formulas validations", { MaxSize })
+        // console.log("Execute formulas validations", { MaxLoss })
+        // console.log("Execute formulas validations", { Reward })
+        console.log({ ReferenceEntry })
+        console.log({ ReferenceShares })
+        console.log({ averagePrice })
+
+
+    }, [ReferenceEntry, ReferenceShares])
     return (
         <Container>
             <Row>

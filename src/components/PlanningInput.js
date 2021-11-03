@@ -4,13 +4,15 @@ import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } f
 
 
 export default function PlanningInput({ planningInput }) {
+    const refEntry = useRef()
+    const refShare = useRef()
 
-    const [ReferenceEntry, setReferenceEntry] = useState();
-    const [ReferenceShare, setReferenceShare] = useState();
-    function handleChange(e) {
-        console.log("handling")
+    function handleChangeRefenceEntry(e) {
+        planningInput.referenceEntry.setState(refEntry.current.value);
     }
-    const ref = useRef()
+    function handleChangeRefenceShares(e) {
+        planningInput.referenceShares.setState(refShare.current.value);
+    }
     return (
         <div className="personal-box-shadow">
             <h5>
@@ -20,26 +22,25 @@ export default function PlanningInput({ planningInput }) {
                 <Col sm="6">
                     <Form.Group as={Row} className="mb-3 align-items-center">
                         <Form.Label column xs="6">
-                            Reference Input
+                            {planningInput.referenceEntry.name || "planningInput.referenceEntry.name"}
                         </Form.Label>
                         <Col xs="6">
-                            <Form.Control type="number" ref={ref} onChange={handleChange} />
+
+                            <Form.Control type="number" ref={refEntry} onChange={handleChangeRefenceEntry} placeholder="$/sh" />
                         </Col>
                     </Form.Group>
                 </Col>
                 <Col sm="6">
                     <Form.Group as={Row} className="mb-3 align-items-center">
                         <Form.Label column xs="6">
-                            Reference Input
+                            {planningInput.referenceShares.name || "planningInput.referenceEntry.name"}
                         </Form.Label>
                         <Col xs="6">
-                            <Form.Control type="number" ref={ref} onChange={handleChange} />
+                            <Form.Control type="number" ref={refShare} onChange={handleChangeRefenceShares} placeholder="sh" />
                         </Col>
                     </Form.Group>
                 </Col>
             </Row>
-
-
         </div>
     )
 }

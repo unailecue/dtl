@@ -4,16 +4,13 @@ import PlanningInput from './PlanningInput';
 import PlanningResults from './PlanningResults';
 
 export default function PositionPlan({ positionPlan }) {
-    function handleChange(e) {
-        console.log("handling")
-    }
-
     const planningResults = positionPlan.planningResults;
+    const planningInput = positionPlan.planningInput;
     return (
         <div className="box">
             <Row>
                 <Col sm="6">
-                    <PlanningInput />
+                    <PlanningInput planningInput={planningInput} />
                 </Col>
                 <Col sm="6">
                     <PlanningResults planningResults={planningResults} />

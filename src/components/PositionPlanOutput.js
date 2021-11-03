@@ -12,7 +12,7 @@ export default function PositionPlanOutput({ data }) {
             </Form.Label>
             <Col xs="7">
                 <InputGroup>
-                    <Form.Control type="number" defaultValue={data.val} readOnly />
+                    <Form.Control type="number" value={data.val || 0} readOnly />
                     <InputGroup.Text> {data.onlyDolarSymbol}</InputGroup.Text>
                 </InputGroup>
             </Col>
