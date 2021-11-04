@@ -61,3 +61,16 @@
 .personal-box-shadow h5 {
   text-align: left;
 }
+
+.add-button,
+.edit {
+  margin-top: 25px;
+}
+
+.align-right {
+  text-align: end;
+}
+
+.delete-all {
+  color: rgb(135, 6, 6) !important
+}

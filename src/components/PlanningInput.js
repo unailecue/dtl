@@ -16,7 +16,7 @@ export default function PlanningInput({ planningInput }) {
     return (
         <div className="personal-box-shadow">
             <h5>
-                Planification
+                Plan
             </h5>
             <Row>
                 <Col sm="6">
