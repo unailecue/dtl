@@ -2,48 +2,33 @@ import React, { useEffect, useState } from 'react'
 import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
 import AddExecution from './AddExecution';
 import ExecutionResult from './ExecutionResult';
-const LOCAL_STORAGE = "storage.executedvalues";
 
-export default function PositionExecute() {
-    const [Executed, setExecuted] = useState([]);
-    useEffect(() => {
-        const storedExecuted = JSON.parse(localStorage.getItem(LOCAL_STORAGE))
-        if (storedExecuted) setExecuted(storedExecuted);
-    }, []);
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE, JSON.stringify(Executed))
-    }, [Executed])
+export default function PositionExecute({ positionExecute }) {
 
-    function ChangeStoredExecute(id, shares, price) {
-        const newExecuted = [...Executed];
-        const Execute = newExecuted.find(x => x.id === id);
-        Execute.shares = shares;
-        Execute.price = price;
-
-        setExecuted(newExecuted);
-
-    }
+    const addExecution = positionExecute.addExecution;
+    const executionResult = positionExecute.executionResult;
+    const executed = positionExecute.executed;
+    const setExecuted = positionExecute.setExecuted;
+    const changeStoredExecute = positionExecute.changeStoredExecute;
     return (
         <div className="box">
             <h5>Execute</h5>
             <Row>
                 <Col>
                     <Row>
-                        <AddExecution executed={Executed} setExecuted={setExecuted} />
+                        <AddExecution addExecution={addExecution} executed={executed} setExecuted={setExecuted} />
                     </Row>
                     <Row>
-                        <ExecutionResult executed={Executed} changeStoredExecute={ChangeStoredExecute} />
+                        <ExecutionResult executionResult={executionResult} executed={executed} changeStoredExecute={changeStoredExecute} />
                     </Row>
                 </Col>
                 <Col>
-                    <Row className="container">
+                    <Row>
                         <div className="personal-box-shadow">
-                            {/* <AddExecution /> */}
                         </div>
                     </Row>
-                    <Row className="container">
+                    <Row >
                         <div className="personal-box-shadow">
-                            {/* <AddExecution /> */}
                         </div>
                     </Row>
                 </Col>

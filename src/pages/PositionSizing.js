@@ -5,6 +5,8 @@ import PositionRules from '../components/PositionRules';
 import PositionPlan from '../components/PositionPlan';
 import PositionExecute from '../components/PositionExecute';
 import { Trans } from 'react-i18next';
+const LOCAL_STORAGE = "storage.executedvalues";
+
 
 export default function PositionSizing() {
 
@@ -28,6 +30,8 @@ export default function PositionSizing() {
 
     const [ReferenceEntry, setReferenceEntry] = useState();
     const [ReferenceShares, setReferenceShares] = useState();
+
+    const [Executed, setExecuted] = useState([]);
 
     //Object construction
     const PositionTypeObj = { name: <Trans>Position Type</Trans>, islong: isLong, setState: setIsLongChange, nameShortValue: <Trans>Short</Trans>, nameLongValue: <Trans>Long</Trans> };
@@ -67,27 +71,72 @@ export default function PositionSizing() {
             referenceEntry: referenceEntry,
             referenceShares: referenceShares
         }
+    };
+
+    const positionExecute = {
+        addExecution: {
+            title: <Trans>Add executions</Trans>,
+            deleteAllText: <Trans>delete all</Trans>,
+            sharesLabel: <Trans>Shares</Trans>,
+            priceLabel: <Trans>Price</Trans>,
+            addButtonText: <Trans>Add</Trans>,
+            isLong: isLong,
+            swal: {
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                deletedTitle: 'Deleted!',
+                deletedText: 'Your inputs has been deleted.',
+
+                //--------- this files should have translation but swal is not understanding it
+
+                // title: <Trans>Are you sure?</Trans>,
+                // text: <Trans>You won't be able to revert this!</Trans>,
+                // confirmButtonText: <Trans>Yes, delete it!</Trans>,
+                // cancelButtonText: <Trans>Cancel</Trans>,
+                // deletedTitle: <Trans>Deleted!</Trans>,
+                // deletedText: <Trans>Your inputs has been deleted.</Trans>,
+            }
+        },
+        executionResult: {
+            title: <Trans>Executions</Trans>,
+            sharesLabel: <Trans>Shares</Trans>,
+            priceLabel: <Trans>Price</Trans>,
+            editButtonText: <Trans>Edit</Trans>,
+            enableButtonText: <Trans>Enable</Trans>,
+
+        },
+        executed: Executed,
+        setExecuted: setExecuted,
+        changeStoredExecute: ChangeStoredExecute
+
+
+    };
+
+    // Effect to get execution values from local storage
+    useEffect(() => {
+        const storedExecuted = JSON.parse(localStorage.getItem(LOCAL_STORAGE))
+        if (storedExecuted) setExecuted(storedExecuted);
+    }, []);
+    // Effect to set execution values to local storage
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE, JSON.stringify(Executed))
+    }, [Executed])
+
+    //function that allow us to edit a execution value
+    function ChangeStoredExecute(id, shares, price) {
+        const newExecuted = [...Executed];
+        const Execute = newExecuted.find(x => x.id === id);
+        Execute.shares = shares;
+        Execute.price = price;
+        setExecuted(newExecuted);
     }
 
-    //Example of useEffect
-    useEffect(() => {
-
-        // console.log("Execute formulas validations", { MaxSize })
-        // console.log("Execute formulas validations", { MaxLoss })
-        // console.log("Execute formulas validations", { Reward })
-
-    }, [MaxLoss, isLong, MaxSize, Risk, Reward])
-    useEffect(() => {
-
-        // console.log("Execute formulas validations", { MaxSize })
-        // console.log("Execute formulas validations", { MaxLoss })
-        // console.log("Execute formulas validations", { Reward })
-        console.log({ ReferenceEntry })
-        console.log({ ReferenceShares })
-        console.log({ averagePrice })
 
 
-    }, [ReferenceEntry, ReferenceShares])
+
+
     return (
         <Container>
             <Row>
@@ -102,7 +151,7 @@ export default function PositionSizing() {
                     </Row>
                     <Row>
                         <Col>
-                            <PositionExecute />
+                            <PositionExecute positionExecute={positionExecute} />
                         </Col>
                     </Row>
                 </Col>

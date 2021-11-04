@@ -3,9 +3,20 @@ import { v4 as uniqueId } from "uuid";
 import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
 import Swal from 'sweetalert2'
 
-export default function AddExecution({ executed, setExecuted }) {
+export default function AddExecution({ addExecution, executed, setExecuted }) {
+    const title = addExecution.title;
+    const deleteAllText = addExecution.deleteAllText;
+    const sharesLabel = addExecution.sharesLabel;
+    const priceLabel = addExecution.priceLabel;
+    const addButtonText = addExecution.addButtonText;
+    const isLong = addExecution.isLong;
+    const swalTexts = addExecution.swal;
+
+
     const sharesInput = useRef()
     const priceInput = useRef()
+
+    //Fuction that add the value of the execution to the executions obj
     function handleAddExecutions(e) {
         const shares = sharesInput.current.value;
         const price = priceInput.current.value;
@@ -16,24 +27,29 @@ export default function AddExecution({ executed, setExecuted }) {
         priceInput.current.value = "";
     }
     function handleDeleteExecutions(e) {
+        const title = swalTexts.title;
+        const text = swalTexts.text;
+        const confirmButtonText = swalTexts.confirmButtonText;
+        const cancelButtonText = swalTexts.cancelButtonText;
+        const deletedTitle = swalTexts.deletedTitle;
+        const deletedText = swalTexts.deletedText;
 
-
-
-        //confirmacion
+        //Confirmation that you will delete all reacords
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: title,
+            text: text,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: cancelButtonText
         }).then((result) => {
             if (result.isConfirmed) {
                 setExecuted([]);
                 Swal.fire(
-                    'Deleted!',
-                    'Your inputs has been deleted.',
+                    deletedTitle,
+                    deletedText,
                     'success'
                 )
             }
@@ -47,21 +63,18 @@ export default function AddExecution({ executed, setExecuted }) {
                 <Row>
                     <Col>
                         <h5>
-                            Add executions
+                            {title}
                         </h5>
                     </Col>
                     <Col className="align-right">
-                        <Button className="justify-content-end delete-all" variant="link" onClick={handleDeleteExecutions} >delete all</Button>
+                        <Button className="justify-content-end delete-all" variant="link" onClick={handleDeleteExecutions} >{deleteAllText}</Button>
                     </Col>
                 </Row>
-
-
-
                 <Row>
                     <Col>
                         <Form.Group as={Row} className="mb-3 align-items-center">
                             <Col>
-                                Shares
+                                {sharesLabel}
                                 <InputGroup>
 
                                     <Form.Control type="number" ref={sharesInput} />
@@ -73,7 +86,7 @@ export default function AddExecution({ executed, setExecuted }) {
                     <Col>
                         <Form.Group as={Row} className="mb-3 align-items-center">
                             <Col>
-                                Price
+                                {priceLabel}
                                 <InputGroup>
                                     <Form.Control type="number" ref={priceInput} />
                                     <InputGroup.Text> $/sh</InputGroup.Text>
@@ -82,12 +95,8 @@ export default function AddExecution({ executed, setExecuted }) {
                         </Form.Group>
                     </Col>
                     <Col xs="3">
-                        <Button className="add-button" onClick={handleAddExecutions} >Add</Button>
+                        <Button className="add-button" variant={isLong ? "success" : "danger"} onClick={handleAddExecutions} >{addButtonText}</Button>
                     </Col>
-                    {/* <Col xs="4">
-                        <Button onClick={() => { console.log(executed) }}>check</Button>
-                    </Col> */}
-
                 </Row>
             </div>
         </div>
