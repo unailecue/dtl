@@ -7,6 +7,7 @@ import PositionPlanOutputPercent from './PositionPlanOutputPercent';
 
 export default function PlanningResults({ planningResults }) {
 
+    const title = planningResults.title;
     const averagePrice = planningResults.averagePrice;
     const sharesTotals = planningResults.sharesTotals;
     const sizeAvgPrice = planningResults.sizeAvgPrice;
@@ -20,7 +21,7 @@ export default function PlanningResults({ planningResults }) {
         <>
             <div className="personal-box-shadow">
                 <h5>
-                    Plan results
+                    {title}
                 </h5>
                 <Row>
                     <Col sm="12">

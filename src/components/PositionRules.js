@@ -6,6 +6,7 @@ import PositionRulesInput from './PositionRulesInput';
 
 export default function PositionRules({ positionRules }) {
 
+    const title = positionRules.title;
     const positionType = positionRules.PositionType;
     const MaxSize = positionRules.MaxSize;
     const MaxLoss = positionRules.MaxLoss;
@@ -17,7 +18,7 @@ export default function PositionRules({ positionRules }) {
         <div className="box">
             <Container>
                 <h3>
-                    Rules
+                    {title}
                 </h3>
                 <hr />
                 <Row>

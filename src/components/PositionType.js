@@ -17,8 +17,8 @@ export default function PositionType({ data }) {
     return (
         <>
             <ButtonGroup aria-label="Transaction type">
-                <ToggleButton type="checkbox" variant="outline-success" onClick={handleChangeLong} checked={data.islong} >Long</ToggleButton>
-                <ToggleButton type="checkbox" variant="outline-danger" onClick={handleChangeShort} checked={!data.islong}>Short</ToggleButton>
+                <ToggleButton type="checkbox" variant="outline-success" onClick={handleChangeLong} checked={data.islong} >{data.nameLongValue || "Long"}</ToggleButton>
+                <ToggleButton type="checkbox" variant="outline-danger" onClick={handleChangeShort} checked={!data.islong}>{data.nameShortValue || "Short"}</ToggleButton>
             </ButtonGroup>
         </>
     )
