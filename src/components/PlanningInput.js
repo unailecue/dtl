@@ -7,6 +7,7 @@ export default function PlanningInput({ planningInput }) {
     const refEntry = useRef()
     const refShare = useRef()
 
+    const title = planningInput.title;
     function handleChangeRefenceEntry(e) {
         planningInput.referenceEntry.setState(refEntry.current.value);
     }
@@ -16,7 +17,7 @@ export default function PlanningInput({ planningInput }) {
     return (
         <div className="personal-box-shadow">
             <h5>
-                Plan
+                {title}
             </h5>
             <Row>
                 <Col sm="6">

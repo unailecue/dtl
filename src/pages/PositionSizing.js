@@ -4,7 +4,11 @@ import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } f
 import PositionRules from '../components/PositionRules';
 import PositionPlan from '../components/PositionPlan';
 import PositionExecute from '../components/PositionExecute';
+import { Trans } from 'react-i18next';
+
 export default function PositionSizing() {
+
+
 
     //Variables and Hooks for important data
     const [isLong, setIsLongChange] = useState(true);
@@ -26,30 +30,31 @@ export default function PositionSizing() {
     const [ReferenceShares, setReferenceShares] = useState();
 
     //Object construction
-    const PositionTypeObj = { name: "Position Type", islong: isLong, setState: setIsLongChange, nameShortValue: "Short", nameLongValue: "Long" };
-    const MaxSizeObj = { name: "Max Size", onlyDolarSymbol: true, setState: setMaxSize };
-    const MaxLossOBJ = { name: "Max Loss", onlyDolarSymbol: true, setState: setMaxLoss };
-    const RewardOBJ = { name: "Planned reward level", onlyDolarSymbol: false, setState: setReward };
-    const RiskOBJ = { name: "Planned risk level", onlyDolarSymbol: false, setState: setRisk };
+    const PositionTypeObj = { name: <Trans>Position Type</Trans>, islong: isLong, setState: setIsLongChange, nameShortValue: <Trans>Short</Trans>, nameLongValue: <Trans>Long</Trans> };
+    const MaxSizeObj = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true, setState: setMaxSize };
+    const MaxLossOBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true, setState: setMaxLoss };
+    const RewardOBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false, setState: setReward };
+    const RiskOBJ = { name: <Trans>Planned risk level</Trans>, onlyDolarSymbol: false, setState: setRisk };
 
-    const averagePrice = { name: "Average price", onlyDolarSymbol: "$/sh", val: AvergaPrice };
-    const sharesTotals = { name: "Total shares", onlyDolarSymbol: "Sh", val: SharesTotals };
-    const sizeAvgPrice = { name: "Average Price", onlyDolarSymbol: "$", val: SizeAvgPrice };
-    const plannedReward = { name: "Planned Reward", onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
-    const plannedLoss = { name: "Planned Loss", onlyDolarSymbol: false, dolars: PlannedLoss, percent: PlannedLossPerc };
-    const relationRiskReward = { name: "Risk Reward", onlyDolarSymbol: ":1", val: RelationRiskReward };
+    const averagePrice = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AvergaPrice };
+    const sharesTotals = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotals };
+    const sizeAvgPrice = { name: <Trans>Average Price</Trans>, onlyDolarSymbol: "$", val: SizeAvgPrice };
+    const plannedReward = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
+    const plannedLoss = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false, dolars: PlannedLoss, percent: PlannedLossPerc };
+    const relationRiskReward = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1", val: RelationRiskReward };
 
 
-    const referenceEntry = { name: "Reference Entry", setState: setReferenceEntry };
-    const referenceShares = { name: " Reference Shares", setState: setReferenceShares };
+    const referenceEntry = { name: <Trans>Reference Entry</Trans>, setState: setReferenceEntry };
+    const referenceShares = { name: <Trans>Reference Shares</Trans>, setState: setReferenceShares };
 
 
 
 
     //Unify objects by component
-    const positionRules = { MaxSize: MaxSizeObj, PositionType: PositionTypeObj, MaxLoss: MaxLossOBJ, Reward: RewardOBJ, Risk: RiskOBJ }
+    const positionRules = { title: <Trans>Rules</Trans>, MaxSize: MaxSizeObj, PositionType: PositionTypeObj, MaxLoss: MaxLossOBJ, Reward: RewardOBJ, Risk: RiskOBJ }
     const positionPlan = {
         planningResults: {
+            title: <Trans>Plan results</Trans>,
             averagePrice: averagePrice,
             sharesTotals: sharesTotals,
             sizeAvgPrice: sizeAvgPrice,
@@ -58,6 +63,7 @@ export default function PositionSizing() {
             relationRiskReward: relationRiskReward
         },
         planningInput: {
+            title: <Trans>Plan</Trans>,
             referenceEntry: referenceEntry,
             referenceShares: referenceShares
         }

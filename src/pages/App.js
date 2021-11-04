@@ -7,7 +7,6 @@ import Header from "./../components/header";
 import PostionSizingOld from "./position-sizing-old";
 import PositionSizing from "./PositionSizing";
 import TradingData from "./tradingData";
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +18,7 @@ class App extends Component {
     console.log("si entro en el elemento padre");
     console.log(this.state);
   }
+
   render() {
     return (
       <div className="App">
