@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
-import { v4 as uniqueId } from "uuid";
+import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+
 
 export default function PositionRulesInput({ data }) {
     const ref = useRef()
@@ -15,12 +15,12 @@ export default function PositionRulesInput({ data }) {
             <Form.Label column xs="4">
                 {data.name}
             </Form.Label>
-            <Col xs="6">
-                <Form.Control type="number" ref={ref} onChange={handleChange} />
+            <Col xs="8">
+                <InputGroup>
+                    <Form.Control type="number" ref={ref} onChange={handleChange} />
+                    <InputGroup.Text>    {data.onlyDolarSymbol ? "$" : "$/sh"}</InputGroup.Text>
+                </InputGroup>
             </Col>
-            <Form.Label column xs="1">
-                {data.onlyDolarSymbol ? "$" : "$/share"}
-            </Form.Label>
         </Form.Group>
     )
 }

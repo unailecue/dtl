@@ -16,8 +16,6 @@
 .App-header {
   background-color: #282c34;
   display: flex;
-  /* flex-direction: column; */
-  /* align-items: center; */
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
@@ -45,4 +43,34 @@
   padding: 15px;
   border-radius: 3px;
   margin: 3px;
+}
+
+.personal-box-shadow {
+  box-shadow: 0px 3px 5px 2px lightgrey;
+  padding: 5px 15px;
+  border-radius: 3px;
+  transition: ease-in 0.3s;
+  text-align: start;
+}
+
+.personal-box-shadow:hover {
+  box-shadow: 0px 3px 5px 3px lightgrey;
+  transition: ease-in 0.3s;
+}
+
+.personal-box-shadow h5 {
+  text-align: left;
+}
+
+.add-button,
+.edit {
+  margin-top: 25px;
+}
+
+.align-right {
+  text-align: end;
+}
+
+.delete-all {
+  color: rgb(135, 6, 6) !important
 }

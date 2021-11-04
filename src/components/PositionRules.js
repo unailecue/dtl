@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import PositionType from './PositionType'
 import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
 import PositionRulesInput from './PositionRulesInput';
-import { v4 as uniqueId } from "uuid";
+
 
 export default function PositionRules({ positionRules }) {
 
+    const title = positionRules.title;
     const positionType = positionRules.PositionType;
     const MaxSize = positionRules.MaxSize;
     const MaxLoss = positionRules.MaxLoss;
@@ -17,7 +18,7 @@ export default function PositionRules({ positionRules }) {
         <div className="box">
             <Container>
                 <h3>
-                    Rules
+                    {title}
                 </h3>
                 <hr />
                 <Row>
