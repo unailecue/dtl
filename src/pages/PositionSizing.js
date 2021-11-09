@@ -5,7 +5,8 @@ import PositionRules from '../components/PositionRules';
 import PositionPlan from '../components/PositionPlan';
 import PositionExecute from '../components/PositionExecute';
 import { Trans } from 'react-i18next';
-const LOCAL_STORAGE = "storage.executedvalues";
+const LOCAL_STORAGE_EXE = "storage.executedvalues";
+const LOCAL_STORAGE_TYPE = "storage.type";
 
 
 export default function PositionSizing() {
@@ -13,7 +14,7 @@ export default function PositionSizing() {
 
 
     //Variables and Hooks for important data
-    const [isLong, setIsLongChange] = useState(true);
+    const [isLong, setIsLongChange] = useState();
     const [MaxSize, setMaxSize] = useState();
     const [MaxLoss, setMaxLoss] = useState();
     const [Reward, setReward] = useState();
@@ -33,14 +34,14 @@ export default function PositionSizing() {
 
     const [Executed, setExecuted] = useState([]);
 
-    const [AvergaPriceExe, setAvergaPriceExe] = useState(0);
+    const [AveragePriceExe, setAveragePriceExe] = useState(0);
     const [SharesTotalsExe, setSharesTotalsExe] = useState(0);
-    const [SizeAvgPriceExe, setSizeAvgPriceExe] = useState();
-    const [PlannedRewardExe, setPlannedRewardExe] = useState();
-    const [PlannedLossExe, setPlannedLossExe] = useState();
-    const [PlannedRewardPercExe, setPlannedRewardPercExe] = useState();
-    const [PlannedLossPercExe, setPlannedLossPercExe] = useState();
-    const [RelationRiskRewardExe, setRelationRiskRewardExe] = useState();
+    const [SizeAvgPriceExe, setSizeAvgPriceExe] = useState(0);
+    const [PlannedRewardExe, setPlannedRewardExe] = useState(0);
+    const [PlannedLossExe, setPlannedLossExe] = useState(0);
+    const [PlannedRewardPercExe, setPlannedRewardPercExe] = useState(0);
+    const [PlannedLossPercExe, setPlannedLossPercExe] = useState(0);
+    const [RelationRiskRewardExe, setRelationRiskRewardExe] = useState(0);
 
     //Object construction
     const PositionTypeObj = { name: <Trans>Position Type</Trans>, islong: isLong, setState: setIsLongChange, nameShortValue: <Trans>Short</Trans>, nameLongValue: <Trans>Long</Trans> };
@@ -60,7 +61,7 @@ export default function PositionSizing() {
     const referenceEntry = { name: <Trans>Reference Entry</Trans>, setState: setReferenceEntry };
     const referenceShares = { name: <Trans>Reference Shares</Trans>, setState: setReferenceShares };
 
-    const averagePriceExe = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AvergaPriceExe };
+    const averagePriceExe = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AveragePriceExe };
     const sharesTotalsExe = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotalsExe };
     const sizeAvgPriceExe = { name: <Trans>Average Price</Trans>, onlyDolarSymbol: "$", val: SizeAvgPriceExe };
     const plannedRewardExe = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedRewardExe, percent: PlannedRewardPercExe };
@@ -138,14 +139,23 @@ export default function PositionSizing() {
 
     // Effect to get execution values from local storage
     useEffect(() => {
-        const storedExecuted = JSON.parse(localStorage.getItem(LOCAL_STORAGE))
+        const storedExecuted = JSON.parse(localStorage.getItem(LOCAL_STORAGE_EXE))
         if (storedExecuted) setExecuted(storedExecuted);
+        const storedType = localStorage.getItem(LOCAL_STORAGE_TYPE);
+        let tempIsLong = true;
+        if (storedType == "false") tempIsLong = false
+        setIsLongChange(tempIsLong);
     }, []);
     // Effect to set execution values to local storage
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE, JSON.stringify(Executed));
+        localStorage.setItem(LOCAL_STORAGE_EXE, JSON.stringify(Executed));
         calcAveragePriceExe();
     }, [Executed])
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_TYPE, isLong);
+        //TODO: here we should delete all previus executions, it should not be easy to change type
+    }, [isLong])
+
 
     //function that allow us to edit a execution value
     function ChangeStoredExecute(id, shares, price) {
@@ -159,6 +169,7 @@ export default function PositionSizing() {
 
     // CALCULATION AREA
     function calcAveragePriceExe() {
+        //TODO we need to get ammount of shares will be positive or negative, in short it will not be positive and long is the opposite
         const newExecuted = [...Executed];
         let tempAvg = 0;
         let tempTotalSh = 0;
@@ -170,8 +181,28 @@ export default function PositionSizing() {
             }
             tempTotalSh += parseFloat(executed.shares);
         })
-        setAvergaPriceExe(tempAvg.toFixed(3));
+        setAveragePriceExe(tempAvg.toFixed(3));
         setSharesTotalsExe(tempTotalSh.toFixed(2));
+        setSizeAvgPriceExe((tempTotalSh * tempAvg).toFixed(2));
+    }
+
+    useEffect(() => {
+        calcRewardExe();
+    }, [averagePriceExe, Reward, sharesTotalsExe])
+    function calcRewardExe() {
+        // ! Check this formula!!!
+        // TODO we have to check if we dont have all the values (validations)
+        console.log("ejecuta metodo de prueba", { PlannedRewardExe })
+        if (AveragePriceExe != 0) {
+            setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe).toFixed(3))
+            setPlannedRewardExe(((Reward - AveragePriceExe) / SharesTotalsExe).toFixed(3))
+        }
+    }
+    function calcLossExe() {
+        // rw - avgp / ave - rsk
+    }
+    function calcRiskRewardMedia() {
+        // rw - avgp / ave - rsk
     }
     // CALCULATION AREA
 
