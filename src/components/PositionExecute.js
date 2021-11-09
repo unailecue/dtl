@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
 import AddExecution from './AddExecution';
 import ExecutionResult from './ExecutionResult';
+import PlanningResults from './PlanningResults';
+
 
 export default function PositionExecute({ positionExecute }) {
 
@@ -10,6 +12,7 @@ export default function PositionExecute({ positionExecute }) {
     const executed = positionExecute.executed;
     const setExecuted = positionExecute.setExecuted;
     const changeStoredExecute = positionExecute.changeStoredExecute;
+    const planningResults = positionExecute.planningResults;
     return (
         <div className="box">
             <h5>Execute</h5>
@@ -23,14 +26,7 @@ export default function PositionExecute({ positionExecute }) {
                     </Row>
                 </Col>
                 <Col>
-                    <Row>
-                        <div className="personal-box-shadow">
-                        </div>
-                    </Row>
-                    <Row >
-                        <div className="personal-box-shadow">
-                        </div>
-                    </Row>
+                    <PlanningResults planningResults={planningResults} />
                 </Col>
 
             </Row>
