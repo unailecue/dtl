@@ -34,20 +34,19 @@ export default function ExecutionValue({ executionResult, values, changeStoredEx
     return (
         <div>
             <Row>
+
                 <Col>
                     <Form.Group as={Row} className="mb-3 align-items-center">
-
                         <Col>
-                            {sharesLabel}
-                            <Form.Control type="number" ref={sharesInput} placeholder="Sh" defaultValue={shares} disabled />
+                            <Form.Control type="number" ref={priceInput} placeholder="$/sh" defaultValue={price} disabled />
                         </Col>
                     </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group as={Row} className="mb-3 align-items-center">
+
                         <Col>
-                            {priceLabel}
-                            <Form.Control type="number" ref={priceInput} placeholder="$/sh" defaultValue={price} disabled />
+                            <Form.Control type="number" ref={sharesInput} placeholder="Sh" defaultValue={shares} disabled />
                         </Col>
                     </Form.Group>
                 </Col>

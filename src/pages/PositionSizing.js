@@ -1,12 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useSetState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
 import PositionRules from '../components/PositionRules';
 import PositionPlan from '../components/PositionPlan';
 import PositionExecute from '../components/PositionExecute';
 import { Trans } from 'react-i18next';
+import { render } from 'react-dom';
+
 const LOCAL_STORAGE_EXE = "storage.executedvalues";
 const LOCAL_STORAGE_TYPE = "storage.type";
+
+const ROUND = {
+    price: 3,
+    shares: 2
+}
 
 
 export default function PositionSizing() {
@@ -52,61 +59,30 @@ export default function PositionSizing() {
 
     const averagePrice = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AvergaPrice };
     const sharesTotals = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotals };
-    const sizeAvgPrice = { name: <Trans>Average Price</Trans>, onlyDolarSymbol: "$", val: SizeAvgPrice };
+    const sizeAvgPrice = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", val: SizeAvgPrice };
     const plannedReward = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
     const plannedLoss = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false, dolars: PlannedLoss, percent: PlannedLossPerc };
     const relationRiskReward = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1", val: RelationRiskReward };
 
 
     const referenceEntry = { name: <Trans>Reference Entry</Trans>, setState: setReferenceEntry };
-    const referenceShares = { name: <Trans>Reference Shares</Trans>, setState: setReferenceShares };
+    const referenceShares = { name: <Trans>Reference Shares</Trans>, setState: setReferenceShares, referenceShare: ReferenceShares };
 
     const averagePriceExe = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AveragePriceExe };
     const sharesTotalsExe = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotalsExe };
-    const sizeAvgPriceExe = { name: <Trans>Average Price</Trans>, onlyDolarSymbol: "$", val: SizeAvgPriceExe };
+    const sizeAvgPriceExe = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", val: SizeAvgPriceExe };
     const plannedRewardExe = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedRewardExe, percent: PlannedRewardPercExe };
     const plannedLossExe = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false, dolars: PlannedLossExe, percent: PlannedLossPercExe };
     const relationRiskRewardExe = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1", val: RelationRiskRewardExe };
 
-
-
     //Unify objects by component
     const positionRules = { title: <Trans>Rules</Trans>, MaxSize: MaxSizeObj, PositionType: PositionTypeObj, MaxLoss: MaxLossOBJ, Reward: RewardOBJ, Risk: RiskOBJ }
-    const positionPlan = {
-        planningResults: {
-            title: <Trans>Plan results</Trans>,
-            averagePrice: averagePrice,
-            sharesTotals: sharesTotals,
-            sizeAvgPrice: sizeAvgPrice,
-            plannedReward: plannedReward,
-            plannedLoss: plannedLoss,
-            relationRiskReward: relationRiskReward
-        },
-        planningInput: {
-            title: <Trans>Plan</Trans>,
-            referenceEntry: referenceEntry,
-            referenceShares: referenceShares
-        }
-    };
-
+    const positionPlan = { planningResults: { title: <Trans>Plan results</Trans>, averagePrice: averagePrice, sharesTotals: sharesTotals, sizeAvgPrice: sizeAvgPrice, plannedReward: plannedReward, plannedLoss: plannedLoss, relationRiskReward: relationRiskReward }, planningInput: { title: <Trans>Plan</Trans>, referenceEntry: referenceEntry, referenceShares: referenceShares } };
     const positionExecute = {
         addExecution: {
-            title: <Trans>Add executions</Trans>,
-            deleteAllText: <Trans>delete all</Trans>,
-            sharesLabel: <Trans>Shares</Trans>,
-            priceLabel: <Trans>Price</Trans>,
-            addButtonText: <Trans>Add</Trans>,
-            isLong: isLong,
-            swal: {
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel',
-                deletedTitle: 'Deleted!',
-                deletedText: 'Your inputs has been deleted.',
-
+            title: <Trans>Add executions</Trans>, deleteAllText: <Trans>delete all</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, addButtonText: <Trans>Add</Trans>, isLong: isLong, swal: {
+                title: 'Are you sure?', text: "You won't be able to revert this!", confirmButtonText: 'Yes, delete it!', cancelButtonText: 'Cancel', deletedTitle: 'Deleted!', deletedText: 'Your inputs has been deleted.',
                 //--------- this files should have translation but swal is not understanding it
-
                 // title: <Trans>Are you sure?</Trans>,
                 // text: <Trans>You won't be able to revert this!</Trans>,
                 // confirmButtonText: <Trans>Yes, delete it!</Trans>,
@@ -114,27 +90,7 @@ export default function PositionSizing() {
                 // deletedTitle: <Trans>Deleted!</Trans>,
                 // deletedText: <Trans>Your inputs has been deleted.</Trans>,
             }
-        },
-        executionResult: {
-            title: <Trans>Executions</Trans>,
-            sharesLabel: <Trans>Shares</Trans>,
-            priceLabel: <Trans>Price</Trans>,
-            editButtonText: <Trans>Edit</Trans>,
-            enableButtonText: <Trans>Enable</Trans>,
-
-        },
-        executed: Executed,
-        setExecuted: setExecuted,
-        changeStoredExecute: ChangeStoredExecute,
-        planningResults: {
-            title: <Trans>Plan results executed</Trans>,
-            averagePrice: averagePriceExe,
-            sharesTotals: sharesTotalsExe,
-            sizeAvgPrice: sizeAvgPriceExe,
-            plannedReward: plannedRewardExe,
-            plannedLoss: plannedLossExe,
-            relationRiskReward: relationRiskRewardExe
-        }
+        }, executionResult: { title: <Trans>Executions</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, editButtonText: <Trans>Edit</Trans>, enableButtonText: <Trans>Enable</Trans>, }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
     };
 
     // Effect to get execution values from local storage
@@ -151,10 +107,20 @@ export default function PositionSizing() {
         localStorage.setItem(LOCAL_STORAGE_EXE, JSON.stringify(Executed));
         calcAveragePriceExe();
     }, [Executed])
+    // Effect to set type to localStorage
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_TYPE, isLong);
-        //TODO: here we should delete all previus executions, it should not be easy to change type
+        //TODO: alert the user if is sure to do it
+        //TODO: delete all previous exceution
     }, [isLong])
+
+    //Use Effect for formula Calculations
+    useEffect(() => {
+        calcRewardExe();
+        calcLossExe();
+        calcRiskRewardMedia();
+        calcReferenceShare()
+    }, [averagePriceExe, Reward, sharesTotalsExe, Risk])
 
 
     //function that allow us to edit a execution value
@@ -181,31 +147,68 @@ export default function PositionSizing() {
             }
             tempTotalSh += parseFloat(executed.shares);
         })
-        setAveragePriceExe(tempAvg.toFixed(3));
-        setSharesTotalsExe(tempTotalSh.toFixed(2));
-        setSizeAvgPriceExe((tempTotalSh * tempAvg).toFixed(2));
+        setAveragePriceExe(tempAvg.toFixed(ROUND.price));
+        setSharesTotalsExe(tempTotalSh.toFixed(ROUND.shares));
+        setSizeAvgPriceExe((tempTotalSh * tempAvg).toFixed(ROUND.shares));
     }
 
-    useEffect(() => {
-        calcRewardExe();
-    }, [averagePriceExe, Reward, sharesTotalsExe])
+
+    // TODO we have to check if we dont have all the values (validations)
     function calcRewardExe() {
-        // ! Check this formula!!!
-        // TODO we have to check if we dont have all the values (validations)
-        console.log("ejecuta metodo de prueba", { PlannedRewardExe })
-        if (AveragePriceExe != 0) {
-            setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe).toFixed(3))
-            setPlannedRewardExe(((Reward - AveragePriceExe) / SharesTotalsExe).toFixed(3))
-        }
+        if (AveragePriceExe == 0) return;
+        setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe).toFixed(ROUND.price))
+        setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe).toFixed(ROUND.price))
     }
     function calcLossExe() {
-        // rw - avgp / ave - rsk
+
+        if (AveragePriceExe == 0) return;
+        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe).toFixed(ROUND.price))
+        setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe).toFixed(ROUND.price));
     }
     function calcRiskRewardMedia() {
-        // rw - avgp / ave - rsk
+        if ((AveragePriceExe - Risk) == 0) return;
+        setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)).toFixed(ROUND.price))
+
+    }
+
+    function calcPlannedLoss() {
+
+
+        // setPlannedLossPerc(averagePrice -  );
+        setPlannedLoss(1);
+    }
+    function calcReferenceShare() {
+
+
+        let firstWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
+        let secondWay = (parseFloat(MaxSize) + parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
+        let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk))) + parseFloat(SizeAvgPriceExe);
+        if (compare > -MaxSize) {
+            console.log("con formula asquerosa")
+            setReferenceShares(secondWay);
+        } else {
+            console.log("sin formula")
+            setReferenceShares(firstWay);
+
+        }
+
+        console.log("referenceShare", ReferenceShares)
+    }
+
+    function calcAveragePrice() {
+        // (averpExe *sizeExe ) +Reference entryE*Referencedhares )) /referenceshare -ssexecuted
+
+        setAvergaPrice(-1)
     }
     // CALCULATION AREA
 
+    //TODO se tiene que poner una regla que dependiendo del tipo se puede agregar shares o no, siendo positivo o negativo
+    //TODO se tiene que parsear todo a float desde el us state
+    //TODO todos los valores de reglas en memoria
+    //TODO si se puede buscar que los metodos de memoria esten en elementos hijos para no sobrecargar al padre
+    //TODO mejorar estilos en ejecuciones
+    //! se tiene que tener el valor del campo bloqueado 
+    //todo sort y cover  buy sell
 
 
 

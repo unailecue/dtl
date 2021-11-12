@@ -28,7 +28,7 @@ class App extends Component {
         {/* <TradingData /> */}
         <PositionSizing />
         <hr />
-        <PostionSizingOld />
+        {/* <PostionSizingOld /> */}
 
       </div>
     );

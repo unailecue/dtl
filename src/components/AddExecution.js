@@ -71,6 +71,18 @@ export default function AddExecution({ addExecution, executed, setExecuted }) {
                     </Col>
                 </Row>
                 <Row>
+
+                    <Col>
+                        <Form.Group as={Row} className="mb-3 align-items-center">
+                            <Col>
+                                {priceLabel}
+                                <InputGroup>
+                                    <Form.Control type="number" ref={priceInput} />
+                                    <InputGroup.Text> $/sh</InputGroup.Text>
+                                </InputGroup>
+                            </Col>
+                        </Form.Group>
+                    </Col>
                     <Col>
                         <Form.Group as={Row} className="mb-3 align-items-center">
                             <Col>
@@ -79,17 +91,6 @@ export default function AddExecution({ addExecution, executed, setExecuted }) {
 
                                     <Form.Control type="number" ref={sharesInput} />
                                     <InputGroup.Text> sh</InputGroup.Text>
-                                </InputGroup>
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group as={Row} className="mb-3 align-items-center">
-                            <Col>
-                                {priceLabel}
-                                <InputGroup>
-                                    <Form.Control type="number" ref={priceInput} />
-                                    <InputGroup.Text> $/sh</InputGroup.Text>
                                 </InputGroup>
                             </Col>
                         </Form.Group>

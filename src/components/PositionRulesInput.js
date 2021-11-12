@@ -7,15 +7,15 @@ export default function PositionRulesInput({ data }) {
 
     function handleChange(e) {
 
-        data.setState(ref.current.value)
+        data.setState(parseFloat(ref.current.value));
     }
 
     return (
         <Form.Group as={Row} className="mb-3 align-items-center">
-            <Form.Label column xs="4">
+            <Form.Label column xs="12">
                 {data.name}
             </Form.Label>
-            <Col xs="8">
+            <Col xs="12">
                 <InputGroup>
                     <Form.Control type="number" ref={ref} onChange={handleChange} />
                     <InputGroup.Text>    {data.onlyDolarSymbol ? "$" : "$/sh"}</InputGroup.Text>
