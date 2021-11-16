@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import ExecutionValue from './ExecutionValue'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 
 export default function ExecutionResult({ executionResult, executed, changeStoredExecute, buyButton, sellButton, typeValues }) {

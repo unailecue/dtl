@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { v4 as uniqueId } from "uuid";
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
 import Swal from 'sweetalert2'
 
 export default function AddExecution({ addExecution, executed, setExecuted, typeValues }) {
@@ -19,23 +19,16 @@ export default function AddExecution({ addExecution, executed, setExecuted, type
 
 
     function handleBuyExecution(e) {
-        const shares = sharesInput.current.value;
-        isLong ?
-            handleAddExecutions(Math.abs(parseFloat(shares)))
-            :
-            handleAddExecutions(Math.abs(parseFloat(shares)) * -1)
+        const shares = Math.abs(parseFloat(sharesInput.current.value));
+        isLong ? handleAddExecutions(shares) : handleAddExecutions((shares) * -1)
     }
     function handleSellExecution(e) {
-        const shares = sharesInput.current.value;
-        isLong ?
-            handleAddExecutions(Math.abs(parseFloat(shares)) * -1)
-            :
-            handleAddExecutions(Math.abs(parseFloat(shares)))
+        const shares = Math.abs(parseFloat(sharesInput.current.value));
+        isLong ? handleAddExecutions((shares) * -1) : handleAddExecutions(shares)
     }
     //Fuction that add the value of the execution to the executions obj
     function handleAddExecutions(shares) {
         const price = priceInput.current.value;
-
         if (shares === "" || price === "") return
         setExecuted([...executed, { id: uniqueId(), shares: shares, price: price }])
         sharesInput.current.value = "";
