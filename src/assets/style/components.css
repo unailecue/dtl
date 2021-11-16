@@ -93,12 +93,6 @@
     opacity: 1;
 }
 
-.basic-parameters {
-    display: inline-grid;
-}
-
-.register-parameters {}
-
 .space {
     margin-top: 5px;
     padding-bottom: 5px;
@@ -108,9 +102,4 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-    -moz-appearance: textfield;
 }

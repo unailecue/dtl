@@ -51,7 +51,7 @@ export default function PositionSizing() {
     const [RelationRiskRewardExe, setRelationRiskRewardExe] = useState(0);
 
     //Object construction
-    const PositionTypeObj = { name: <Trans>Position Type</Trans>, islong: isLong, setState: setIsLongChange, nameShortValue: <Trans>Short</Trans>, nameLongValue: <Trans>Long</Trans> };
+    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted: setExecuted, Executed: Executed };
     const MaxSizeObj = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true, setState: setMaxSize };
     const MaxLossOBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true, setState: setMaxLoss };
     const RewardOBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false, setState: setReward };
@@ -111,8 +111,6 @@ export default function PositionSizing() {
     // Effect to set type to localStorage
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_TYPE, isLong);
-        //TODO: alert the user if is sure to do it
-        //TODO: delete all previous exceution
     }, [isLong])
 
     //Use Effect for formula Calculations
@@ -136,7 +134,9 @@ export default function PositionSizing() {
 
     // CALCULATION AREA
     function calcAveragePriceExe() {
-        //TODO we need to get ammount of shares will be positive or negative, in short it will not be positive and long is the opposite
+
+        //? next todo should be here?
+        //todo: we need to get ammount of shares will be positive or negative, in short it will not be positive and long is the opposite
         const newExecuted = [...Executed];
         let tempAvg = 0;
         let tempTotalSh = 0;
@@ -154,7 +154,7 @@ export default function PositionSizing() {
     }
 
 
-    // TODO we have to check if we dont have all the values (validations)
+    // todo: formulaInputValidations -> we have to check if we dont have all the values (validations)
     function calcRewardExe() {
         if (AveragePriceExe == 0) return;
         setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe).toFixed(ROUND.price))
@@ -204,16 +204,10 @@ export default function PositionSizing() {
         setAvergaPrice(-1)
     }
     // CALCULATION AREA
-
-    //TODO se tiene que poner una regla que dependiendo del tipo se puede agregar shares o no, siendo positivo o negativo
-    //TODO se tiene que parsear todo a float desde el us state
-    //TODO todos los valores de reglas en memoria
-    //TODO si se puede buscar que los metodos de memoria esten en elementos hijos para no sobrecargar al padre
-    //TODO mejorar estilos en ejecuciones
-    //! se tiene que tener el valor del campo bloqueado 
-    //TODO Round volverla context y usarla solo a manera visual en las vistas
-
-
+    //todo checkFloatValues -> we need to check if all useState variables are float, and try to keep it that way throug the code
+    //todo memoryCheck -> add all rule values to localStorage memory
+    //todo stringInComponent -> remove all string passing throgh components and have them in each component whit the TRANS tag
+    //todo useContext -> we need to use context to pass round values, to only have round in the visual components
 
     return (
         <Container>
