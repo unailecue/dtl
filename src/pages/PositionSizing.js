@@ -22,22 +22,22 @@ export default function PositionSizing() {
 
     //Variables and Hooks for important data
     const [isLong, setIsLongChange] = useState();
-    const [MaxSize, setMaxSize] = useState();
-    const [MaxLoss, setMaxLoss] = useState();
-    const [Reward, setReward] = useState();
-    const [Risk, setRisk] = useState();
+    const [MaxSize, setMaxSize] = useState(0);
+    const [MaxLoss, setMaxLoss] = useState(0);
+    const [Reward, setReward] = useState(0);
+    const [Risk, setRisk] = useState(0);
 
-    const [AvergaPrice, setAvergaPrice] = useState();
-    const [SharesTotals, setSharesTotals] = useState();
-    const [SizeAvgPrice, setSizeAvgPrice] = useState();
-    const [PlannedReward, setPlannedReward] = useState();
-    const [PlannedLoss, setPlannedLoss] = useState();
-    const [PlannedRewardPerc, setPlannedRewardPerc] = useState();
-    const [PlannedLossPerc, setPlannedLossPerc] = useState();
-    const [RelationRiskReward, setRelationRiskReward] = useState();
+    const [AvergaPrice, setAvergaPrice] = useState(0);
+    const [SharesTotals, setSharesTotals] = useState(0);
+    const [SizeAvgPrice, setSizeAvgPrice] = useState(0);
+    const [PlannedReward, setPlannedReward] = useState(0);
+    const [PlannedLoss, setPlannedLoss] = useState(0);
+    const [PlannedRewardPerc, setPlannedRewardPerc] = useState(0);
+    const [PlannedLossPerc, setPlannedLossPerc] = useState(0);
+    const [RelationRiskReward, setRelationRiskReward] = useState(0);
 
-    const [ReferenceEntry, setReferenceEntry] = useState();
-    const [ReferenceShares, setReferenceShares] = useState();
+    const [ReferenceEntry, setReferenceEntry] = useState(0);
+    const [ReferenceShares, setReferenceShares] = useState(0);
 
     const [Executed, setExecuted] = useState([]);
 
@@ -79,8 +79,9 @@ export default function PositionSizing() {
     const positionRules = { title: <Trans>Rules</Trans>, MaxSize: MaxSizeObj, PositionType: PositionTypeObj, MaxLoss: MaxLossOBJ, Reward: RewardOBJ, Risk: RiskOBJ }
     const positionPlan = { planningResults: { title: <Trans>Plan results</Trans>, averagePrice: averagePrice, sharesTotals: sharesTotals, sizeAvgPrice: sizeAvgPrice, plannedReward: plannedReward, plannedLoss: plannedLoss, relationRiskReward: relationRiskReward }, planningInput: { title: <Trans>Plan</Trans>, referenceEntry: referenceEntry, referenceShares: referenceShares } };
     const positionExecute = {
+        isLong: isLong,
         addExecution: {
-            title: <Trans>Add executions</Trans>, deleteAllText: <Trans>delete all</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, addButtonText: <Trans>Add</Trans>, isLong: isLong, swal: {
+            title: <Trans>Add executions</Trans>, deleteAllText: <Trans>delete all</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, addButtonText: <Trans>Add</Trans>, sellButtonText: <Trans>sellButtonText</Trans>, isLong: isLong, swal: {
                 title: 'Are you sure?', text: "You won't be able to revert this!", confirmButtonText: 'Yes, delete it!', cancelButtonText: 'Cancel', deletedTitle: 'Deleted!', deletedText: 'Your inputs has been deleted.',
                 //--------- this files should have translation but swal is not understanding it
                 // title: <Trans>Are you sure?</Trans>,
@@ -180,18 +181,20 @@ export default function PositionSizing() {
     function calcReferenceShare() {
 
 
+        if (isNaN(MaxLoss) && isNaN(PlannedLossExe) && isNaN(ReferenceEntry) && isNaN(Risk)) return console.log("no aplica")
         let firstWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
         let secondWay = (parseFloat(MaxSize) + parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
         let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk))) + parseFloat(SizeAvgPriceExe);
         if (compare > -MaxSize) {
             console.log("con formula asquerosa")
+            if (isNaN(secondWay)) return;
             setReferenceShares(secondWay);
         } else {
             console.log("sin formula")
+            if (isNaN(firstWay)) return;
             setReferenceShares(firstWay);
 
         }
-
         console.log("referenceShare", ReferenceShares)
     }
 
@@ -208,7 +211,7 @@ export default function PositionSizing() {
     //TODO si se puede buscar que los metodos de memoria esten en elementos hijos para no sobrecargar al padre
     //TODO mejorar estilos en ejecuciones
     //! se tiene que tener el valor del campo bloqueado 
-    //todo sort y cover  buy sell
+    //TODO Round volverla context y usarla solo a manera visual en las vistas
 
 
 

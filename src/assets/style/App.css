@@ -62,9 +62,9 @@
   text-align: left;
 }
 
-.add-button {
+/* .add-button {
   margin-top: 24px;
-}
+} */
 
 .align-right {
   text-align: end;
@@ -72,4 +72,18 @@
 
 .delete-all {
   color: rgb(135, 6, 6) !important
+}
+
+.center {
+  text-align: center;
+}
+
+button.btn:hover {
+  border-radius: 10px;
+  transition: 3s;
+}
+
+button.btn {
+  transition: 1s;
+  border-radius: 2px;
 }
