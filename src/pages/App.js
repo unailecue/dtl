@@ -29,6 +29,8 @@ class App extends Component {
         </header>
         {/* <TradingData /> */}
         <PositionSizing />
+
+
         <hr />
         {/* <PostionSizingOld /> */}
 
