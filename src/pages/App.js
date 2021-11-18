@@ -19,6 +19,8 @@ class App extends Component {
     console.log(this.state);
   }
 
+
+
   render() {
     return (
       <div className="App">
@@ -28,7 +30,7 @@ class App extends Component {
         {/* <TradingData /> */}
         <PositionSizing />
         <hr />
-        <PostionSizingOld />
+        {/* <PostionSizingOld /> */}
 
       </div>
     );

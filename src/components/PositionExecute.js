@@ -1,51 +1,52 @@
 import React, { useEffect, useState } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import AddExecution from './AddExecution';
 import ExecutionResult from './ExecutionResult';
-const LOCAL_STORAGE = "storage.executedvalues";
+import PlanningResults from './PlanningResults';
+import { Trans } from 'react-i18next';
 
-export default function PositionExecute() {
-    const [Executed, setExecuted] = useState([]);
+const addButtonTextLong = <Trans>Buy</Trans>;
+const addButtonTextShort = <Trans>Short</Trans>
+const sellButtonTextLong = <Trans>Sell</Trans>
+const sellButtonTextShort = <Trans>Cover</Trans>
+
+export default function PositionExecute({ positionExecute }) {
+    const [ButtonTextBuyValue, setButtonTextBuyValue] = useState(addButtonTextLong)
+    const [ButtonTextSellValue, setButtonTextSellValue] = useState(sellButtonTextLong)
+    const isLong = positionExecute.isLong;
     useEffect(() => {
-        const storedExecuted = JSON.parse(localStorage.getItem(LOCAL_STORAGE))
-        if (storedExecuted) setExecuted(storedExecuted);
-    }, []);
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE, JSON.stringify(Executed))
-    }, [Executed])
+        if (isLong == true) {
+            setButtonTextBuyValue(addButtonTextLong)
+            setButtonTextSellValue(sellButtonTextLong)
+        } else {
+            setButtonTextBuyValue(addButtonTextShort)
+            setButtonTextSellValue(sellButtonTextShort)
+        }
+    }, [isLong])
 
-    function ChangeStoredExecute(id, shares, price) {
-        const newExecuted = [...Executed];
-        const Execute = newExecuted.find(x => x.id === id);
-        Execute.shares = shares;
-        Execute.price = price;
+    const typeValues = { isLong: isLong, buyButton: ButtonTextBuyValue, sellButton: ButtonTextSellValue }
 
-        setExecuted(newExecuted);
+    const addExecution = positionExecute.addExecution;
+    const executionResult = positionExecute.executionResult;
+    const executed = positionExecute.executed;
+    const setExecuted = positionExecute.setExecuted;
+    const changeStoredExecute = positionExecute.changeStoredExecute;
+    const planningResults = positionExecute.planningResults;
 
-    }
     return (
         <div className="box">
             <h5>Execute</h5>
             <Row>
                 <Col>
                     <Row>
-                        <AddExecution executed={Executed} setExecuted={setExecuted} />
+                        <AddExecution addExecution={addExecution} executed={executed} setExecuted={setExecuted} typeValues={typeValues} />
                     </Row>
                     <Row>
-                        <ExecutionResult executed={Executed} changeStoredExecute={ChangeStoredExecute} />
+                        <ExecutionResult executionResult={executionResult} executed={executed} changeStoredExecute={changeStoredExecute} typeValues={typeValues} />
                     </Row>
                 </Col>
                 <Col>
-                    <Row className="container">
-                        <div className="personal-box-shadow">
-                            {/* <AddExecution /> */}
-                        </div>
-                    </Row>
-                    <Row className="container">
-                        <div className="personal-box-shadow">
-                            {/* <AddExecution /> */}
-                        </div>
-                    </Row>
+                    <PlanningResults planningResults={planningResults} />
                 </Col>
 
             </Row>

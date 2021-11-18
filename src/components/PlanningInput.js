@@ -5,14 +5,11 @@ import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, In
 
 export default function PlanningInput({ planningInput }) {
     const refEntry = useRef()
-    const refShare = useRef()
+    const referenceShare = planningInput.referenceShares.referenceShare;
 
     const title = planningInput.title;
     function handleChangeRefenceEntry(e) {
-        planningInput.referenceEntry.setState(refEntry.current.value);
-    }
-    function handleChangeRefenceShares(e) {
-        planningInput.referenceShares.setState(refShare.current.value);
+        planningInput.referenceEntry.setState(parseFloat(refEntry.current.value));
     }
     return (
         <div className="personal-box-shadow">
@@ -22,10 +19,10 @@ export default function PlanningInput({ planningInput }) {
             <Row>
                 <Col sm="6">
                     <Form.Group as={Row} className="mb-3 align-items-center">
-                        <Form.Label column xs="6">
-                            {planningInput.referenceEntry.name || "planningInput.referenceEntry.name"}
+                        <Form.Label column xs="12">
+                            {planningInput.referenceEntry.name}
                         </Form.Label>
-                        <Col xs="6">
+                        <Col xs="12">
                             <InputGroup>
 
                                 <Form.Control type="number" ref={refEntry} onChange={handleChangeRefenceEntry} />
@@ -36,13 +33,13 @@ export default function PlanningInput({ planningInput }) {
                 </Col>
                 <Col sm="6">
                     <Form.Group as={Row} className="mb-3 align-items-center">
-                        <Form.Label column xs="6">
-                            {planningInput.referenceShares.name || "planningInput.referenceEntry.name"}
+                        <Form.Label column xs="12">
+                            {planningInput.referenceShares.name}
                         </Form.Label>
-                        <Col xs="6">
+                        <Col xs="12">
                             <InputGroup>
 
-                                <Form.Control type="number" ref={refShare} onChange={handleChangeRefenceShares} />
+                                <Form.Control type="number" readOnly value={referenceShare} />
                                 <InputGroup.Text> sh</InputGroup.Text>
                             </InputGroup>
                         </Col>
