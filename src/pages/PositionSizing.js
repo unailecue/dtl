@@ -183,7 +183,7 @@ export default function PositionSizing() {
 
         if (isNaN(MaxLoss) && isNaN(PlannedLossExe) && isNaN(ReferenceEntry) && isNaN(Risk)) return console.log("no aplica")
         let firstWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
-        let secondWay = (parseFloat(MaxSize) + parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
+        let secondWay = (parseFloat(MaxSize) - parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
         let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk))) + parseFloat(SizeAvgPriceExe);
         if (compare > -MaxSize) {
             console.log("con formula asquerosa")
