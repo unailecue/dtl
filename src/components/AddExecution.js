@@ -1,9 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { v4 as uniqueId } from "uuid";
 import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
-import Swal from 'sweetalert2'
 import * as utils from "../utils/utils";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function AddExecution({ addExecution, executed, setExecuted, typeValues }) {
@@ -19,37 +17,36 @@ export default function AddExecution({ addExecution, executed, setExecuted, type
 
     const sharesInput = useRef()
     const priceInput = useRef()
-    // todo: ValidateFieldsInput -> we need to create a method that allows to check if the imputs are positive numbers, shares and price
 
     function handleBuyExecution(e) {
         const shares = utils.abs(sharesInput.current.value);
         isLong ? handleAddExecutions(shares) : handleAddExecutions((shares) * -1)
     }
+
     function handleSellExecution(e) {
         const shares = utils.abs(sharesInput.current.value);
         isLong ? handleAddExecutions((shares) * -1) : handleAddExecutions(shares)
     }
-    //Fuction that add the value of the execution to the executions obj
+
+    //*Fuction that add the value of the execution to the executions obj
     function handleAddExecutions(shares) {
-        // todo: validationsCheckExecutions -> we need to check if the execution that we are trying to do is logical for the execution type, not having positive shares in short or negative ammount of share in long 
-        // validations.printArrat(executed);
+        if (!utils.validationsCheckExecutions(isLong, executed, shares)) return
         const price = utils.abs(priceInput.current.value);
         if (shares === "" || price === "" || shares === 0 || price === 0) return
         setExecuted([...executed, { id: uniqueId(), shares: shares, price: price }])
         sharesInput.current.value = "";
         priceInput.current.value = "";
     }
+
     function handleDeleteExecutions(e) {
         //* Confirmation that you will delete all reacords
         const confirmFunctions = () => setExecuted([]);
         utils.swal(swalTexts, [confirmFunctions]);
-
     }
 
     return (
         <div>
             <div className="personal-box-shadow">
-                {/* <button onClick={() => utils.error("Mensaje")}>Notify!</button> */}
                 <Row>
                     <Col>
                         <h5>

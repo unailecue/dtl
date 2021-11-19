@@ -1,7 +1,8 @@
 
 const { toast } = require('react-toastify');
 const Swal = require('sweetalert2');
-
+const INVALID_TYPE_LONG = "Long type operations cannot have negative shares"
+const INVALID_TYPE_SHORT = "Short type operations cannot have positive shares"
 
 module.exports = {
     printArray(array) {
@@ -49,7 +50,6 @@ module.exports = {
             cancelButtonText: cancelButtonText
         }).then((result) => {
             if (result.isConfirmed) {
-                // setExecuted([]);
                 confirmFunctions.forEach(fn => fn());
                 Swal.fire(
                     deletedTitle,
@@ -58,11 +58,25 @@ module.exports = {
                 )
             }
         })
+    },
+    validationsCheckExecutions(type, executions, share) {
+        console.log({ type })
+        console.log({ executions })
+        console.log({ share })
+        let totalShares = 0;
+        executions.forEach(exe => totalShares += exe.shares);
+        if (type) {
+            if (totalShares + share >= 0) return true;
+            this.warn(INVALID_TYPE_LONG)
+            return false;
+        } else {
+            if (totalShares + share <= 0) return true;
+            this.warn(INVALID_TYPE_SHORT)
+            return false;
+
+        }
     }
 
 
 }
-// todo: validationsCheckExecutions -> we need to check if the execution that we are trying to do is logical for the execution type, not having positive shares in short or negative ammount of share in long
-// todo: toastAlert -> we need to use some toasr or alerts to show when the input is not valid.
-// todo: validationsCheckAllExecutions -> we need to check if the execution that we are trying to change is logical for the execution type and if the oreder make sence, not having positive shares in short or negative ammount of share in long in any moment of the execution 
-// todo: confirmationSwal -> creeate the confirmation method that recives an object with the text that we need to display the info and the methods if the confirmation is executed.
+// todo: validationsCheckAllExecutions -> we need to check if the execution that we are trying to change is logical for the execution type and if the oreder make sence, not having positive shares in short or negative ammount of share in long in any moment of the execution
