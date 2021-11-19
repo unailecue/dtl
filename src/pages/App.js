@@ -7,6 +7,8 @@ import Header from "./../components/header";
 import PostionSizingOld from "./position-sizing-old";
 import PositionSizing from "./PositionSizing";
 import TradingData from "./tradingData";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +35,17 @@ class App extends Component {
 
         <hr />
         {/* <PostionSizingOld /> */}
-
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     );
   }
