@@ -25,7 +25,6 @@ export default function PlanningInput({ planningInput }) {
                         </Form.Label>
                         <Col xs="12">
                             <InputGroup>
-
                                 <Form.Control type="number" ref={refEntry} onChange={handleChangeRefenceEntry} />
                                 <InputGroup.Text> $/sh</InputGroup.Text>
                             </InputGroup>

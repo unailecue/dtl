@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+import React, { useRef } from 'react'
+import { Form, Row, Col, InputGroup } from 'react-bootstrap';
 
 
 export default function PositionRulesInput({ data }) {
