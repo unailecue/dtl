@@ -2,12 +2,15 @@ import React, { useState } from 'react'
 
 import ExecutionValue from './ExecutionValue'
 import { Row, Col } from 'react-bootstrap';
+import { Trans } from 'react-i18next';
+
+const title = <Trans>Executions</Trans>
+const sharesLabel = <Trans>Shares</Trans>
+const priceLabel = <Trans>Price</Trans>
 
 
-export default function ExecutionResult({ executionResult, executed, changeStoredExecute, buyButton, sellButton, typeValues }) {
-    const title = executionResult.title
-    const sharesLabel = executionResult.sharesLabel;
-    const priceLabel = executionResult.priceLabel;
+export default function ExecutionResult({ executed, changeStoredExecute, typeValues }) {
+
     return (
         <div>
 
@@ -26,7 +29,7 @@ export default function ExecutionResult({ executionResult, executed, changeStore
                     </Col>
                     {executed.length === 0 ? <div>Waiting for executions ...</div>
                         : executed.map((values) => {
-                            return <ExecutionValue executionResult={executionResult} values={values} key={values.id} changeStoredExecute={changeStoredExecute} typeValues={typeValues} />
+                            return <ExecutionValue values={values} key={values.id} changeStoredExecute={changeStoredExecute} typeValues={typeValues} />
                         })}
                 </Row>
             </div>

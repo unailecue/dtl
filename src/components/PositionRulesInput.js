@@ -17,7 +17,7 @@ export default function PositionRulesInput({ data }) {
             </Form.Label>
             <Col xs="12">
                 <InputGroup>
-                    <Form.Control type="number" ref={ref} onChange={handleChange} />
+                    <Form.Control type="number" ref={ref} onChange={handleChange} defaultValue={data.value} />
                     <InputGroup.Text>    {data.onlyDolarSymbol ? "$" : "$/sh"}</InputGroup.Text>
                 </InputGroup>
             </Col>

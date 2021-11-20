@@ -3,12 +3,26 @@ const { toast } = require('react-toastify');
 const Swal = require('sweetalert2');
 const INVALID_TYPE_LONG = "Long type operations cannot have negative shares"
 const INVALID_TYPE_SHORT = "Short type operations cannot have positive shares"
+const ROUND = {
+    price: 3,
+    shares: 2,
+    percent: 1,
+    relationRiskReward: 1
+}
+
 
 module.exports = {
-    printArray(array) {
-        array.forEach(element => {
-            console.log("elemento a ver", element);
-        });
+    roundPrice(num) {
+        return num.toFixed(ROUND.price)
+    },
+    roundShares(num) {
+        return num.toFixed(ROUND.shares)
+    },
+    roundPercent(num) {
+        return num.toFixed(ROUND.percent)
+    },
+    roundRR(num) {
+        return num.toFixed(ROUND.relationRiskReward)
     },
     abs(num) {
         return Math.abs(parseFloat(num));

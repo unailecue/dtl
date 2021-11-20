@@ -9,6 +9,10 @@ import { render } from 'react-dom';
 
 const LOCAL_STORAGE_EXE = "storage.executedvalues";
 const LOCAL_STORAGE_TYPE = "storage.type";
+const LOCAL_STORAGE_MAX_SIZE = "storage.maxSize";
+const LOCAL_STORAGE_MAX_LOSS = "storage.maxLoss";
+const LOCAL_STORAGE_REWARD = "storage.reward";
+const LOCAL_STORAGE_RISK = "storage.risk";
 
 const ROUND = {
     price: 3,
@@ -22,10 +26,10 @@ export default function PositionSizing() {
 
     //Variables and Hooks for important data
     const [isLong, setIsLongChange] = useState();
-    const [MaxSize, setMaxSize] = useState(0);
-    const [MaxLoss, setMaxLoss] = useState(0);
-    const [Reward, setReward] = useState(0);
-    const [Risk, setRisk] = useState(0);
+    const [MaxSize, setMaxSize] = useState();
+    const [MaxLoss, setMaxLoss] = useState();
+    const [Reward, setReward] = useState();
+    const [Risk, setRisk] = useState();
 
     const [AvergaPrice, setAvergaPrice] = useState(0);
     const [SharesTotals, setSharesTotals] = useState(0);
@@ -52,10 +56,10 @@ export default function PositionSizing() {
 
     //Object construction
     const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted: setExecuted, Executed: Executed };
-    const MaxSizeObj = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true, setState: setMaxSize };
-    const MaxLossOBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true, setState: setMaxLoss };
-    const RewardOBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false, setState: setReward };
-    const RiskOBJ = { name: <Trans>Planned risk level</Trans>, onlyDolarSymbol: false, setState: setRisk };
+    const MaxSizeObj = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true, setState: setMaxSize, value: MaxSize };
+    const MaxLossOBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true, setState: setMaxLoss, value: MaxLoss };
+    const RewardOBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false, setState: setReward, value: Reward };
+    const RiskOBJ = { name: <Trans>Planned risk level</Trans>, onlyDolarSymbol: false, setState: setRisk, value: Risk };
 
     const averagePrice = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AvergaPrice };
     const sharesTotals = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotals };
@@ -91,29 +95,68 @@ export default function PositionSizing() {
                 // deletedTitle: <Trans>Deleted!</Trans>,
                 // deletedText: <Trans>Your inputs has been deleted.</Trans>,
             }
-        }, executionResult: { title: <Trans>Executions</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, editButtonText: <Trans>Edit</Trans>, enableButtonText: <Trans>Enable</Trans>, }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
+        }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
     };
+
+    const vars = { isLong, setIsLongChange, MaxSize, setMaxSize, MaxLoss, setMaxLoss, Reward, setReward, Risk, setRisk, Executed, setExecuted }
+
 
     // Effect to get execution values from local storage
     useEffect(() => {
+        //* Executed values
         const storedExecuted = JSON.parse(localStorage.getItem(LOCAL_STORAGE_EXE))
         if (storedExecuted) setExecuted(storedExecuted);
+        //* Execution type
         const storedType = localStorage.getItem(LOCAL_STORAGE_TYPE);
         let tempIsLong = true;
         if (storedType == "false") tempIsLong = false
         setIsLongChange(tempIsLong);
+        //* Max size
+        const maxSize = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MAX_SIZE))
+        if (maxSize) setMaxSize(maxSize);
+        //* Max loss
+        const maxLoss = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MAX_LOSS))
+        if (maxLoss) setMaxLoss(maxLoss);
+        //* Reward
+        const reward = JSON.parse(localStorage.getItem(LOCAL_STORAGE_REWARD))
+        if (reward) setReward(reward);
+        //* Risk
+        const risk = JSON.parse(localStorage.getItem(LOCAL_STORAGE_RISK))
+        if (risk) setRisk(risk);
     }, []);
-    // Effect to set execution values to local storage
+
+    //* Effect to set execution values to local storage
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_EXE, JSON.stringify(Executed));
         calcAveragePriceExe();
     }, [Executed])
-    // Effect to set type to localStorage
+
+    //* Effect to set type to localStorage
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_TYPE, isLong);
     }, [isLong])
 
-    //Use Effect for formula Calculations
+    //* Effect to set maxSize values to local storage
+    useEffect(() => {
+        if (MaxSize) localStorage.setItem(LOCAL_STORAGE_MAX_SIZE, JSON.stringify(MaxSize));
+    }, [MaxSize])
+
+    //* Effect to set maxSize values to local storage
+    useEffect(() => {
+        if (MaxLoss) localStorage.setItem(LOCAL_STORAGE_MAX_LOSS, JSON.stringify(MaxLoss));
+    }, [MaxLoss])
+
+    //* Effect to set maxSize values to local storage
+    useEffect(() => {
+        if (Risk) localStorage.setItem(LOCAL_STORAGE_RISK, JSON.stringify(Risk));
+    }, [Risk])
+
+    //* Effect to set maxSize values to local storage
+    useEffect(() => {
+        if (Reward) localStorage.setItem(LOCAL_STORAGE_REWARD, JSON.stringify(Reward));
+    }, [Reward])
+
+    //* Use Effect for formula Calculations
     useEffect(() => {
         calcRewardExe();
         calcLossExe();
@@ -148,27 +191,27 @@ export default function PositionSizing() {
             }
             tempTotalSh += parseFloat(executed.shares);
         })
-        setAveragePriceExe(tempAvg.toFixed(ROUND.price));
-        setSharesTotalsExe(tempTotalSh.toFixed(ROUND.shares));
-        setSizeAvgPriceExe((tempTotalSh * tempAvg).toFixed(ROUND.shares));
+        setAveragePriceExe(tempAvg);
+        setSharesTotalsExe(tempTotalSh);
+        setSizeAvgPriceExe((tempTotalSh * tempAvg));
     }
 
 
     // todo: formulaInputValidations -> we have to check if we dont have all the values (validations)
     function calcRewardExe() {
         if (AveragePriceExe == 0) return;
-        setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe).toFixed(ROUND.price))
-        setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe).toFixed(ROUND.price))
+        setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe))
+        setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
     function calcLossExe() {
 
         if (AveragePriceExe == 0) return;
-        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe).toFixed(ROUND.price))
-        setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe).toFixed(ROUND.price));
+        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe))
+        setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
     function calcRiskRewardMedia() {
         if ((AveragePriceExe - Risk) == 0) return;
-        setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)).toFixed(ROUND.price))
+        setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)))
 
     }
 
@@ -193,7 +236,6 @@ export default function PositionSizing() {
             console.log("sin formula")
             if (isNaN(firstWay)) return;
             setReferenceShares(firstWay);
-
         }
         console.log("referenceShare", ReferenceShares)
     }

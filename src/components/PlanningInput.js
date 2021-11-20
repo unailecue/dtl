@@ -1,6 +1,7 @@
 
 import React, { useRef, useState } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+import { Form, Row, Col, InputGroup } from 'react-bootstrap';
+import * as utils from "../utils/utils";
 
 
 export default function PlanningInput({ planningInput }) {
@@ -39,7 +40,7 @@ export default function PlanningInput({ planningInput }) {
                         <Col xs="12">
                             <InputGroup>
 
-                                <Form.Control type="number" readOnly value={referenceShare} />
+                                <Form.Control type="number" readOnly value={utils.roundShares(referenceShare)} />
                                 <InputGroup.Text> sh</InputGroup.Text>
                             </InputGroup>
                         </Col>
