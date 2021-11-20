@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+import React from 'react'
+import { Form, Row, Col, InputGroup } from 'react-bootstrap';
+import * as utils from "../utils/utils";
+
 
 export default function PositionPlanOutputPercent({ data }) {
     return (
@@ -10,13 +12,13 @@ export default function PositionPlanOutputPercent({ data }) {
             <Col xs="4">
 
                 <InputGroup>
-                    <Form.Control type="number" value={data.dolars || 0} readOnly />
+                    <Form.Control type="number" value={utils.roundPrice(data.dolars) || 0} readOnly />
                     <InputGroup.Text>$</InputGroup.Text>
                 </InputGroup>
             </Col>
             <Col xs="4">
                 <InputGroup>
-                    <Form.Control type="number" value={data.percent || 0} readOnly />
+                    <Form.Control type="number" value={utils.roundPercent(data.percent) || 0} readOnly />
                     <InputGroup.Text>%</InputGroup.Text>
                 </InputGroup>
             </Col>

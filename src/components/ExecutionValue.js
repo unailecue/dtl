@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react'
 import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+import { Trans } from 'react-i18next';
+const enableButtonText = <Trans>Enable</Trans>;
 
 
-export default function ExecutionValue({ executionResult, values, changeStoredExecute, typeValues }) {
-    const enableButtonText = executionResult.enableButtonText;
+export default function ExecutionValue({ values, changeStoredExecute, typeValues }) {
 
 
     const sharesInput = useRef()

@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react'
 import { v4 as uniqueId } from "uuid";
 import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
 import * as utils from "../utils/utils";
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function AddExecution({ addExecution, executed, setExecuted, typeValues }) {
     const title = addExecution.title;

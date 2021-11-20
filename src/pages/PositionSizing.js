@@ -95,7 +95,7 @@ export default function PositionSizing() {
                 // deletedTitle: <Trans>Deleted!</Trans>,
                 // deletedText: <Trans>Your inputs has been deleted.</Trans>,
             }
-        }, executionResult: { title: <Trans>Executions</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, editButtonText: <Trans>Edit</Trans>, enableButtonText: <Trans>Enable</Trans>, }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
+        }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
     };
 
     const vars = { isLong, setIsLongChange, MaxSize, setMaxSize, MaxLoss, setMaxLoss, Reward, setReward, Risk, setRisk, Executed, setExecuted }
@@ -138,22 +138,22 @@ export default function PositionSizing() {
 
     //* Effect to set maxSize values to local storage
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_MAX_SIZE, JSON.stringify(MaxSize));
+        if (MaxSize) localStorage.setItem(LOCAL_STORAGE_MAX_SIZE, JSON.stringify(MaxSize));
     }, [MaxSize])
 
     //* Effect to set maxSize values to local storage
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_MAX_LOSS, JSON.stringify(MaxLoss));
+        if (MaxLoss) localStorage.setItem(LOCAL_STORAGE_MAX_LOSS, JSON.stringify(MaxLoss));
     }, [MaxLoss])
 
     //* Effect to set maxSize values to local storage
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_RISK, JSON.stringify(Risk));
+        if (Risk) localStorage.setItem(LOCAL_STORAGE_RISK, JSON.stringify(Risk));
     }, [Risk])
 
     //* Effect to set maxSize values to local storage
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_REWARD, JSON.stringify(Reward));
+        if (Reward) localStorage.setItem(LOCAL_STORAGE_REWARD, JSON.stringify(Reward));
     }, [Reward])
 
     //* Use Effect for formula Calculations
@@ -191,27 +191,27 @@ export default function PositionSizing() {
             }
             tempTotalSh += parseFloat(executed.shares);
         })
-        setAveragePriceExe(tempAvg.toFixed(ROUND.price));
-        setSharesTotalsExe(tempTotalSh.toFixed(ROUND.shares));
-        setSizeAvgPriceExe((tempTotalSh * tempAvg).toFixed(ROUND.shares));
+        setAveragePriceExe(tempAvg);
+        setSharesTotalsExe(tempTotalSh);
+        setSizeAvgPriceExe((tempTotalSh * tempAvg));
     }
 
 
     // todo: formulaInputValidations -> we have to check if we dont have all the values (validations)
     function calcRewardExe() {
         if (AveragePriceExe == 0) return;
-        setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe).toFixed(ROUND.price))
-        setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe).toFixed(ROUND.price))
+        setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe))
+        setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
     function calcLossExe() {
 
         if (AveragePriceExe == 0) return;
-        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe).toFixed(ROUND.price))
-        setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe).toFixed(ROUND.price));
+        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe))
+        setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
     function calcRiskRewardMedia() {
         if ((AveragePriceExe - Risk) == 0) return;
-        setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)).toFixed(ROUND.price))
+        setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)))
 
     }
 
