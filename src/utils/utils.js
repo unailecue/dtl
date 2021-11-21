@@ -27,6 +27,39 @@ module.exports = {
     abs(num) {
         return Math.abs(parseFloat(num));
     },
+    checkIfHaveValidPositiveNumber(number) {
+        if (!this.checkIfHaveValidNumber(number)) return false
+        if (number < 0) { console.log("Invalid-checkIfHaveValidRuleNumber(3) ", number); return false };
+        return true
+    },
+    checkIfHaveValidNumber(number) {
+        if (isNaN(number)) { console.log("Invalid-checkIfHaveValidRuleNumber(1) ", number); return false };
+        if (number === 0) { console.log("Invalid-checkIfHaveValidRuleNumber(2) ", number); return false };
+        return true
+    },
+    validateInputs(funct, arrValues) {
+        arrValues.forEach(element => {
+            const value = element.value;
+            const name = element.name;
+            const type = element.type;
+            if (type == 1) {
+                if (!this.checkIfHaveValidNumber(value)) {
+                    console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: yellow")
+                    return false;
+                }
+            }
+            if (type == 2) {
+                if (!this.checkIfHaveValidPositiveNumber(value)) {
+                    console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: orange")
+                    return false;
+                }
+            }
+
+        });
+        return true;
+
+
+    },
     warn(message) {
         toast.warn(message, {
             position: "bottom-right",
