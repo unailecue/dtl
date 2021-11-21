@@ -6,6 +6,7 @@ import PositionPlan from '../components/PositionPlan';
 import PositionExecute from '../components/PositionExecute';
 import { Trans } from 'react-i18next';
 import { render } from 'react-dom';
+import utils from '../utils/utils';
 
 const LOCAL_STORAGE_EXE = "storage.executedvalues";
 const LOCAL_STORAGE_TYPE = "storage.type";
@@ -31,7 +32,7 @@ export default function PositionSizing() {
     const [Reward, setReward] = useState();
     const [Risk, setRisk] = useState();
 
-    const [AvergaPrice, setAvergaPrice] = useState(0);
+    const [AveragePrice, setAveragePrice] = useState(0);
     const [SharesTotals, setSharesTotals] = useState(0);
     const [SizeAvgPrice, setSizeAvgPrice] = useState(0);
     const [PlannedReward, setPlannedReward] = useState(0);
@@ -61,7 +62,7 @@ export default function PositionSizing() {
     const RewardOBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false, setState: setReward, value: Reward };
     const RiskOBJ = { name: <Trans>Planned risk level</Trans>, onlyDolarSymbol: false, setState: setRisk, value: Risk };
 
-    const averagePrice = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AvergaPrice };
+    const averagePrice = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AveragePrice };
     const sharesTotals = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotals };
     const sizeAvgPrice = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", val: SizeAvgPrice };
     const plannedReward = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
@@ -158,10 +159,17 @@ export default function PositionSizing() {
 
     //* Use Effect for formula Calculations
     useEffect(() => {
+        //todo check wich should be changed and wich not
         calcRewardExe();
         calcLossExe();
         calcRiskRewardMedia();
-        calcReferenceShare()
+        calcReferenceShare();
+        calcAveragePrice();
+        calcPlannedLoss();
+        calcTotalShares();
+        calcSizeAveragePrice();
+        calcPlannedReward();
+        calcPlannedRiskReward();
     }, [averagePriceExe, Reward, sharesTotalsExe, Risk])
 
 
@@ -177,9 +185,6 @@ export default function PositionSizing() {
 
     // CALCULATION AREA
     function calcAveragePriceExe() {
-
-        //? next todo should be here?
-        //todo: we need to get ammount of shares will be positive or negative, in short it will not be positive and long is the opposite
         const newExecuted = [...Executed];
         let tempAvg = 0;
         let tempTotalSh = 0;
@@ -196,60 +201,132 @@ export default function PositionSizing() {
         setSizeAvgPriceExe((tempTotalSh * tempAvg));
     }
 
-
-    // todo: formulaInputValidations -> we have to check if we dont have all the values (validations)
     function calcRewardExe() {
-        if (AveragePriceExe == 0) return;
+        if (!utils.validateInputs("calcRewardExe", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+        ])) return
         setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe))
         setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
     function calcLossExe() {
 
-        if (AveragePriceExe == 0) return;
+        if (!utils.validateInputs("calcLossExe", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+        ])) return
         setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe))
         setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
     function calcRiskRewardMedia() {
+        //* Init validations
+        if (!utils.validateInputs("calcRiskRewardMedia", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+        ])) return
         if ((AveragePriceExe - Risk) == 0) return;
+        //* End of validations
         setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)))
 
     }
 
-    function calcPlannedLoss() {
-
-
-        // setPlannedLossPerc(averagePrice -  );
-        setPlannedLoss(1);
-    }
     function calcReferenceShare() {
-
-
         if (isNaN(MaxLoss) && isNaN(PlannedLossExe) && isNaN(ReferenceEntry) && isNaN(Risk)) return console.log("no aplica")
         let firstWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
         let secondWay = (parseFloat(MaxSize) - parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
         let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk))) + parseFloat(SizeAvgPriceExe);
         if (compare > -MaxSize) {
-            console.log("con formula asquerosa")
+            console.log("%c ReferenceShare: Basado en la primera formula", "color: #bada55")
             if (isNaN(secondWay)) return;
             setReferenceShares(secondWay);
         } else {
-            console.log("sin formula")
+            console.log("%c ReferenceShare: Basado en la segunda formula", "color: blue")
             if (isNaN(firstWay)) return;
             setReferenceShares(firstWay);
         }
-        console.log("referenceShare", ReferenceShares)
     }
 
     function calcAveragePrice() {
-        // (averpExe *sizeExe ) +Reference entryE*Referencedhares )) /referenceshare -ssexecuted
+        //* Init validations
+        if (!utils.validateInputs("calcAveragePrice", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: SizeAvgPriceExe, name: "SizeAvgPriceExe", type: 1 },
+            { value: ReferenceEntry, name: "ReferenceEntry", type: 1 },
+        ])) return
+        //* End of validations
+        const avgPriceTemp = ((AveragePriceExe * SizeAvgPriceExe) + (ReferenceEntry * ReferenceShares)) / (ReferenceShares - SharesTotalsExe)
+        setAveragePrice(avgPriceTemp)
+    }
 
-        setAvergaPrice(-1)
+    function calcTotalShares() {
+        //* Init validations
+        if (!utils.validateInputs("calcTotalShares", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: ReferenceShares, name: "ReferenceShares", type: 1 },
+        ])) return
+        //* End of validations
+        const totalSharesTemp = (SharesTotalsExe + ReferenceShares);
+        setSharesTotals(totalSharesTemp)
+    }
+    function calcSizeAveragePrice() {
+        //* Init validations
+        if (!utils.validateInputs("calcSizeAveragePrice", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+        ])) return
+        //* End of validations
+        const size = (SharesTotals * AveragePrice);
+        setSizeAvgPrice(size)
+    }
+
+    function calcPlannedLoss() {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedLoss", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+        ])) return
+        //* End of validations
+        const plannedLossTemp = (AveragePrice - Risk) / SharesTotalsExe
+        setPlannedLoss(plannedLossTemp);
+        const plannedLossPercTemp = (AveragePrice - Risk) / AveragePrice
+        setPlannedLossPerc(plannedLossPercTemp * 100);
+    }
+
+    function calcPlannedReward() {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedReward", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+        ])) return
+        //* End of validations
+        const plannedRewardTemp = (Reward - AveragePrice) / SharesTotalsExe
+        setPlannedReward(plannedRewardTemp);
+        const plannedRewardPercTemp = (Reward - AveragePrice) / AveragePrice
+        setPlannedRewardPerc(plannedRewardPercTemp * 100);
+    }
+    function calcPlannedRiskReward() {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedRiskReward", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+        ])) return
+        //* End of validations
+        const plannedRiskRewardTemp = (Reward - AveragePrice) / (AveragePrice - Risk)
+        setRelationRiskReward(plannedRiskRewardTemp);
+
     }
     // CALCULATION AREA
-    //todo checkFloatValues -> we need to check if all useState variables are float, and try to keep it that way throug the code
-    //todo memoryCheck -> add all rule values to localStorage memory
+
     //todo stringInComponent -> remove all string passing throgh components and have them in each component whit the TRANS tag
     //todo useContext -> we need to use context to pass round values, to only have round in the visual components
+    //todo useEffect -> filter better the useeffect by each calculation and having it controlled
 
     return (
         <Container>
