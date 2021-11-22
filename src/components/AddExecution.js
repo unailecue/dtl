@@ -1,14 +1,24 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { v4 as uniqueId } from "uuid";
 import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
 import * as utils from "../utils/utils";
+import { Trans } from 'react-i18next';
+
+const confirmationValues = {
+    title: <Trans>Are you sure?</Trans>,
+    text: <Trans>You won't be able to revert this!</Trans>,
+    confirmButtonText: <Trans>Yes, delete it!</Trans>,
+    cancelButtonText: <Trans>Cancel</Trans>,
+    deletedTitle: <Trans>Deleted!</Trans>,
+    deletedText: <Trans>Your inputs has been deleted.</Trans>
+};
 
 export default function AddExecution({ addExecution, executed, setExecuted, typeValues }) {
     const title = addExecution.title;
     const deleteAllText = addExecution.deleteAllText;
     const sharesLabel = addExecution.sharesLabel;
     const priceLabel = addExecution.priceLabel;
-    const swalTexts = addExecution.swal;
+
 
     const isLong = typeValues.isLong;
     const buyButton = typeValues.buyButton;
@@ -40,7 +50,7 @@ export default function AddExecution({ addExecution, executed, setExecuted, type
     function handleDeleteExecutions(e) {
         //* Confirmation that you will delete all reacords
         const confirmFunctions = () => setExecuted([]);
-        utils.swal(swalTexts, [confirmFunctions]);
+        utils.confirmationsModal(confirmationValues, [confirmFunctions]);
     }
 
     return (

@@ -1,5 +1,7 @@
 
 const { toast } = require('react-toastify');
+const { confirmAlert } = require('react-confirm-alert');
+// import { confirmAlert } from 'react-confirm-alert';
 const Swal = require('sweetalert2');
 const INVALID_TYPE_LONG = "Long type operations cannot have negative shares"
 const INVALID_TYPE_SHORT = "Short type operations cannot have positive shares"
@@ -9,6 +11,7 @@ const ROUND = {
     percent: 1,
     relationRiskReward: 1
 }
+
 
 
 module.exports = {
@@ -85,27 +88,6 @@ module.exports = {
             theme: "colored"
         })
     },
-    swal({ title, text, confirmButtonText, cancelButtonText, deletedText, deletedTitle }, confirmFunctions) {
-        Swal.fire({
-            title: title,
-            text: text,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: confirmButtonText,
-            cancelButtonText: cancelButtonText
-        }).then((result) => {
-            if (result.isConfirmed) {
-                confirmFunctions.forEach(fn => fn());
-                Swal.fire(
-                    deletedTitle,
-                    deletedText,
-                    'success'
-                )
-            }
-        })
-    },
     validationsCheckExecutions(type, executions, share) {
         console.log({ type })
         console.log({ executions })
@@ -122,7 +104,26 @@ module.exports = {
             return false;
 
         }
+    }, confirmationsModal({ title, text, confirmButtonText, cancelButtonText, deletedText, deletedTitle }, confirmFunctions) {
+        confirmAlert({
+            title: title,
+            message: text,
+            buttons: [
+                {
+                    label: confirmButtonText,
+                    onClick: () => this.executeConfirmations(confirmFunctions)
+                },
+                {
+                    label: cancelButtonText,
+                    onClick: () => console.log('Process canceled')
+                }
+            ]
+        });
+    },
+    executeConfirmations(confirmFunctions) {
+        confirmFunctions.forEach(fn => fn());
     }
+
 
 
 }
