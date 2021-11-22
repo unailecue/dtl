@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./../assets/style/App.css";
 import "./../assets/style/components.css";
-
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import Header from "./../components/header";
-import PostionSizingOld from "./position-sizing-old";
+// import PostionSizingOld from "./position-sizing-old";
 import PositionSizing from "./PositionSizing";
-import TradingData from "./tradingData";
-import { ToastContainer, toast } from 'react-toastify';
+// import TradingData from "./tradingData";
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 class App extends Component {
   constructor(props) {

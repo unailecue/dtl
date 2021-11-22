@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+import { Button, Form, Row, Col } from 'react-bootstrap';
 import { Trans } from 'react-i18next';
 const enableButtonText = <Trans>Enable</Trans>;
 
@@ -10,7 +10,6 @@ export default function ExecutionValue({ values, changeStoredExecute, typeValues
     const sharesInput = useRef()
     const priceInput = useRef()
     const [isLocked, setisLocked] = useState(true)
-    const key = values.id;
     const shares = values.shares;
     const price = values.price;
     const isLong = typeValues.isLong;

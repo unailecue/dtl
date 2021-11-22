@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import PositionType from './PositionType'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
+import { Row, Container } from 'react-bootstrap';
 import PositionRulesInput from './PositionRulesInput';
 
 

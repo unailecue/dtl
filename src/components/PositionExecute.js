@@ -15,7 +15,7 @@ export default function PositionExecute({ positionExecute }) {
     const [ButtonTextSellValue, setButtonTextSellValue] = useState(sellButtonTextLong)
     const isLong = positionExecute.isLong;
     useEffect(() => {
-        if (isLong == true) {
+        if (isLong === true) {
             setButtonTextBuyValue(addButtonTextLong)
             setButtonTextSellValue(sellButtonTextLong)
         } else {

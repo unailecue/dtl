@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState, useSetState } from 'react'
+import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 import PositionRules from '../components/PositionRules';
 import PositionPlan from '../components/PositionPlan';
 import PositionExecute from '../components/PositionExecute';
 import { Trans } from 'react-i18next';
-import { render } from 'react-dom';
 import utils from '../utils/utils';
 
 const LOCAL_STORAGE_EXE = "storage.executedvalues";
@@ -14,11 +13,6 @@ const LOCAL_STORAGE_MAX_SIZE = "storage.maxSize";
 const LOCAL_STORAGE_MAX_LOSS = "storage.maxLoss";
 const LOCAL_STORAGE_REWARD = "storage.reward";
 const LOCAL_STORAGE_RISK = "storage.risk";
-
-const ROUND = {
-    price: 3,
-    shares: 2
-}
 
 
 export default function PositionSizing() {
@@ -86,16 +80,8 @@ export default function PositionSizing() {
     const positionExecute = {
         isLong: isLong,
         addExecution: {
-            title: <Trans>Add executions</Trans>, deleteAllText: <Trans>delete all</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, addButtonText: <Trans>Add</Trans>, sellButtonText: <Trans>sellButtonText</Trans>, isLong: isLong, swal: {
-                title: 'Are you sure?', text: "You won't be able to revert this!", confirmButtonText: 'Yes, delete it!', cancelButtonText: 'Cancel', deletedTitle: 'Deleted!', deletedText: 'Your inputs has been deleted.',
-                //--------- this files should have translation but swal is not understanding it
-                // title: <Trans>Are you sure?</Trans>,
-                // text: <Trans>You won't be able to revert this!</Trans>,
-                // confirmButtonText: <Trans>Yes, delete it!</Trans>,
-                // cancelButtonText: <Trans>Cancel</Trans>,
-                // deletedTitle: <Trans>Deleted!</Trans>,
-                // deletedText: <Trans>Your inputs has been deleted.</Trans>,
-            }
+            title: <Trans>Add executions</Trans>, deleteAllText: <Trans>delete all</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, addButtonText: <Trans>Add</Trans>, sellButtonText: <Trans>sellButtonText</Trans>, isLong: isLong
+
         }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
     };
 
@@ -110,7 +96,7 @@ export default function PositionSizing() {
         //* Execution type
         const storedType = localStorage.getItem(LOCAL_STORAGE_TYPE);
         let tempIsLong = true;
-        if (storedType == "false") tempIsLong = false
+        if (storedType === "false") tempIsLong = false
         setIsLongChange(tempIsLong);
         //* Max size
         const maxSize = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MAX_SIZE))
@@ -227,7 +213,7 @@ export default function PositionSizing() {
             { value: Risk, name: "Risk", type: 1 },
             { value: Reward, name: "Reward", type: 1 },
         ])) return
-        if ((AveragePriceExe - Risk) == 0) return;
+        if ((AveragePriceExe - Risk) === 0) return;
         //* End of validations
         setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)))
 

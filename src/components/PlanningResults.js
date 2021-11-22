@@ -1,8 +1,7 @@
 
-import React, { useRef, useState } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
+import React from 'react'
+import { Row, Col } from 'react-bootstrap';
 import PositionPlanOutput from './PositionPlanOutput';
-import PositionRulesInput from './PositionRulesInput';
 import PositionPlanOutputPercent from './PositionPlanOutputPercent';
 
 export default function PlanningResults({ planningResults }) {

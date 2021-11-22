@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import ExecutionValue from './ExecutionValue'
 import { Row, Col } from 'react-bootstrap';
