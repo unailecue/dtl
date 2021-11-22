@@ -19,7 +19,7 @@ module.exports = {
         return num.toFixed(ROUND.price)
     },
     roundShares(num) {
-        return num.toFixed(ROUND.shares)
+        return parseFloat(num.toFixed(ROUND.shares))
     },
     roundPercent(num) {
         return num.toFixed(ROUND.percent)
