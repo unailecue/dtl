@@ -182,9 +182,10 @@ export default function PositionSizing() {
             }
             tempTotalSh += parseFloat(executed.shares);
         })
+        const isLongMultiplier = isLong ? 1 : -1
         setAveragePriceExe(tempAvg);
         setSharesTotalsExe(tempTotalSh);
-        setSizeAvgPriceExe((tempTotalSh * tempAvg));
+        setSizeAvgPriceExe((tempTotalSh * tempAvg) * isLongMultiplier);
     }
 
     function calcRewardExe() {
@@ -193,7 +194,8 @@ export default function PositionSizing() {
             { value: Reward, name: "Reward", type: 1 },
             { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
         ])) return
-        setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe))
+        const isLongMultiplier = isLong ? 1 : -1
+        setPlannedRewardPercExe(((Reward - AveragePriceExe) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
     function calcLossExe() {
@@ -203,7 +205,8 @@ export default function PositionSizing() {
             { value: Risk, name: "Risk", type: 1 },
             { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
         ])) return
-        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe))
+        const isLongMultiplier = isLong ? 1 : -1
+        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
     function calcRiskRewardMedia() {
@@ -221,29 +224,35 @@ export default function PositionSizing() {
 
     function calcReferenceShare() {
         if (isNaN(MaxLoss) && isNaN(PlannedLossExe) && isNaN(ReferenceEntry) && isNaN(Risk)) return console.log("no aplica")
-        let firstWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
-        let secondWay = (parseFloat(MaxSize) - parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
+        let maxLossWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
+        let maxSizeWay = (parseFloat(MaxSize) - parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
         let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk))) + parseFloat(SizeAvgPriceExe);
-        if (compare > -MaxSize) {
-            console.log("%c ReferenceShare: Basado en la primera formula", "color: #bada55")
-            if (isNaN(secondWay)) return;
-            setReferenceShares(secondWay);
+        const isLongMultiplier = isLong ? 1 : -1
+
+        //todo parse setrefeenceshare to be an int
+        if (compare > MaxSize) {
+            console.log("%c ReferenceShare: Basado en la maxSizeWay formula", "color: #bada55")
+            if (isNaN(maxSizeWay)) return;
+            setReferenceShares(maxSizeWay * isLongMultiplier);
         } else {
-            console.log("%c ReferenceShare: Basado en la segunda formula", "color: blue")
-            if (isNaN(firstWay)) return;
-            setReferenceShares(firstWay);
+            console.log("%c ReferenceShare: Basado en la segunda maxLossWay", "color: blue")
+            if (isNaN(maxLossWay)) return;
+            setReferenceShares(maxLossWay * isLongMultiplier);
         }
     }
 
     function calcAveragePrice() {
         //* Init validations
         if (!utils.validateInputs("calcAveragePrice", [
+            //todo cambiar estas validaciones
             { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
             { value: SizeAvgPriceExe, name: "SizeAvgPriceExe", type: 1 },
             { value: ReferenceEntry, name: "ReferenceEntry", type: 1 },
         ])) return
         //* End of validations
-        const avgPriceTemp = ((AveragePriceExe * SizeAvgPriceExe) + (ReferenceEntry * ReferenceShares)) / (ReferenceShares - SharesTotalsExe)
+        const isLongMultiplier = isLong ? 1 : -1
+
+        const avgPriceTemp = (SizeAvgPriceExe + (ReferenceEntry * ReferenceShares)) / (ReferenceShares + (SharesTotalsExe * isLongMultiplier))
         setAveragePrice(avgPriceTemp)
     }
 
@@ -264,7 +273,8 @@ export default function PositionSizing() {
             { value: AveragePrice, name: "AveragePrice", type: 1 },
         ])) return
         //* End of validations
-        const size = (SharesTotals * AveragePrice);
+        const isLongMultiplier = isLong ? 1 : -1
+        const size = (SharesTotals * AveragePrice) * isLongMultiplier;
         setSizeAvgPrice(size)
     }
 
@@ -276,9 +286,10 @@ export default function PositionSizing() {
             { value: Risk, name: "Risk", type: 1 },
         ])) return
         //* End of validations
-        const plannedLossTemp = (AveragePrice - Risk) / SharesTotalsExe
+        const isLongMultiplier = isLong ? 1 : -1
+        const plannedLossTemp = (AveragePrice - Risk) * SharesTotals
         setPlannedLoss(plannedLossTemp);
-        const plannedLossPercTemp = (AveragePrice - Risk) / AveragePrice
+        const plannedLossPercTemp = (AveragePrice - Risk) / AveragePrice * isLongMultiplier
         setPlannedLossPerc(plannedLossPercTemp * 100);
     }
 
@@ -290,9 +301,10 @@ export default function PositionSizing() {
             { value: Reward, name: "Reward", type: 1 },
         ])) return
         //* End of validations
-        const plannedRewardTemp = (Reward - AveragePrice) / SharesTotalsExe
+        const isLongMultiplier = isLong ? 1 : -1
+        const plannedRewardTemp = (Reward - AveragePrice) * SharesTotals
         setPlannedReward(plannedRewardTemp);
-        const plannedRewardPercTemp = (Reward - AveragePrice) / AveragePrice
+        const plannedRewardPercTemp = (Reward - AveragePrice) / AveragePrice * isLongMultiplier
         setPlannedRewardPerc(plannedRewardPercTemp * 100);
     }
     function calcPlannedRiskReward() {
