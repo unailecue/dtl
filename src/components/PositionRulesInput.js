@@ -1,13 +1,14 @@
 import React, { useRef } from 'react'
 import { Form, Row, Col, InputGroup } from 'react-bootstrap';
-
+import * as utils from "../utils/utils";
 
 export default function PositionRulesInput({ data }) {
     const ref = useRef()
 
     function handleChange(e) {
-
-        data.setState(parseFloat(ref.current.value));
+        let value = (utils.abs(ref.current.value))
+        ref.current.value = value
+        data.setState(parseFloat(value));
     }
 
     return (
