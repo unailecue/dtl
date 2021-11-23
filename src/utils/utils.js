@@ -15,22 +15,33 @@ const ROUND = {
 
 
 module.exports = {
+    checkIfNumOrReturnCero(num) {
+        if (!isNaN) return num;
+        if (isNaN(parseFloat(num))) return 0
+        return parseFloat(num)
+    },
     roundPrice(num) {
-        return num.toFixed(ROUND.price)
+        num = this.checkIfNumOrReturnCero(num);
+        return parseFloat(num.toFixed(ROUND.price))
     },
     roundShares(num) {
+        num = this.checkIfNumOrReturnCero(num);
         return parseFloat(num.toFixed(ROUND.shares))
     },
     roundPercent(num) {
-        return num.toFixed(ROUND.percent)
+        num = this.checkIfNumOrReturnCero(num);
+        return parseFloat(num.toFixed(ROUND.percent))
     },
     roundRR(num) {
-        return num.toFixed(ROUND.relationRiskReward)
+        num = this.checkIfNumOrReturnCero(num);
+        return parseFloat(num.toFixed(ROUND.relationRiskReward))
     },
     abs(num) {
+        num = this.checkIfNumOrReturnCero(num);
         return Math.abs(parseFloat(num));
     },
     checkIfHaveValidPositiveNumber(number) {
+        if (this.checkIfNumOrReturnCero(number) === 0) return false
         if (!this.checkIfHaveValidNumber(number)) return false
         if (number < 0) { console.log("Invalid-checkIfHaveValidRuleNumber(3) ", number); return false };
         return true
