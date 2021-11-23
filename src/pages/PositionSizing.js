@@ -193,7 +193,8 @@ export default function PositionSizing() {
             { value: Reward, name: "Reward", type: 1 },
             { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
         ])) return
-        setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe))
+        const isLongMultiplier = isLong ? 1 : -1
+        setPlannedRewardPercExe(((Reward - AveragePriceExe) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
     function calcLossExe() {
@@ -203,7 +204,8 @@ export default function PositionSizing() {
             { value: Risk, name: "Risk", type: 1 },
             { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
         ])) return
-        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe))
+        const isLongMultiplier = isLong ? 1 : -1
+        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
     function calcRiskRewardMedia() {
@@ -276,7 +278,8 @@ export default function PositionSizing() {
             { value: Risk, name: "Risk", type: 1 },
         ])) return
         //* End of validations
-        const plannedLossTemp = (AveragePrice - Risk) / SharesTotalsExe
+        const isLongMultiplier = isLong ? 1 : -1
+        const plannedLossTemp = (AveragePrice - Risk) * isLongMultiplier / SharesTotalsExe
         setPlannedLoss(plannedLossTemp);
         const plannedLossPercTemp = (AveragePrice - Risk) / AveragePrice
         setPlannedLossPerc(plannedLossPercTemp * 100);
@@ -290,7 +293,8 @@ export default function PositionSizing() {
             { value: Reward, name: "Reward", type: 1 },
         ])) return
         //* End of validations
-        const plannedRewardTemp = (Reward - AveragePrice) / SharesTotalsExe
+        const isLongMultiplier = isLong ? 1 : -1
+        const plannedRewardTemp = (Reward - AveragePrice) * isLongMultiplier / SharesTotalsExe
         setPlannedReward(plannedRewardTemp);
         const plannedRewardPercTemp = (Reward - AveragePrice) / AveragePrice
         setPlannedRewardPerc(plannedRewardPercTemp * 100);
