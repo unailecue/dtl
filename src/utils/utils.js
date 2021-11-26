@@ -1,8 +1,7 @@
 
 const { toast } = require('react-toastify');
 const { confirmAlert } = require('react-confirm-alert');
-// import { confirmAlert } from 'react-confirm-alert';
-const Swal = require('sweetalert2');
+const { Trans } = require('react-i18next');
 const INVALID_TYPE_LONG = "Long type operations cannot have negative shares"
 const INVALID_TYPE_SHORT = "Short type operations cannot have positive shares"
 const ROUND = {
@@ -122,9 +121,28 @@ module.exports = {
     },
     executeConfirmations(confirmFunctions) {
         confirmFunctions.forEach(fn => fn());
+    },
+    validationsCheckAllExecutions(executions, id, shares, isLong) {
+        let tempShareAmmount = 0;
+        let response = true;
+        executions.forEach(element => {
+            if (element.id === id) {
+                if (isLong && (tempShareAmmount + shares < 0)) {
+                    this.error(INVALID_TYPE_LONG)
+                    response = false;
+                    return;
+                }
+                if (!isLong && (tempShareAmmount + shares > 0)) {
+                    this.error(INVALID_TYPE_SHORT)
+                    response = false;
+                    return;
+                }
+            }
+            tempShareAmmount += element.shares;
+        });
+        return response;
     }
 
 
 
 }
-// todo: validationsCheckAllExecutions -> we need to check if the execution that we are trying to change is logical for the execution type and if the oreder make sence, not having positive shares in short or negative ammount of share in long in any moment of the execution

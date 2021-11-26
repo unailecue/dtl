@@ -163,10 +163,12 @@ export default function PositionSizing() {
     function ChangeStoredExecute(id, shares, price) {
         const newExecuted = [...Executed];
         const Execute = newExecuted.find(x => x.id === id);
+        if (!utils.validationsCheckAllExecutions(Executed, id, shares, isLong)) return false
         Execute.shares = shares;
         Execute.price = price;
         setExecuted(newExecuted);
         calcAveragePriceExe();
+        return true
     }
 
     // CALCULATION AREA

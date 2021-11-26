@@ -35,11 +35,12 @@ export default function ExecutionValue({ values, changeStoredExecute, typeValues
     function handleEdit(sharesInputValue) {
 
         if (sharesInputValue !== values.shares || priceInput.current.value !== values.price) {
-            changeStoredExecute(values.id, sharesInputValue, priceInput.current.value)
+            const isChangeExecuted = changeStoredExecute(values.id, sharesInputValue, priceInput.current.value)
+            if (!isChangeExecuted) return
+            priceInput.current.disabled = true;
+            sharesInput.current.value = sharesInputValue;
+            sharesInput.current.disabled = true;
         }
-        priceInput.current.disabled = true;
-        sharesInput.current.value = sharesInputValue;
-        sharesInput.current.disabled = true;
         setisLocked(true);
     }
     return (
