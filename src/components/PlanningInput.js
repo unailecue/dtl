@@ -39,7 +39,7 @@ export default function PlanningInput({ planningInput }) {
                         <Col xs="12">
                             <InputGroup>
 
-                                <Form.Control type="number" readOnly value={utils.roundShares(referenceShare)} />
+                                <Form.Control type="number" readOnly value={referenceShare} />
                                 <InputGroup.Text> sh</InputGroup.Text>
                             </InputGroup>
                         </Col>
