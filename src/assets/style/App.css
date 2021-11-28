@@ -43,6 +43,15 @@
   padding: 15px;
   border-radius: 3px;
   margin: 3px;
+  /* todo hay que cambiar por tipo  */
+}
+
+.short .box {
+  box-shadow: 2px 4px 10px rgb(255 0 0 / 40%)
+}
+
+.long .box {
+  box-shadow: 2px 4px 10px rgb(46 124 45 / 40%)
 }
 
 .personal-box-shadow {
