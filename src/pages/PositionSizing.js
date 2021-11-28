@@ -334,7 +334,7 @@ export default function PositionSizing() {
     //todo useEffect -> filter better the useeffect by each calculation and having it controlled
 
     return (
-        <Container>
+        <Container className={isLong ? "long" : "short"}>
             <Row>
                 <Col md="3">
                     <PositionRules positionRules={positionRules} />

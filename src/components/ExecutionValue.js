@@ -37,10 +37,10 @@ export default function ExecutionValue({ values, changeStoredExecute, typeValues
         if (sharesInputValue !== values.shares || priceInput.current.value !== values.price) {
             const isChangeExecuted = changeStoredExecute(values.id, sharesInputValue, priceInput.current.value)
             if (!isChangeExecuted) return
-            priceInput.current.disabled = true;
             sharesInput.current.value = sharesInputValue;
-            sharesInput.current.disabled = true;
         }
+        priceInput.current.disabled = true;
+        sharesInput.current.disabled = true;
         setisLocked(true);
     }
     return (
