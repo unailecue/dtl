@@ -126,19 +126,30 @@ module.exports = {
         let tempShareAmmount = 0;
         let response = true;
         executions.forEach(element => {
-            if (element.id === id) {
-                if (isLong && (tempShareAmmount + shares < 0)) {
-                    this.error(INVALID_TYPE_LONG)
-                    response = false;
-                    return;
-                }
-                if (!isLong && (tempShareAmmount + shares > 0)) {
-                    this.error(INVALID_TYPE_SHORT)
-                    response = false;
-                    return;
-                }
+            if (response === false) return false
+            let thisShare = element.shares;
+            if (element.id === id) thisShare = shares
+            tempShareAmmount += thisShare;
+            if (isLong && (tempShareAmmount < 0)) {
+                this.error(INVALID_TYPE_LONG)
+                response = false;
+                return;
             }
-            tempShareAmmount += element.shares;
+            if (!isLong && (tempShareAmmount > 0)) {
+                this.error(INVALID_TYPE_SHORT)
+                response = false;
+                return;
+            }
+        });
+        return response;
+    },
+    arrayWithDiferentIdThan(executions, id) {
+
+        let response = [];
+        executions.forEach(element => {
+            if (element.id !== id) {
+                response.push(element)
+            }
         });
         return response;
     }

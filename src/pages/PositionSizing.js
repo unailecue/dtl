@@ -82,7 +82,7 @@ export default function PositionSizing() {
         addExecution: {
             title: <Trans>Add executions</Trans>, deleteAllText: <Trans>delete all</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, addButtonText: <Trans>Add</Trans>, sellButtonText: <Trans>sellButtonText</Trans>, isLong: isLong
 
-        }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
+        }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, DeleteStoredExecute: DeleteStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
     };
 
     const vars = { isLong, setIsLongChange, MaxSize, setMaxSize, MaxLoss, setMaxLoss, Reward, setReward, Risk, setRisk, Executed, setExecuted }
@@ -167,6 +167,16 @@ export default function PositionSizing() {
         Execute.shares = shares;
         Execute.price = price;
         setExecuted(newExecuted);
+        calcAveragePriceExe();
+        return true
+    }
+
+
+    function DeleteStoredExecute(id) {
+
+        if (!utils.validationsCheckAllExecutions(Executed, id, 0, isLong)) return false
+        const Executed_temp = utils.arrayWithDiferentIdThan(Executed, id)
+        setExecuted(Executed_temp);
         calcAveragePriceExe();
         return true
     }
