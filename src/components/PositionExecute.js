@@ -31,6 +31,7 @@ export default function PositionExecute({ positionExecute }) {
     const executed = positionExecute.executed;
     const setExecuted = positionExecute.setExecuted;
     const changeStoredExecute = positionExecute.changeStoredExecute;
+    const DeleteStoredExecute = positionExecute.DeleteStoredExecute;
     const planningResults = positionExecute.planningResults;
 
     return (
@@ -42,7 +43,7 @@ export default function PositionExecute({ positionExecute }) {
                         <AddExecution addExecution={addExecution} executed={executed} setExecuted={setExecuted} typeValues={typeValues} />
                     </Row>
                     <Row>
-                        <ExecutionResult executionResult={executionResult} executed={executed} changeStoredExecute={changeStoredExecute} typeValues={typeValues} />
+                        <ExecutionResult executionResult={executionResult} executed={executed} changeStoredExecute={changeStoredExecute} DeleteStoredExecute={DeleteStoredExecute} typeValues={typeValues} />
                     </Row>
                 </Col>
                 <Col sm="6">
