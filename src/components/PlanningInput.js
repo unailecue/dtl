@@ -2,26 +2,28 @@
 import React, { useRef } from 'react'
 import { Form, Row, Col, InputGroup } from 'react-bootstrap';
 import * as utils from "../utils/utils";
-
+import { Trans } from 'react-i18next';
+const TITLE = <Trans>Plan</Trans>
+const REFERENCE_ENTRY_NAME = <Trans>Reference Entry</Trans>
+const REFERENCE_SHARES_NAME = <Trans>Reference Shares</Trans>
 
 export default function PlanningInput({ planningInput }) {
     const refEntry = useRef()
-    const referenceShare = planningInput.referenceShares.referenceShare;
+    const referenceShare = planningInput.referenceSharesObj.referenceShare;
 
-    const title = planningInput.title;
     function handleChangeRefenceEntry(e) {
-        planningInput.referenceEntry.setState(parseFloat(refEntry.current.value));
+        planningInput.referenceEntryObj.setState(parseFloat(refEntry.current.value));
     }
     return (
         <div className="personal-box-shadow">
             <h5>
-                {title}
+                {TITLE}
             </h5>
             <Row>
                 <Col sm="6">
                     <Form.Group as={Row} className="mb-3 align-items-center">
                         <Form.Label column xs="12">
-                            {planningInput.referenceEntry.name}
+                            {REFERENCE_ENTRY_NAME}
                         </Form.Label>
                         <Col xs="12">
                             <InputGroup>
@@ -34,7 +36,7 @@ export default function PlanningInput({ planningInput }) {
                 <Col sm="6">
                     <Form.Group as={Row} className="mb-3 align-items-center">
                         <Form.Label column xs="12">
-                            {planningInput.referenceShares.name}
+                            {REFERENCE_SHARES_NAME}
                         </Form.Label>
                         <Col xs="12">
                             <InputGroup>

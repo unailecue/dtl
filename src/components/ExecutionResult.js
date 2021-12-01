@@ -9,11 +9,10 @@ const sharesLabel = <Trans>Shares</Trans>
 const priceLabel = <Trans>Price</Trans>
 
 
-export default function ExecutionResult({ executed, changeStoredExecute, DeleteStoredExecute, typeValues }) {
-
+export default function ExecutionResult({ executionResult }) {
+    const executed = executionResult.executed;
     return (
         <div>
-
             <div className="personal-box-shadow">
                 <h5>
                     {title}
@@ -29,7 +28,8 @@ export default function ExecutionResult({ executed, changeStoredExecute, DeleteS
                     </Col>
                     {executed.length === 0 ? <div>Waiting for executions ...</div>
                         : executed.map((values) => {
-                            return <ExecutionValue values={values} key={values.id} DeleteStoredExecute={DeleteStoredExecute} changeStoredExecute={changeStoredExecute} typeValues={typeValues} />
+                            executionResult.values = values;
+                            return <ExecutionValue executionValue={executionResult} key={values.id} />
                         })}
                 </Row>
             </div>

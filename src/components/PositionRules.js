@@ -2,23 +2,30 @@ import React from 'react'
 import PositionType from './PositionType'
 import { Row, Container } from 'react-bootstrap';
 import PositionRulesInput from './PositionRulesInput';
+import { Trans } from 'react-i18next';
 
 
-export default function PositionRules({ positionRules }) {
+const TITLE = <Trans>Rules</Trans>;
+const MAX_SIZE_OBJ = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true };
+const MAX_LOSS_OBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true };
+const REWARD_OBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false };
+const RISK_OBJ = { name: <Trans>Planned risk level</Trans>, onlyDolarSymbol: false };
 
-    const title = positionRules.title;
-    const positionType = positionRules.PositionType;
-    const MaxSize = positionRules.MaxSize;
-    const MaxLoss = positionRules.MaxLoss;
-    const Reward = positionRules.Reward;
-    const Risk = positionRules.Risk;
 
+export default function PositionRules({ positionRulesObj }) {
+
+
+    const positionType = positionRulesObj.PositionTypeObj;
+    const MaxSize = { ...positionRulesObj.MaxSizeObj, ...MAX_SIZE_OBJ };
+    const MaxLoss = { ...positionRulesObj.MaxLossObj, ...MAX_LOSS_OBJ };
+    const Reward = { ...positionRulesObj.RewardObj, ...REWARD_OBJ };
+    const Risk = { ...positionRulesObj.RiskObj, ...RISK_OBJ };
 
     return (
         <div className="box">
             <Container>
                 <h3>
-                    {title}
+                    {TITLE}
                 </h3>
                 <hr />
                 <Row>

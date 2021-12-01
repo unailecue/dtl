@@ -12,13 +12,12 @@ const confirmationValues = {
     deletedTitle: <Trans>Deleted!</Trans>,
     deletedText: <Trans>Your inputs has been deleted.</Trans>
 };
+const TITLE = <Trans>Add executions</Trans>;
+const DELETE_ALL_TEXT = <Trans>delete all</Trans>;
+const SHARES_LABEL = <Trans>Shares</Trans>;
+const PRICE_LABEL = <Trans>Price</Trans>;
 
-export default function AddExecution({ addExecution, executed, setExecuted, typeValues }) {
-    const title = addExecution.title;
-    const deleteAllText = addExecution.deleteAllText;
-    const sharesLabel = addExecution.sharesLabel;
-    const priceLabel = addExecution.priceLabel;
-
+export default function AddExecution({ executed, setExecuted, typeValues }) {
 
     const isLong = typeValues.isLong;
     const buyButton = typeValues.buyButton;
@@ -59,18 +58,18 @@ export default function AddExecution({ addExecution, executed, setExecuted, type
                 <Row>
                     <Col>
                         <h5>
-                            {title}
+                            {TITLE}
                         </h5>
                     </Col>
                     <Col className="align-right">
-                        <Button className="justify-content-end delete-all" variant="link" onClick={handleDeleteExecutions} >{deleteAllText}</Button>
+                        <Button className="justify-content-end delete-all" variant="link" onClick={handleDeleteExecutions} >{DELETE_ALL_TEXT}</Button>
                     </Col>
                 </Row>
                 <Row>
                     <Col xs="6">
                         <Form.Group as={Row} className="mb-3 align-items-center">
                             <Col>
-                                {priceLabel}
+                                {PRICE_LABEL}
                                 <InputGroup>
                                     <Form.Control type="number" ref={priceInput} />
                                     <InputGroup.Text> $/sh</InputGroup.Text>
@@ -81,7 +80,7 @@ export default function AddExecution({ addExecution, executed, setExecuted, type
                     <Col xs="6">
                         <Form.Group as={Row} className="mb-3 align-items-center">
                             <Col>
-                                {sharesLabel}
+                                {SHARES_LABEL}
                                 <InputGroup>
                                     <Form.Control type="number" ref={sharesInput} />
                                     <InputGroup.Text> sh</InputGroup.Text>

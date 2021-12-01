@@ -38,8 +38,7 @@ export default function PositionSizing() {
     const [ReferenceEntry, setReferenceEntry] = useState(0);
     const [ReferenceShares, setReferenceShares] = useState(0);
 
-    const [Executed, setExecuted] = useState([]);
-
+    const [executed, setExecuted] = useState([]);
     const [AveragePriceExe, setAveragePriceExe] = useState(0);
     const [SharesTotalsExe, setSharesTotalsExe] = useState(0);
     const [SizeAvgPriceExe, setSizeAvgPriceExe] = useState(0);
@@ -50,42 +49,36 @@ export default function PositionSizing() {
     const [RelationRiskRewardExe, setRelationRiskRewardExe] = useState(0);
 
     //Object construction
-    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted: setExecuted, Executed: Executed };
-    const MaxSizeObj = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true, setState: setMaxSize, value: MaxSize };
-    const MaxLossOBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true, setState: setMaxLoss, value: MaxLoss };
-    const RewardOBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false, setState: setReward, value: Reward };
-    const RiskOBJ = { name: <Trans>Planned risk level</Trans>, onlyDolarSymbol: false, setState: setRisk, value: Risk };
+    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted: setExecuted, Executed: executed };
+    const MaxSizeObj = { setState: setMaxSize, value: MaxSize };
+    const MaxLossObj = { setState: setMaxLoss, value: MaxLoss };
+    const RewardObj = { setState: setReward, value: Reward };
+    const RiskObj = { setState: setRisk, value: Risk };
 
-    const averagePrice = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AveragePrice };
-    const sharesTotals = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotals };
-    const sizeAvgPrice = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", val: SizeAvgPrice };
-    const plannedReward = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
-    const plannedLoss = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false, dolars: PlannedLoss, percent: PlannedLossPerc };
-    const relationRiskReward = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1", val: RelationRiskReward };
+    const averagePriceObj = { val: AveragePrice };
+    const sharesTotalsObj = { val: SharesTotals };
+    const sizeAvgPriceObj = { val: SizeAvgPrice };
+    const plannedRewardObj = { dolars: PlannedReward, percent: PlannedRewardPerc };
+    const plannedLossObj = { dolars: PlannedLoss, percent: PlannedLossPerc };
+    const relationRiskRewardObj = { val: RelationRiskReward };
 
+    const referenceEntryObj = { setState: setReferenceEntry };
+    const referenceSharesObj = { setState: setReferenceShares, referenceShare: ReferenceShares };
 
-    const referenceEntry = { name: <Trans>Reference Entry</Trans>, setState: setReferenceEntry };
-    const referenceShares = { name: <Trans>Reference Shares</Trans>, setState: setReferenceShares, referenceShare: ReferenceShares };
-
-    const averagePriceExe = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AveragePriceExe };
-    const sharesTotalsExe = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotalsExe };
-    const sizeAvgPriceExe = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", val: SizeAvgPriceExe };
-    const plannedRewardExe = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedRewardExe, percent: PlannedRewardPercExe };
-    const plannedLossExe = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false, dolars: PlannedLossExe, percent: PlannedLossPercExe };
-    const relationRiskRewardExe = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1", val: RelationRiskRewardExe };
+    const averagePriceExeObj = { val: AveragePriceExe };
+    const sharesTotalsExeObj = { val: SharesTotalsExe };
+    const sizeAvgPriceExeObj = { val: SizeAvgPriceExe };
+    const plannedRewardExeObj = { dolars: PlannedRewardExe, percent: PlannedRewardPercExe };
+    const plannedLossExeObj = { dolars: PlannedLossExe, percent: PlannedLossPercExe };
+    const relationRiskRewardExeObj = { val: RelationRiskRewardExe };
 
     //Unify objects by component
-    const positionRules = { title: <Trans>Rules</Trans>, MaxSize: MaxSizeObj, PositionType: PositionTypeObj, MaxLoss: MaxLossOBJ, Reward: RewardOBJ, Risk: RiskOBJ }
-    const positionPlan = { planningResults: { title: <Trans>Plan results</Trans>, averagePrice: averagePrice, sharesTotals: sharesTotals, sizeAvgPrice: sizeAvgPrice, plannedReward: plannedReward, plannedLoss: plannedLoss, relationRiskReward: relationRiskReward }, planningInput: { title: <Trans>Plan</Trans>, referenceEntry: referenceEntry, referenceShares: referenceShares } };
-    const positionExecute = {
-        isLong: isLong,
-        addExecution: {
-            title: <Trans>Add executions</Trans>, deleteAllText: <Trans>delete all</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, addButtonText: <Trans>Add</Trans>, sellButtonText: <Trans>sellButtonText</Trans>, isLong: isLong
-
-        }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, DeleteStoredExecute: DeleteStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
+    const positionRulesObj = { MaxSizeObj, PositionTypeObj, MaxLossObj, RewardObj, RiskObj }
+    const positionPlanObj = { planningResults: { averagePriceObj, sharesTotalsObj, sizeAvgPriceObj, plannedRewardObj, plannedLossObj, relationRiskRewardObj }, planningInput: { referenceEntryObj, referenceSharesObj } };
+    const positionExecuteObj = {
+        isLong, executed, setExecuted, ChangeStoredExecute, DeleteStoredExecute,
+        planningResults: { averagePriceObj: averagePriceExeObj, sharesTotalsObj: sharesTotalsExeObj, sizeAvgPriceObj: sizeAvgPriceExeObj, plannedRewardObj: plannedRewardExeObj, plannedLossObj: plannedLossExeObj, relationRiskRewardObj: relationRiskRewardExeObj }
     };
-
-    const vars = { isLong, setIsLongChange, MaxSize, setMaxSize, MaxLoss, setMaxLoss, Reward, setReward, Risk, setRisk, Executed, setExecuted }
 
 
     // Effect to get execution values from local storage
@@ -114,9 +107,9 @@ export default function PositionSizing() {
 
     //* Effect to set execution values to local storage
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_EXE, JSON.stringify(Executed));
+        localStorage.setItem(LOCAL_STORAGE_EXE, JSON.stringify(executed));
         calcAveragePriceExe();
-    }, [Executed])
+    }, [executed])
 
     //* Effect to set type to localStorage
     useEffect(() => {
@@ -156,14 +149,14 @@ export default function PositionSizing() {
         calcSizeAveragePrice();
         calcPlannedReward();
         calcPlannedRiskReward();
-    }, [averagePriceExe, Reward, sharesTotalsExe, Risk])
+    }, [averagePriceExeObj, Reward, sharesTotalsExeObj, Risk])
 
 
     //function that allow us to edit a execution value
     function ChangeStoredExecute(id, shares, price) {
-        const newExecuted = [...Executed];
+        const newExecuted = [...executed];
         const Execute = newExecuted.find(x => x.id === id);
-        if (!utils.validationsCheckAllExecutions(Executed, id, shares, isLong)) return false
+        if (!utils.validationsCheckAllExecutions(executed, id, shares, isLong)) return false
         Execute.shares = shares;
         Execute.price = price;
         setExecuted(newExecuted);
@@ -174,8 +167,8 @@ export default function PositionSizing() {
 
     function DeleteStoredExecute(id) {
 
-        if (!utils.validationsCheckAllExecutions(Executed, id, 0, isLong)) return false
-        const Executed_temp = utils.arrayWithDiferentIdThan(Executed, id)
+        if (!utils.validationsCheckAllExecutions(executed, id, 0, isLong)) return false
+        const Executed_temp = utils.arrayWithDiferentIdThan(executed, id)
         setExecuted(Executed_temp);
         calcAveragePriceExe();
         return true
@@ -183,7 +176,7 @@ export default function PositionSizing() {
 
     // CALCULATION AREA
     function calcAveragePriceExe() {
-        const newExecuted = [...Executed];
+        const newExecuted = [...executed];
         let tempAvg = 0;
         let tempTotalSh = 0;
         newExecuted.forEach(executed => {
@@ -302,10 +295,10 @@ export default function PositionSizing() {
         ])) return
         //* End of validations
         const isLongMultiplier = isLong ? 1 : -1
-        const plannedLossTemp = (AveragePrice - Risk) * SharesTotals
-        setPlannedLoss(plannedLossTemp);
-        const plannedLossPercTemp = (AveragePrice - Risk) / AveragePrice * isLongMultiplier
-        setPlannedLossPerc(plannedLossPercTemp * 100);
+        const plannedLossObjTemp = (AveragePrice - Risk) * SharesTotals
+        setPlannedLoss(plannedLossObjTemp);
+        const plannedLossObjPercTemp = (AveragePrice - Risk) / AveragePrice * isLongMultiplier
+        setPlannedLossPerc(plannedLossObjPercTemp * 100);
     }
 
     function calcPlannedReward() {
@@ -317,10 +310,10 @@ export default function PositionSizing() {
         ])) return
         //* End of validations
         const isLongMultiplier = isLong ? 1 : -1
-        const plannedRewardTemp = (Reward - AveragePrice) * SharesTotals
-        setPlannedReward(plannedRewardTemp);
-        const plannedRewardPercTemp = (Reward - AveragePrice) / AveragePrice * isLongMultiplier
-        setPlannedRewardPerc(plannedRewardPercTemp * 100);
+        const plannedRewardObjTemp = (Reward - AveragePrice) * SharesTotals
+        setPlannedReward(plannedRewardObjTemp);
+        const plannedRewardObjPercTemp = (Reward - AveragePrice) / AveragePrice * isLongMultiplier
+        setPlannedRewardPerc(plannedRewardObjPercTemp * 100);
     }
     function calcPlannedRiskReward() {
         //* Init validations
@@ -347,17 +340,17 @@ export default function PositionSizing() {
         <Container className={isLong ? "long" : "short"}>
             <Row>
                 <Col md="3">
-                    <PositionRules positionRules={positionRules} />
+                    <PositionRules positionRulesObj={positionRulesObj} />
                 </Col>
                 <Col>
                     <Row>
                         <Col>
-                            <PositionPlan positionPlan={positionPlan} />
+                            <PositionPlan positionPlanObj={positionPlanObj} />
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <PositionExecute positionExecute={positionExecute} />
+                            <PositionExecute positionExecuteObj={positionExecuteObj} />
                         </Col>
                     </Row>
                 </Col>
