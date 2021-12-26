@@ -7,7 +7,7 @@ export default function PositionRulesInput({ data }) {
 
     function handleChange(e) {
         let value = (utils.abs(ref.current.value))
-        ref.current.value = value
+        if (parseFloat(ref.current.value) != value) ref.current.value = value
         data.setState(parseFloat(value));
     }
 

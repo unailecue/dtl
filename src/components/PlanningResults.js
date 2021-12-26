@@ -3,18 +3,25 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap';
 import PositionPlanOutput from './PositionPlanOutput';
 import PositionPlanOutputPercent from './PositionPlanOutputPercent';
+import { Trans } from 'react-i18next';
+
+const AVERAGE_PRICE = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh" };
+const SHARES_TOTAL = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh" };
+const SIZE_AVERAGE_PRICE = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$" };
+const PLANNED_REWARD = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$" };
+const PLANNED_LOSS = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false };
+const RELATION_RISK_REWARD = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1" };
 
 export default function PlanningResults({ planningResults }) {
 
     const title = planningResults.title;
-    const averagePrice = planningResults.averagePrice;
-    const sharesTotals = planningResults.sharesTotals;
-    const sizeAvgPrice = planningResults.sizeAvgPrice;
-    const plannedReward = planningResults.plannedReward;
-    const plannedLoss = planningResults.plannedLoss;
+    const averagePrice = { ...planningResults.averagePriceObj, ...AVERAGE_PRICE };
+    const sharesTotals = { ...planningResults.sharesTotalsObj, ...SHARES_TOTAL };
+    const sizeAvgPrice = { ...planningResults.sizeAvgPriceObj, ...SIZE_AVERAGE_PRICE };
+    const plannedReward = { ...planningResults.plannedRewardObj, ...PLANNED_REWARD };
+    const plannedLoss = { ...planningResults.plannedLossObj, ...PLANNED_LOSS };
 
-    const relationRiskReward = planningResults.relationRiskReward;
-
+    const relationRiskReward = { ...planningResults.relationRiskRewardObj, ...RELATION_RISK_REWARD };
 
     return (
         <>

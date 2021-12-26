@@ -5,17 +5,25 @@ const enableButtonText = <Trans>Enable</Trans>;
 const deleteButton = <Trans>Delete</Trans>
 
 
-export default function ExecutionValue({ values, changeStoredExecute, DeleteStoredExecute, typeValues }) {
+export default function ExecutionValue({ executionValue }) {
 
 
     const sharesInput = useRef()
     const priceInput = useRef()
     const [isLocked, setisLocked] = useState(true)
+
+    const values = executionValue.values
+    const ChangeStoredExecute = executionValue.ChangeStoredExecute
+    const DeleteStoredExecute = executionValue.DeleteStoredExecute
+    const typeValues = executionValue.typeValues
+
     const shares = values.shares;
     const price = values.price;
     const isLong = typeValues.isLong;
     const buyButton = typeValues.buyButton;
     const sellButton = typeValues.sellButton;
+
+
 
 
     //function that will unlock this execution input
@@ -29,15 +37,15 @@ export default function ExecutionValue({ values, changeStoredExecute, DeleteStor
         let sharesInputValue = Math.abs(sharesInput.current.value);
         isLong ? handleEdit(sharesInputValue) : handleEdit(sharesInputValue * -1)
     }
+
     function handleEditSell(e) {
         let sharesInputValue = Math.abs(sharesInput.current.value);
         isLong ? handleEdit(sharesInputValue * -1) : handleEdit(sharesInputValue)
     }
-    // function that will try to edit the value of this execution
-    function handleEdit(sharesInputValue) {
 
+    function handleEdit(sharesInputValue) {
         if (sharesInputValue !== values.shares || priceInput.current.value !== values.price) {
-            const isChangeExecuted = changeStoredExecute(values.id, sharesInputValue, priceInput.current.value)
+            const isChangeExecuted = ChangeStoredExecute(values.id, sharesInputValue, priceInput.current.value)
             if (!isChangeExecuted) return
             sharesInput.current.value = sharesInputValue;
         }
@@ -45,24 +53,10 @@ export default function ExecutionValue({ values, changeStoredExecute, DeleteStor
         sharesInput.current.disabled = true;
         setisLocked(true);
     }
+
     function handleDelete(e) {
-
         const idToDelete = values.id;
-        console.log(idToDelete)
-
-        //todo debemos ver si aqui hace falta alguna confirmacion de eliminar el valor
-
-        const resp = DeleteStoredExecute(idToDelete)
-
-        console.log(resp)
-        // if (sharesInputValue !== values.shares || priceInput.current.value !== values.price) {
-        //     const isChangeExecuted = changeStoredExecute(values.id, sharesInputValue, priceInput.current.value)
-        //     if (!isChangeExecuted) return
-        //     sharesInput.current.value = sharesInputValue;
-        // }
-        // priceInput.current.disabled = true;
-        // sharesInput.current.disabled = true;
-        // setisLocked(true);
+        DeleteStoredExecute(idToDelete)
     }
     return (
         <div>
