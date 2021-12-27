@@ -5,9 +5,9 @@ import PositionPlanOutput from './PositionPlanOutput';
 import PositionPlanOutputPercent from './PositionPlanOutputPercent';
 import { Trans } from 'react-i18next';
 
-const AVERAGE_PRICE = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh" };
-const SHARES_TOTAL = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh" };
-const SIZE_AVERAGE_PRICE = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$" };
+const AVERAGE_PRICE = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", roudedToDecimals: 2 };
+const SHARES_TOTAL = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", roudedToDecimals: 0 };
+const SIZE_AVERAGE_PRICE = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", roudedToDecimals: 2 };
 const PLANNED_REWARD = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$" };
 const PLANNED_LOSS = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false };
 const RELATION_RISK_REWARD = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1" };

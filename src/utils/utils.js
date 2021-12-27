@@ -14,6 +14,9 @@ const ROUND = {
 
 
 module.exports = {
+    roundBy(num, round) {
+        return num.toFixed(round)
+    },
     roundPrice(num) {
         return num.toFixed(ROUND.price)
     },
