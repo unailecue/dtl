@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PositionType from './PositionType'
 import { Row, Container } from 'react-bootstrap';
 import PositionRulesInput from './PositionRulesInput';
 import { Trans } from 'react-i18next';
+import Alert from 'react-bootstrap/Alert'
 
 
 const TITLE = <Trans>Rules</Trans>;
+const SHORT_VALIDATION_MESSAGE = <Trans>In Short the Risk should be higher than Reward</Trans>;
+const LONG_VALIDATION_MESSAGE = <Trans>In Long the Reward should be higher than Risk</Trans>;
 const MAX_SIZE_OBJ = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true };
 const MAX_LOSS_OBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true };
 const REWARD_OBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false };
@@ -14,12 +17,25 @@ const RISK_OBJ = { name: <Trans>Planned risk level</Trans>, onlyDolarSymbol: fal
 
 export default function PositionRules({ positionRulesObj }) {
 
+    const [showAlert, setShowAlert] = useState(false);
 
     const positionType = positionRulesObj.PositionTypeObj;
     const MaxSize = { ...positionRulesObj.MaxSizeObj, ...MAX_SIZE_OBJ };
     const MaxLoss = { ...positionRulesObj.MaxLossObj, ...MAX_LOSS_OBJ };
     const Reward = { ...positionRulesObj.RewardObj, ...REWARD_OBJ };
     const Risk = { ...positionRulesObj.RiskObj, ...RISK_OBJ };
+
+    const isLong = positionType.islong;
+    const RiskValue = positionRulesObj.RiskObj.value;
+    const RewardValue = positionRulesObj.RewardObj.value;
+
+
+    //*Effect to check if alert should be displayed
+    useEffect(() => {
+        if (isLong && (RiskValue > RewardValue)) return setShowAlert(true);
+        if (!isLong && (RiskValue < RewardValue)) return setShowAlert(true);
+        setShowAlert(false)
+    }, [isLong, RiskValue, RewardValue])
 
     return (
         <div className="box">
@@ -39,16 +55,26 @@ export default function PositionRules({ positionRulesObj }) {
                     <PositionRulesInput data={MaxLoss} />
                 </Row>
                 <hr />
-                <Row>
-                    <PositionRulesInput data={Reward} />
-                </Row>
+                <Alert variant="danger" hidden={!showAlert}>
+                    {isLong ? LONG_VALIDATION_MESSAGE : SHORT_VALIDATION_MESSAGE}
+                </Alert>
+                {
+                    //*to top the reward only in long
+                    isLong &&
+                    <Row>
+                        <PositionRulesInput data={Reward} />
+                    </Row>
+                }
                 <Row>
                     <PositionRulesInput data={Risk} />
                 </Row>
-
-
-
-
+                {
+                    //*to put reward on bottom in short
+                    !isLong &&
+                    <Row>
+                        <PositionRulesInput data={Reward} />
+                    </Row>
+                }
             </Container>
         </div>
     )

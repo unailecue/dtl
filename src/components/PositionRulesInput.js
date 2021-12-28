@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Form, Row, Col, InputGroup } from 'react-bootstrap';
 import * as utils from "../utils/utils";
 import { Trans } from 'react-i18next';
-const CEROVALIDATION = <Trans>0 is not a valid number for rules</Trans>
+const CERO_VALIDATION = <Trans>0 is not a valid number for rules</Trans>
 
 export default function PositionRulesInput({ data }) {
     const ref = useRef()
@@ -24,7 +24,7 @@ export default function PositionRulesInput({ data }) {
                 <InputGroup >
                     <Form.Control type="number" ref={ref} onChange={handleChange} defaultValue={data.value} isInvalid={validated} />
                     <InputGroup.Text>    {data.onlyDolarSymbol ? "$" : "$/sh"}</InputGroup.Text>
-                    <Form.Control.Feedback type="invalid">{CEROVALIDATION}</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">{CERO_VALIDATION}</Form.Control.Feedback>
                 </InputGroup>
             </Col>
         </Form.Group>
