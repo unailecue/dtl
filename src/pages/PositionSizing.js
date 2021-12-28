@@ -271,7 +271,8 @@ export default function PositionSizing() {
             { value: ReferenceShares, name: "ReferenceShares", type: 1 },
         ])) return
         //* End of validations
-        const totalSharesTemp = (SharesTotalsExe + ReferenceShares);
+        const isLongMultiplier = isLong ? 1 : -1
+        const totalSharesTemp = SharesTotalsExe + (ReferenceShares * isLongMultiplier);
         setSharesTotals(totalSharesTemp)
     }
     function calcSizeAveragePrice() {
