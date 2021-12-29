@@ -10,7 +10,7 @@ const SHARES_TOTAL = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh",
 const SIZE_AVERAGE_PRICE = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", roudedToDecimals: 2 };
 const PLANNED_REWARD = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$" };
 const PLANNED_LOSS = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false };
-const RELATION_RISK_REWARD = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1" };
+const RELATION_RISK_REWARD = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1", roudedToDecimals: 1 };
 
 export default function PlanningResults({ planningResults }) {
 
