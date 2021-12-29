@@ -5,7 +5,7 @@ const { Trans } = require('react-i18next');
 const INVALID_TYPE_LONG = "Long type operations cannot have negative shares"
 const INVALID_TYPE_SHORT = "Short type operations cannot have positive shares"
 const ROUND = {
-    price: 3,
+    price: 2,
     shares: 2,
     percent: 1,
     relationRiskReward: 1
