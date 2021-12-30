@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import { Trans } from 'react-i18next';
-const enableButtonText = <Trans>Enable</Trans>;
+const enableButtonText = <Trans>Edit</Trans>;
 const deleteButton = <Trans>Delete</Trans>
 
 

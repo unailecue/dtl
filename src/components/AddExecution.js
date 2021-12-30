@@ -12,7 +12,7 @@ const confirmationValues = {
     deletedTitle: <Trans>Deleted!</Trans>,
     deletedText: <Trans>Your inputs has been deleted.</Trans>
 };
-const TITLE = <Trans>Add executions</Trans>;
+const TITLE = <Trans>Add trade</Trans>;
 const DELETE_ALL_TEXT = <Trans>delete all</Trans>;
 const SHARES_LABEL = <Trans>Shares</Trans>;
 const PRICE_LABEL = <Trans>Price</Trans>;
