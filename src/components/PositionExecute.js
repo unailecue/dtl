@@ -41,7 +41,7 @@ export default function PositionExecute({ positionExecuteObj }) {
 
     return (
         <div className="box">
-            <h5>Execute</h5>
+            <h5>Executed</h5>
             <Row>
                 <Col sm="6">
                     <Row>
