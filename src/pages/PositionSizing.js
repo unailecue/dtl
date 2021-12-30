@@ -4,27 +4,22 @@ import { Row, Col, Container } from 'react-bootstrap';
 import PositionRules from '../components/PositionRules';
 import PositionPlan from '../components/PositionPlan';
 import PositionExecute from '../components/PositionExecute';
-import { Trans } from 'react-i18next';
 import utils from '../utils/utils';
+import { useSessionStorage } from "../customHooks/useStorage"
 
-const LOCAL_STORAGE_EXE = "storage.executedvalues";
-const LOCAL_STORAGE_TYPE = "storage.type";
-const LOCAL_STORAGE_MAX_SIZE = "storage.maxSize";
-const LOCAL_STORAGE_MAX_LOSS = "storage.maxLoss";
-const LOCAL_STORAGE_REWARD = "storage.reward";
-const LOCAL_STORAGE_RISK = "storage.risk";
-
+const LOCAL_STORAGE_INIT_VALUE = "storage.";
 
 export default function PositionSizing() {
 
 
 
     //Variables and Hooks for important data
-    const [isLong, setIsLongChange] = useState();
-    const [MaxSize, setMaxSize] = useState();
-    const [MaxLoss, setMaxLoss] = useState();
-    const [Reward, setReward] = useState();
-    const [Risk, setRisk] = useState();
+    const [isLong, setIsLongChange,] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}isLong`, "")
+    const [MaxSize, setMaxSize, removeMaxSize] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}MaxSize`, "")
+    const [MaxLoss, setMaxLoss, removeMaxLoss] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}MaxLoss`, "")
+    const [Reward, setReward, removeReward] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}Reward`, "")
+    const [Risk, setRisk, removeRisk] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}Risk`, "")
+
 
     const [AveragePrice, setAveragePrice] = useState(0);
     const [SharesTotals, setSharesTotals] = useState(0);
@@ -49,7 +44,7 @@ export default function PositionSizing() {
     const [RelationRiskRewardExe, setRelationRiskRewardExe] = useState(0);
 
     //Object construction
-    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted: setExecuted, Executed: executed };
+    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted, Executed: executed, setReward, setRisk, Risk };
     const MaxSizeObj = { setState: setMaxSize, value: MaxSize };
     const MaxLossObj = { setState: setMaxLoss, value: MaxLoss };
     const RewardObj = { setState: setReward, value: Reward };
@@ -89,62 +84,6 @@ export default function PositionSizing() {
         isLong, executed, setExecuted, ChangeStoredExecute, DeleteStoredExecute,
         planningResults: { averagePriceObj: averagePriceExeObj, sharesTotalsObj: sharesTotalsExeObj, sizeAvgPriceObj: sizeAvgPriceExeObj, plannedRewardObj: plannedRewardExeObj, plannedLossObj: plannedLossExeObj, relationRiskRewardObj: relationRiskRewardExeObj }
     };
-
-
-    // Effect to get execution values from local storage
-    useEffect(() => {
-        //* Executed values
-        const storedExecuted = JSON.parse(localStorage.getItem(LOCAL_STORAGE_EXE))
-        if (storedExecuted) setExecuted(storedExecuted);
-        //* Execution type
-        const storedType = localStorage.getItem(LOCAL_STORAGE_TYPE);
-        let tempIsLong = true;
-        if (storedType === "false") tempIsLong = false
-        setIsLongChange(tempIsLong);
-        //* Max size
-        const maxSize = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MAX_SIZE))
-        if (maxSize) setMaxSize(maxSize);
-        //* Max loss
-        const maxLoss = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MAX_LOSS))
-        if (maxLoss) setMaxLoss(maxLoss);
-        //* Reward
-        const reward = JSON.parse(localStorage.getItem(LOCAL_STORAGE_REWARD))
-        if (reward) setReward(reward);
-        //* Risk
-        const risk = JSON.parse(localStorage.getItem(LOCAL_STORAGE_RISK))
-        if (risk) setRisk(risk);
-    }, []);
-
-    //* Effect to set execution values to local storage
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_EXE, JSON.stringify(executed));
-        calcAveragePriceExe();
-    }, [executed])
-
-    //* Effect to set type to localStorage
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_TYPE, isLong);
-    }, [isLong])
-
-    //* Effect to set maxSize values to local storage
-    useEffect(() => {
-        if (MaxSize) localStorage.setItem(LOCAL_STORAGE_MAX_SIZE, JSON.stringify(MaxSize));
-    }, [MaxSize])
-
-    //* Effect to set maxSize values to local storage
-    useEffect(() => {
-        if (MaxLoss) localStorage.setItem(LOCAL_STORAGE_MAX_LOSS, JSON.stringify(MaxLoss));
-    }, [MaxLoss])
-
-    //* Effect to set maxSize values to local storage
-    useEffect(() => {
-        if (Risk) localStorage.setItem(LOCAL_STORAGE_RISK, JSON.stringify(Risk));
-    }, [Risk])
-
-    //* Effect to set maxSize values to local storage
-    useEffect(() => {
-        if (Reward) localStorage.setItem(LOCAL_STORAGE_REWARD, JSON.stringify(Reward));
-    }, [Reward])
 
     //* Use Effect for formula Calculations
     useEffect(() => {

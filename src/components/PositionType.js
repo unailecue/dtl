@@ -21,7 +21,7 @@ export default function PositionType({ data }) {
         if (data.islong === true) return
         //* we set is long type to TRUE
         data.Executed.length === 0 ?
-            data.setState(true) :
+            setDataAndRemoveRiskReward(data, true) :
             confirmationOfDeleteExecutions(true);
     }
     function handleChangeShort(e) {
@@ -29,15 +29,22 @@ export default function PositionType({ data }) {
         if (data.islong === false) return
         //* we set is long type to FALSE
         data.Executed.length === 0 ?
-            data.setState(false) :
+            setDataAndRemoveRiskReward(data, false) :
             confirmationOfDeleteExecutions(false);
+    }
+    function setDataAndRemoveRiskReward(data, value) {
+        data.setState(value);
+        data.setRisk(null);
+        data.setReward(null)
     }
 
     function confirmationOfDeleteExecutions(val) {
         //*Confirmation that you will delete all reacords
         const setExecuted = data.setExecuted;
         const setState = data.setState;
-        utils.confirmationsModal(confirmationObject, [() => setExecuted([]), () => setState(val)]);
+        const setReward = data.setReward;
+        const setRisk = data.setRisk;
+        utils.confirmationsModal(confirmationObject, [() => setExecuted([]), () => setState(val), () => setRisk(null), () => setReward(null)]);
     }
     return (
         <>
