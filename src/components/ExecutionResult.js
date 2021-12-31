@@ -29,8 +29,7 @@ export default function ExecutionResult({ executionResult }) {
                     </Col>
                     {executed.length === 0 ? <div>{NO_TRADES_ADDED}</div>
                         : executed.map((values) => {
-                            executionResult.values = values;
-                            return <ExecutionValue executionValue={executionResult} key={values.id} />
+                            return <ExecutionValue executionValue={executionResult} key={values.id} values={values} />
                         })}
                 </Row>
             </div>
