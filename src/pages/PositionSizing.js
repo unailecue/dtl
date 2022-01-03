@@ -98,7 +98,7 @@ export default function PositionSizing() {
         calcPlannedLoss();
         calcPlannedReward();
         calcPlannedRiskReward();
-    }, [ReferenceEntry]);
+    }, [ReferenceEntry, executed]);
     useEffect(() => {
         calcReferenceShare();
     }, [MaxSize]);
@@ -136,6 +136,11 @@ export default function PositionSizing() {
     useEffect(() => {
         calcSizeAveragePrice()
     }, [SharesTotals, AveragePrice]);
+    useEffect(() => {
+        calcRewardExe();
+        calcLossExe();
+        calcRiskRewardMedia();
+    }, [AveragePriceExe]);
 
 
     //* Function that allow us to edit a execution value
