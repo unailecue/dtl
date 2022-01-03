@@ -5,14 +5,13 @@ const enableButtonText = <Trans>Edit</Trans>;
 const deleteButton = <Trans>Delete</Trans>
 
 
-export default function ExecutionValue({ executionValue }) {
+export default function ExecutionValue({ executionValue, values }) {
 
 
     const sharesInput = useRef()
     const priceInput = useRef()
     const [isLocked, setisLocked] = useState(true)
 
-    const values = executionValue.values
     const ChangeStoredExecute = executionValue.ChangeStoredExecute
     const DeleteStoredExecute = executionValue.DeleteStoredExecute
     const typeValues = executionValue.typeValues
@@ -22,9 +21,6 @@ export default function ExecutionValue({ executionValue }) {
     const isLong = typeValues.isLong;
     const buyButton = typeValues.buyButton;
     const sellButton = typeValues.sellButton;
-
-
-
 
     //function that will unlock this execution input
     function handleUnlock(e) {
