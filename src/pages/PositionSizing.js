@@ -137,10 +137,18 @@ export default function PositionSizing() {
         calcSizeAveragePrice()
     }, [SharesTotals, AveragePrice]);
     useEffect(() => {
-        calcRewardExe();
-        calcLossExe();
-        calcRiskRewardMedia();
-    }, [AveragePriceExe]);
+        calcAveragePrice();
+    }, [ReferenceShares]);
+    useEffect(() => {
+        calcPlannedReward();
+        calcPlannedLoss();
+        calcPlannedRiskReward();
+    }, [AveragePrice]);
+
+
+
+
+
 
 
     //* Function that allow us to edit a execution value
