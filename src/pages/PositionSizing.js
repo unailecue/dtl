@@ -33,7 +33,9 @@ export default function PositionSizing() {
     const [ReferenceEntry, setReferenceEntry] = useState(0);
     const [ReferenceShares, setReferenceShares] = useState(0);
 
-    const [executed, setExecuted] = useState([]);
+
+    const [executed, setExecuted, removeExecuted] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}executed`, [])
+
     const [AveragePriceExe, setAveragePriceExe] = useState(0);
     const [SharesTotalsExe, setSharesTotalsExe] = useState(0);
     const [SizeAvgPriceExe, setSizeAvgPriceExe] = useState(0);
@@ -86,22 +88,57 @@ export default function PositionSizing() {
     };
 
     //* Use Effect for formula Calculations
+
     useEffect(() => {
-        //todo check wich should be changed and wich not
+        calcAveragePriceExe();
+    }, [executed]);
+    useEffect(() => {
+        calcReferenceShare();
+        calcAveragePrice();
+        calcPlannedLoss();
+        calcPlannedReward();
+        calcPlannedRiskReward();
+    }, [ReferenceEntry]);
+    useEffect(() => {
+        calcReferenceShare();
+    }, [MaxSize]);
+    useEffect(() => {
+        calcReferenceShare();
+    }, [MaxLoss]);
+    useEffect(() => {
+        calcLossExe();
+        calcRiskRewardMedia();
+        calcReferenceShare();
+        calcPlannedLoss();
+        calcPlannedRiskReward();
+    }, [Risk]);
+    useEffect(() => {
+        calcRewardExe();
+        calcRiskRewardMedia();
+        calcPlannedReward();
+        calcPlannedRiskReward();
+    }, [Reward]);
+    useEffect(() => {
         calcRewardExe();
         calcLossExe();
         calcRiskRewardMedia();
         calcReferenceShare();
-        calcAveragePrice();
-        calcPlannedLoss();
-        calcTotalShares();
-        calcSizeAveragePrice();
         calcPlannedReward();
+        calcPlannedLoss();
         calcPlannedRiskReward();
-    }, [averagePriceExeObj, Reward, sharesTotalsExeObj, Risk])
+    }, [AveragePriceExe]);
+    useEffect(() => {
+        calcTotalShares();
+        calcPlannedReward();
+        calcPlannedLoss();
+        calcPlannedRiskReward();
+    }, [ReferenceShares]);
+    useEffect(() => {
+        calcSizeAveragePrice()
+    }, [SharesTotals, AveragePrice]);
 
 
-    //function that allow us to edit a execution value
+    //* Function that allow us to edit a execution value
     function ChangeStoredExecute(id, shares, price) {
         const newExecuted = [...executed];
         const Execute = newExecuted.find(x => x.id === id);
@@ -140,6 +177,7 @@ export default function PositionSizing() {
         setAveragePriceExe(tempAvg);
         setSharesTotalsExe(tempTotalSh);
         setSizeAvgPriceExe((tempTotalSh * tempAvg) * isLongMultiplier);
+        calcSizeAveragePrice();
     }
 
     function calcRewardExe() {
@@ -152,6 +190,7 @@ export default function PositionSizing() {
         setPlannedRewardPercExe(((Reward - AveragePriceExe) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
+
     function calcLossExe() {
 
         if (!utils.validateInputs("calcLossExe", [
@@ -163,6 +202,7 @@ export default function PositionSizing() {
         setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
+
     function calcRiskRewardMedia() {
         //* Init validations
         if (!utils.validateInputs("calcRiskRewardMedia", [
@@ -224,6 +264,7 @@ export default function PositionSizing() {
         const totalSharesTemp = SharesTotalsExe + (ReferenceShares * isLongMultiplier);
         setSharesTotals(totalSharesTemp)
     }
+
     function calcSizeAveragePrice() {
         //* Init validations
         if (!utils.validateInputs("calcSizeAveragePrice", [
@@ -265,6 +306,7 @@ export default function PositionSizing() {
         const plannedRewardObjPercTemp = (Reward - AveragePrice) / AveragePrice * isLongMultiplier
         setPlannedRewardPerc(plannedRewardObjPercTemp * 100);
     }
+
     function calcPlannedRiskReward() {
         //* Init validations
 
