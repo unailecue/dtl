@@ -46,7 +46,7 @@ export default function PositionSizing() {
     const [RelationRiskRewardExe, setRelationRiskRewardExe] = useState(0);
 
     //Object construction
-    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted, Executed: executed, setReward, setRisk, Risk };
+    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted, Executed: executed, removeAllData };
     const MaxSizeObj = { setState: setMaxSize, value: MaxSize };
     const MaxLossObj = { setState: setMaxLoss, value: MaxLoss };
     const RewardObj = { setState: setReward, value: Reward };
@@ -88,67 +88,122 @@ export default function PositionSizing() {
     };
 
     //* Use Effect for formula Calculations
-
     useEffect(() => {
         calcAveragePriceExe();
     }, [executed]);
     useEffect(() => {
+        if (!utils.validateInputs("calcRewardExe", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+        ])) return
+        calcRewardExe();
+    }, [AveragePriceExe, Reward, SharesTotalsExe]);
+    useEffect(() => {
+        if (!utils.validateInputs("calcLossExe", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+        ])) return
+        calcLossExe();
+    }, [AveragePriceExe, Risk, SharesTotalsExe]);
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcRiskRewardMedia", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+        ])) return
+        if (AveragePriceExe === 0) return setRelationRiskRewardExe(0);
+        if ((AveragePriceExe - Risk) === 0) return setRelationRiskRewardExe(0);
+        //* End of validations
+        calcRiskRewardMedia();
+    }, [AveragePriceExe, Risk, Reward]);
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcReferenceShare", [
+            { value: MaxLoss, name: "MaxLoss", type: 1 },
+            { value: PlannedLossExe, name: "PlannedLossExe", type: 1 },
+            { value: ReferenceEntry, name: "ReferenceEntry", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+        ])) return
+        if (ReferenceEntry === 0) return setReferenceShares((0))
+        //* End of validations
         calcReferenceShare();
+    }, [RelationRiskReward, SizeAvgPriceExe, ReferenceEntry, plannedLossExeObj, Reward]);
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcAveragePrice", [
+            { value: ReferenceShares, name: "ReferenceShares", type: 1 },
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: SizeAvgPriceExe, name: "SizeAvgPriceExe", type: 1 },
+        ])) return
+        //* End of validations
         calcAveragePrice();
-        calcPlannedLoss();
-        calcPlannedReward();
-        calcPlannedRiskReward();
-    }, [ReferenceEntry, executed]);
+    }, [ReferenceShares, AveragePriceExe, SizeAvgPriceExe]);
     useEffect(() => {
-        calcReferenceShare();
-    }, [MaxSize]);
-    useEffect(() => {
-        calcReferenceShare();
-    }, [MaxLoss]);
-    useEffect(() => {
-        calcLossExe();
-        calcRiskRewardMedia();
-        calcReferenceShare();
-        calcPlannedLoss();
-        calcPlannedRiskReward();
-    }, [Risk]);
-    useEffect(() => {
-        calcRewardExe();
-        calcRiskRewardMedia();
-        calcPlannedReward();
-        calcPlannedRiskReward();
-    }, [Reward]);
-    useEffect(() => {
-        calcRewardExe();
-        calcLossExe();
-        calcRiskRewardMedia();
-        calcReferenceShare();
-        calcPlannedReward();
-        calcPlannedLoss();
-        calcPlannedRiskReward();
-    }, [AveragePriceExe]);
-    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcTotalShares", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: ReferenceShares, name: "ReferenceShares", type: 1 },
+        ])) return
+        //* End of validations
         calcTotalShares();
-        calcPlannedReward();
+    }, [ReferenceShares, SharesTotalsExe]);
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcSizeAveragePrice", [
+            { value: SharesTotals, name: "SharesTotals", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+        ])) return
+        //* End of validations
+        calcSizeAveragePrice();
+    }, [AveragePrice, SharesTotals]);
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedLoss", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+        ])) return
+        //* End of validations
         calcPlannedLoss();
-        calcPlannedRiskReward();
-    }, [ReferenceShares]);
+    }, [AveragePrice, Risk, SharesTotals]);
     useEffect(() => {
-        calcSizeAveragePrice()
-    }, [SharesTotals, AveragePrice]);
-    useEffect(() => {
-        calcAveragePrice();
-    }, [ReferenceShares]);
-    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedReward", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+        ])) return
+        //* End of validations
         calcPlannedReward();
-        calcPlannedLoss();
+    }, [AveragePrice, Reward, SharesTotals]);
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedRiskReward", [
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+        ])) return setRelationRiskReward(0)
+        //* End of validations
         calcPlannedRiskReward();
-    }, [AveragePrice]);
+    }, [AveragePrice, Reward, Risk]);
 
 
 
 
-
+    function removeAllData() {
+        //*We will skip only max size and max lose
+        console.log("remove all")
+        setSizeAvgPriceExe(0)
+        setPlannedLossPercExe(0)
+        setReferenceShares(0)
+        setReferenceEntry(0)
+        setRisk(0)
+        setReward(0)
+        setAveragePrice(0)
+    }
 
 
     //* Function that allow us to edit a execution value
@@ -190,114 +245,59 @@ export default function PositionSizing() {
         setAveragePriceExe(tempAvg);
         setSharesTotalsExe(tempTotalSh);
         setSizeAvgPriceExe((tempTotalSh * tempAvg) * isLongMultiplier);
-        calcSizeAveragePrice();
     }
 
     function calcRewardExe() {
-        if (!utils.validateInputs("calcRewardExe", [
-            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
-            { value: Reward, name: "Reward", type: 1 },
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-        ])) return
         const isLongMultiplier = isLong ? 1 : -1
         setPlannedRewardPercExe(((Reward - AveragePriceExe) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
 
     function calcLossExe() {
-
-        if (!utils.validateInputs("calcLossExe", [
-            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
-            { value: Risk, name: "Risk", type: 1 },
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-        ])) return
         const isLongMultiplier = isLong ? 1 : -1
         setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
 
     function calcRiskRewardMedia() {
-        //* Init validations
-        if (!utils.validateInputs("calcRiskRewardMedia", [
-            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
-            { value: Risk, name: "Risk", type: 1 },
-            { value: Reward, name: "Reward", type: 1 },
-        ])) return
-
-        if (AveragePriceExe === 0) return setRelationRiskRewardExe(0);
-        if ((AveragePriceExe - Risk) === 0) return setRelationRiskRewardExe(0);
-        //* End of validations
         setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)))
-
     }
 
     function calcReferenceShare() {
-        if (isNaN(MaxLoss) && isNaN(PlannedLossExe) && isNaN(ReferenceEntry) && isNaN(Risk)) return console.log("no aplica")
-        if (ReferenceEntry === 0) return setReferenceShares((0))
         let maxLossWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
         let maxSizeWay = (parseFloat(MaxSize) - parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
-        let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk))) + parseFloat(SizeAvgPriceExe);
         const isLongMultiplier = isLong ? 1 : -1
+        let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk) * isLongMultiplier)) + parseFloat(SizeAvgPriceExe);
         let finalValue = 0;
         if (compare > MaxSize) {
-            console.log("%c ReferenceShare: Basado en la maxSizeWay formula", "color: #bada55")
             if (isNaN(maxSizeWay)) return;
-            finalValue = (maxSizeWay * isLongMultiplier);
+            finalValue = (maxSizeWay);
         } else {
-            console.log("%c ReferenceShare: Basado en la segunda maxLossWay", "color: blue")
             if (isNaN(maxLossWay)) return;
-            finalValue = (maxLossWay * isLongMultiplier);
+            finalValue = (maxLossWay);
         }
-        setReferenceShares(parseFloat(finalValue.toFixed(0)))
+        setReferenceShares(Math.trunc(utils.abs(finalValue)))
     }
 
     function calcAveragePrice() {
-        //* Init validations
-        if (!utils.validateInputs("calcAveragePrice", [
-            //todo cambiar estas validaciones
-            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
-            { value: SizeAvgPriceExe, name: "SizeAvgPriceExe", type: 1 },
-            { value: ReferenceEntry, name: "ReferenceEntry", type: 1 },
-        ])) return
-        //* End of validations
         const isLongMultiplier = isLong ? 1 : -1
-
         const avgPriceTemp = (SizeAvgPriceExe + (ReferenceEntry * ReferenceShares)) / (ReferenceShares + (SharesTotalsExe * isLongMultiplier))
         setAveragePrice(avgPriceTemp)
     }
 
     function calcTotalShares() {
-        //* Init validations
-        if (!utils.validateInputs("calcTotalShares", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: ReferenceShares, name: "ReferenceShares", type: 1 },
-        ])) return
-        //* End of validations
         const isLongMultiplier = isLong ? 1 : -1
         const totalSharesTemp = SharesTotalsExe + (ReferenceShares * isLongMultiplier);
         setSharesTotals(totalSharesTemp)
     }
 
     function calcSizeAveragePrice() {
-        //* Init validations
-        if (!utils.validateInputs("calcSizeAveragePrice", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: AveragePrice, name: "AveragePrice", type: 1 },
-        ])) return
-        //* End of validations
         const isLongMultiplier = isLong ? 1 : -1
         const size = (SharesTotals * AveragePrice) * isLongMultiplier;
         setSizeAvgPrice(size)
     }
 
     function calcPlannedLoss() {
-        //* Init validations
-        if (!utils.validateInputs("calcPlannedLoss", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: AveragePrice, name: "AveragePrice", type: 1 },
-            { value: Risk, name: "Risk", type: 1 },
-        ])) return
-        //* End of validations
         const isLongMultiplier = isLong ? 1 : -1
         const plannedLossObjTemp = (AveragePrice - Risk) * SharesTotals
         setPlannedLoss(plannedLossObjTemp);
@@ -306,13 +306,6 @@ export default function PositionSizing() {
     }
 
     function calcPlannedReward() {
-        //* Init validations
-        if (!utils.validateInputs("calcPlannedReward", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: AveragePrice, name: "AveragePrice", type: 1 },
-            { value: Reward, name: "Reward", type: 1 },
-        ])) return
-        //* End of validations
         const isLongMultiplier = isLong ? 1 : -1
         const plannedRewardObjTemp = (Reward - AveragePrice) * SharesTotals
         setPlannedReward(plannedRewardObjTemp);
@@ -321,25 +314,13 @@ export default function PositionSizing() {
     }
 
     function calcPlannedRiskReward() {
-        //* Init validations
-
-        if (!utils.validateInputs("calcPlannedRiskReward", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: AveragePrice, name: "AveragePrice", type: 1 },
-            { value: Reward, name: "Reward", type: 1 },
-            { value: Risk, name: "Risk", type: 1 },
-        ])) return setRelationRiskReward(0)
-        //* End of validations
         if (AveragePrice === 0) return setRelationRiskReward(0);
         const plannedRiskRewardTemp = (Reward - AveragePrice) / (AveragePrice - Risk)
         setRelationRiskReward(plannedRiskRewardTemp);
 
     }
     // CALCULATION AREA
-
-    //todo stringInComponent -> remove all string passing throgh components and have them in each component whit the TRANS tag
     //todo useContext -> we need to use context to pass round values, to only have round in the visual components
-    //todo useEffect -> filter better the useeffect by each calculation and having it controlled
 
     return (
         <Container className={isLong ? "long" : "short"}>
