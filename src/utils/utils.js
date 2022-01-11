@@ -10,6 +10,7 @@ const ROUND = {
     percent: 1,
     relationRiskReward: 1
 }
+const PRINT_VALIDATIONS = false;
 
 
 
@@ -34,12 +35,20 @@ module.exports = {
     },
     checkIfHaveValidPositiveNumber(number) {
         if (!this.checkIfHaveValidNumber(number)) return false
-        if (number < 0) { console.log("Invalid-checkIfHaveValidRuleNumber(3) ", number); return false };
+        if (number < 0) {
+            if (PRINT_VALIDATIONS) console.log("Invalid-checkIfHaveValidRuleNumber(3) ", number);
+            return false
+        };
         return true
     },
     checkIfHaveValidNumber(number) {
-        if (isNaN(number)) { console.log("Invalid-checkIfHaveValidRuleNumber(1) ", number); return false };
-        if (number === 0) { console.log("Invalid-checkIfHaveValidRuleNumber(2) ", number); return false };
+        if (isNaN(number)) {
+            if (PRINT_VALIDATIONS) console.log("Invalid-checkIfHaveValidRuleNumber(1) ", number); return false
+        };
+        if (number === 0) {
+            if (PRINT_VALIDATIONS) console.log("Invalid-checkIfHaveValidRuleNumber(2) ", number);
+            return false
+        };
         return true
     },
     validateInputs(funct, arrValues) {
@@ -49,17 +58,16 @@ module.exports = {
             const type = element.type;
             if (type == 1) {
                 if (!this.checkIfHaveValidNumber(value)) {
-                    console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: yellow")
+                    if (PRINT_VALIDATIONS) console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: yellow")
                     return false;
                 }
             }
             if (type == 2) {
                 if (!this.checkIfHaveValidPositiveNumber(value)) {
-                    console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: orange")
+                    if (PRINT_VALIDATIONS) console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: orange")
                     return false;
                 }
             }
-
         });
         return true;
 
