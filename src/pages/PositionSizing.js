@@ -72,6 +72,7 @@ export default function PositionSizing() {
     const [invalidValueReferenceEntry, setInvalidValueReferenceEntry] = useState(false)
     useEffect(() => {
         if (isNaN(Risk) || isNaN(Reward) || isNaN(ReferenceEntry)) return setInvalidValueReferenceEntry(false);
+        if (ReferenceEntry === 0) return setInvalidValueReferenceEntry(false);
         if (Risk <= ReferenceEntry && ReferenceEntry <= Reward) return setInvalidValueReferenceEntry(false);
         if (Risk >= ReferenceEntry && ReferenceEntry >= Reward) return setInvalidValueReferenceEntry(false);
         setInvalidValueReferenceEntry(true)
