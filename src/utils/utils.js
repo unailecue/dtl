@@ -1,17 +1,23 @@
 
 const { toast } = require('react-toastify');
-const Swal = require('sweetalert2');
+const { confirmAlert } = require('react-confirm-alert');
+const { Trans } = require('react-i18next');
 const INVALID_TYPE_LONG = "Long type operations cannot have negative shares"
 const INVALID_TYPE_SHORT = "Short type operations cannot have positive shares"
 const ROUND = {
-    price: 3,
+    price: 2,
     shares: 2,
     percent: 1,
     relationRiskReward: 1
 }
+const PRINT_VALIDATIONS = false;
+
 
 
 module.exports = {
+    roundBy(num, round) {
+        return num.toFixed(round)
+    },
     roundPrice(num) {
         return num.toFixed(ROUND.price)
     },
@@ -29,12 +35,20 @@ module.exports = {
     },
     checkIfHaveValidPositiveNumber(number) {
         if (!this.checkIfHaveValidNumber(number)) return false
-        if (number < 0) { console.log("Invalid-checkIfHaveValidRuleNumber(3) ", number); return false };
+        if (number < 0) {
+            if (PRINT_VALIDATIONS) console.log("Invalid-checkIfHaveValidRuleNumber(3) ", number);
+            return false
+        };
         return true
     },
     checkIfHaveValidNumber(number) {
-        if (isNaN(number)) { console.log("Invalid-checkIfHaveValidRuleNumber(1) ", number); return false };
-        if (number === 0) { console.log("Invalid-checkIfHaveValidRuleNumber(2) ", number); return false };
+        if (isNaN(number)) {
+            if (PRINT_VALIDATIONS) console.log("Invalid-checkIfHaveValidRuleNumber(1) ", number); return false
+        };
+        if (number === 0) {
+            if (PRINT_VALIDATIONS) console.log("Invalid-checkIfHaveValidRuleNumber(2) ", number);
+            return false
+        };
         return true
     },
     validateInputs(funct, arrValues) {
@@ -44,17 +58,16 @@ module.exports = {
             const type = element.type;
             if (type == 1) {
                 if (!this.checkIfHaveValidNumber(value)) {
-                    console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: yellow")
+                    if (PRINT_VALIDATIONS) console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: yellow")
                     return false;
                 }
             }
             if (type == 2) {
                 if (!this.checkIfHaveValidPositiveNumber(value)) {
-                    console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: orange")
+                    if (PRINT_VALIDATIONS) console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: orange")
                     return false;
                 }
             }
-
         });
         return true;
 
@@ -85,27 +98,6 @@ module.exports = {
             theme: "colored"
         })
     },
-    swal({ title, text, confirmButtonText, cancelButtonText, deletedText, deletedTitle }, confirmFunctions) {
-        Swal.fire({
-            title: title,
-            text: text,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: confirmButtonText,
-            cancelButtonText: cancelButtonText
-        }).then((result) => {
-            if (result.isConfirmed) {
-                confirmFunctions.forEach(fn => fn());
-                Swal.fire(
-                    deletedTitle,
-                    deletedText,
-                    'success'
-                )
-            }
-        })
-    },
     validationsCheckExecutions(type, executions, share) {
         console.log({ type })
         console.log({ executions })
@@ -122,8 +114,57 @@ module.exports = {
             return false;
 
         }
+    }, confirmationsModal({ title, text, confirmButtonText, cancelButtonText, deletedText, deletedTitle }, confirmFunctions) {
+        confirmAlert({
+            title: title,
+            message: text,
+            buttons: [
+                {
+                    label: confirmButtonText,
+                    onClick: () => this.executeConfirmations(confirmFunctions)
+                },
+                {
+                    label: cancelButtonText,
+                    onClick: () => console.log('Process canceled')
+                }
+            ]
+        });
+    },
+    executeConfirmations(confirmFunctions) {
+        confirmFunctions.forEach(fn => fn());
+    },
+    validationsCheckAllExecutions(executions, id, shares, isLong) {
+        let tempShareAmmount = 0;
+        let response = true;
+        executions.forEach(element => {
+            if (response === false) return false
+            let thisShare = element.shares;
+            if (element.id === id) thisShare = shares
+            tempShareAmmount += thisShare;
+            if (isLong && (tempShareAmmount < 0)) {
+                this.error(INVALID_TYPE_LONG)
+                response = false;
+                return;
+            }
+            if (!isLong && (tempShareAmmount > 0)) {
+                this.error(INVALID_TYPE_SHORT)
+                response = false;
+                return;
+            }
+        });
+        return response;
+    },
+    arrayWithDiferentIdThan(executions, id) {
+
+        let response = [];
+        executions.forEach(element => {
+            if (element.id !== id) {
+                response.push(element)
+            }
+        });
+        return response;
     }
 
 
+
 }
-// todo: validationsCheckAllExecutions -> we need to check if the execution that we are trying to change is logical for the execution type and if the oreder make sence, not having positive shares in short or negative ammount of share in long in any moment of the execution

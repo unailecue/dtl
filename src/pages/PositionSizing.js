@@ -1,36 +1,25 @@
-import React, { useEffect, useRef, useState, useSetState } from 'react'
+import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 import PositionRules from '../components/PositionRules';
 import PositionPlan from '../components/PositionPlan';
 import PositionExecute from '../components/PositionExecute';
-import { Trans } from 'react-i18next';
-import { render } from 'react-dom';
 import utils from '../utils/utils';
+import { useSessionStorage } from "../customHooks/useStorage"
 
-const LOCAL_STORAGE_EXE = "storage.executedvalues";
-const LOCAL_STORAGE_TYPE = "storage.type";
-const LOCAL_STORAGE_MAX_SIZE = "storage.maxSize";
-const LOCAL_STORAGE_MAX_LOSS = "storage.maxLoss";
-const LOCAL_STORAGE_REWARD = "storage.reward";
-const LOCAL_STORAGE_RISK = "storage.risk";
-
-const ROUND = {
-    price: 3,
-    shares: 2
-}
-
+const LOCAL_STORAGE_INIT_VALUE = "storage.";
 
 export default function PositionSizing() {
 
 
 
     //Variables and Hooks for important data
-    const [isLong, setIsLongChange] = useState();
-    const [MaxSize, setMaxSize] = useState();
-    const [MaxLoss, setMaxLoss] = useState();
-    const [Reward, setReward] = useState();
-    const [Risk, setRisk] = useState();
+    const [isLong, setIsLongChange,] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}isLong`, "")
+    const [MaxSize, setMaxSize, removeMaxSize] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}MaxSize`, "")
+    const [MaxLoss, setMaxLoss, removeMaxLoss] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}MaxLoss`, "")
+    const [Reward, setReward, removeReward] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}Reward`, "")
+    const [Risk, setRisk, removeRisk] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}Risk`, "")
+
 
     const [AveragePrice, setAveragePrice] = useState(0);
     const [SharesTotals, setSharesTotals] = useState(0);
@@ -44,7 +33,8 @@ export default function PositionSizing() {
     const [ReferenceEntry, setReferenceEntry] = useState(0);
     const [ReferenceShares, setReferenceShares] = useState(0);
 
-    const [Executed, setExecuted] = useState([]);
+
+    const [executed, setExecuted, removeExecuted] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}executed`, [])
 
     const [AveragePriceExe, setAveragePriceExe] = useState(0);
     const [SharesTotalsExe, setSharesTotalsExe] = useState(0);
@@ -56,136 +46,195 @@ export default function PositionSizing() {
     const [RelationRiskRewardExe, setRelationRiskRewardExe] = useState(0);
 
     //Object construction
-    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted: setExecuted, Executed: Executed };
-    const MaxSizeObj = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true, setState: setMaxSize, value: MaxSize };
-    const MaxLossOBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true, setState: setMaxLoss, value: MaxLoss };
-    const RewardOBJ = { name: <Trans>Planned reward level</Trans>, onlyDolarSymbol: false, setState: setReward, value: Reward };
-    const RiskOBJ = { name: <Trans>Planned risk level</Trans>, onlyDolarSymbol: false, setState: setRisk, value: Risk };
+    const PositionTypeObj = { islong: isLong, setState: setIsLongChange, setExecuted, Executed: executed, removeAllData };
+    const MaxSizeObj = { setState: setMaxSize, value: MaxSize };
+    const MaxLossObj = { setState: setMaxLoss, value: MaxLoss };
+    const RewardObj = { setState: setReward, value: Reward };
+    const RiskObj = { setState: setRisk, value: Risk };
 
-    const averagePrice = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AveragePrice };
-    const sharesTotals = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotals };
-    const sizeAvgPrice = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", val: SizeAvgPrice };
-    const plannedReward = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedReward, percent: PlannedRewardPerc };
-    const plannedLoss = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false, dolars: PlannedLoss, percent: PlannedLossPerc };
-    const relationRiskReward = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1", val: RelationRiskReward };
+    const averagePriceObj = { val: AveragePrice };
+    const sharesTotalsObj = { val: SharesTotals };
+    const sizeAvgPriceObj = { val: SizeAvgPrice };
+    const plannedRewardObj = { dolars: PlannedReward, percent: PlannedRewardPerc };
+    const plannedLossObj = { dolars: PlannedLoss, percent: PlannedLossPerc };
+    const relationRiskRewardObj = { val: RelationRiskReward };
 
+    const referenceEntryObj = { setState: setReferenceEntry };
+    const referenceSharesObj = { setState: setReferenceShares, referenceShare: ReferenceShares };
 
-    const referenceEntry = { name: <Trans>Reference Entry</Trans>, setState: setReferenceEntry };
-    const referenceShares = { name: <Trans>Reference Shares</Trans>, setState: setReferenceShares, referenceShare: ReferenceShares };
+    const averagePriceExeObj = { val: AveragePriceExe };
+    const sharesTotalsExeObj = { val: SharesTotalsExe };
+    const sizeAvgPriceExeObj = { val: SizeAvgPriceExe };
+    const plannedRewardExeObj = { dolars: PlannedRewardExe, percent: PlannedRewardPercExe };
+    const plannedLossExeObj = { dolars: PlannedLossExe, percent: PlannedLossPercExe };
+    const relationRiskRewardExeObj = { val: RelationRiskRewardExe };
 
-    const averagePriceExe = { name: <Trans>Average price</Trans>, onlyDolarSymbol: "$/sh", val: AveragePriceExe };
-    const sharesTotalsExe = { name: <Trans>Total shares</Trans>, onlyDolarSymbol: "Sh", val: SharesTotalsExe };
-    const sizeAvgPriceExe = { name: <Trans>Size</Trans>, onlyDolarSymbol: "$", val: SizeAvgPriceExe };
-    const plannedRewardExe = { name: <Trans>Planned Reward</Trans>, onlyDolarSymbol: "$", dolars: PlannedRewardExe, percent: PlannedRewardPercExe };
-    const plannedLossExe = { name: <Trans>Planned Loss</Trans>, onlyDolarSymbol: false, dolars: PlannedLossExe, percent: PlannedLossPercExe };
-    const relationRiskRewardExe = { name: <Trans>Risk Reward</Trans>, onlyDolarSymbol: ":1", val: RelationRiskRewardExe };
+    const [invalidValueReferenceEntry, setInvalidValueReferenceEntry] = useState(false)
+    useEffect(() => {
+        if (isNaN(Risk) || isNaN(Reward) || isNaN(ReferenceEntry)) return setInvalidValueReferenceEntry(false);
+        if (ReferenceEntry === 0) return setInvalidValueReferenceEntry(false);
+        if (Risk <= ReferenceEntry && ReferenceEntry <= Reward) return setInvalidValueReferenceEntry(false);
+        if (Risk >= ReferenceEntry && ReferenceEntry >= Reward) return setInvalidValueReferenceEntry(false);
+        setInvalidValueReferenceEntry(true)
 
-    //Unify objects by component
-    const positionRules = { title: <Trans>Rules</Trans>, MaxSize: MaxSizeObj, PositionType: PositionTypeObj, MaxLoss: MaxLossOBJ, Reward: RewardOBJ, Risk: RiskOBJ }
-    const positionPlan = { planningResults: { title: <Trans>Plan results</Trans>, averagePrice: averagePrice, sharesTotals: sharesTotals, sizeAvgPrice: sizeAvgPrice, plannedReward: plannedReward, plannedLoss: plannedLoss, relationRiskReward: relationRiskReward }, planningInput: { title: <Trans>Plan</Trans>, referenceEntry: referenceEntry, referenceShares: referenceShares } };
-    const positionExecute = {
-        isLong: isLong,
-        addExecution: {
-            title: <Trans>Add executions</Trans>, deleteAllText: <Trans>delete all</Trans>, sharesLabel: <Trans>Shares</Trans>, priceLabel: <Trans>Price</Trans>, addButtonText: <Trans>Add</Trans>, sellButtonText: <Trans>sellButtonText</Trans>, isLong: isLong, swal: {
-                title: 'Are you sure?', text: "You won't be able to revert this!", confirmButtonText: 'Yes, delete it!', cancelButtonText: 'Cancel', deletedTitle: 'Deleted!', deletedText: 'Your inputs has been deleted.',
-                //--------- this files should have translation but swal is not understanding it
-                // title: <Trans>Are you sure?</Trans>,
-                // text: <Trans>You won't be able to revert this!</Trans>,
-                // confirmButtonText: <Trans>Yes, delete it!</Trans>,
-                // cancelButtonText: <Trans>Cancel</Trans>,
-                // deletedTitle: <Trans>Deleted!</Trans>,
-                // deletedText: <Trans>Your inputs has been deleted.</Trans>,
-            }
-        }, executed: Executed, setExecuted: setExecuted, changeStoredExecute: ChangeStoredExecute, planningResults: { title: <Trans>Plan results executed</Trans>, averagePrice: averagePriceExe, sharesTotals: sharesTotalsExe, sizeAvgPrice: sizeAvgPriceExe, plannedReward: plannedRewardExe, plannedLoss: plannedLossExe, relationRiskReward: relationRiskRewardExe }
+    }, [Risk, Reward, ReferenceEntry])
+
+    //* Unify objects by component
+    const positionRulesObj = { MaxSizeObj, PositionTypeObj, MaxLossObj, RewardObj, RiskObj }
+    const positionPlanObj = { planningResults: { averagePriceObj, sharesTotalsObj, sizeAvgPriceObj, plannedRewardObj, plannedLossObj, relationRiskRewardObj }, planningInput: { referenceEntryObj, referenceSharesObj, invalidValueReferenceEntry } };
+    const positionExecuteObj = {
+        isLong, executed, setExecuted, ChangeStoredExecute, DeleteStoredExecute,
+        planningResults: { averagePriceObj: averagePriceExeObj, sharesTotalsObj: sharesTotalsExeObj, sizeAvgPriceObj: sizeAvgPriceExeObj, plannedRewardObj: plannedRewardExeObj, plannedLossObj: plannedLossExeObj, relationRiskRewardObj: relationRiskRewardExeObj }
     };
-
-    const vars = { isLong, setIsLongChange, MaxSize, setMaxSize, MaxLoss, setMaxLoss, Reward, setReward, Risk, setRisk, Executed, setExecuted }
-
-
-    // Effect to get execution values from local storage
-    useEffect(() => {
-        //* Executed values
-        const storedExecuted = JSON.parse(localStorage.getItem(LOCAL_STORAGE_EXE))
-        if (storedExecuted) setExecuted(storedExecuted);
-        //* Execution type
-        const storedType = localStorage.getItem(LOCAL_STORAGE_TYPE);
-        let tempIsLong = true;
-        if (storedType == "false") tempIsLong = false
-        setIsLongChange(tempIsLong);
-        //* Max size
-        const maxSize = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MAX_SIZE))
-        if (maxSize) setMaxSize(maxSize);
-        //* Max loss
-        const maxLoss = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MAX_LOSS))
-        if (maxLoss) setMaxLoss(maxLoss);
-        //* Reward
-        const reward = JSON.parse(localStorage.getItem(LOCAL_STORAGE_REWARD))
-        if (reward) setReward(reward);
-        //* Risk
-        const risk = JSON.parse(localStorage.getItem(LOCAL_STORAGE_RISK))
-        if (risk) setRisk(risk);
-    }, []);
-
-    //* Effect to set execution values to local storage
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_EXE, JSON.stringify(Executed));
-        calcAveragePriceExe();
-    }, [Executed])
-
-    //* Effect to set type to localStorage
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_TYPE, isLong);
-    }, [isLong])
-
-    //* Effect to set maxSize values to local storage
-    useEffect(() => {
-        if (MaxSize) localStorage.setItem(LOCAL_STORAGE_MAX_SIZE, JSON.stringify(MaxSize));
-    }, [MaxSize])
-
-    //* Effect to set maxSize values to local storage
-    useEffect(() => {
-        if (MaxLoss) localStorage.setItem(LOCAL_STORAGE_MAX_LOSS, JSON.stringify(MaxLoss));
-    }, [MaxLoss])
-
-    //* Effect to set maxSize values to local storage
-    useEffect(() => {
-        if (Risk) localStorage.setItem(LOCAL_STORAGE_RISK, JSON.stringify(Risk));
-    }, [Risk])
-
-    //* Effect to set maxSize values to local storage
-    useEffect(() => {
-        if (Reward) localStorage.setItem(LOCAL_STORAGE_REWARD, JSON.stringify(Reward));
-    }, [Reward])
 
     //* Use Effect for formula Calculations
     useEffect(() => {
-        //todo check wich should be changed and wich not
+        calcAveragePriceExe();
+    }, [executed]);
+
+    useEffect(() => {
+        if (!utils.validateInputs("calcRewardExe", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+        ])) return
         calcRewardExe();
+    }, [AveragePriceExe, Reward, SharesTotalsExe]);
+
+    useEffect(() => {
+        if (!utils.validateInputs("calcLossExe", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+        ])) return
         calcLossExe();
+    }, [AveragePriceExe, Risk, SharesTotalsExe]);
+
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcRiskRewardMedia", [
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+        ])) return
+        if (AveragePriceExe === 0) return setRelationRiskRewardExe(0);
+        if ((AveragePriceExe - Risk) === 0) return setRelationRiskRewardExe(0);
+        //* End of validations
         calcRiskRewardMedia();
+    }, [AveragePriceExe, Risk, Reward]);
+
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcReferenceShare", [
+            { value: MaxLoss, name: "MaxLoss", type: 1 },
+            { value: PlannedLossExe, name: "PlannedLossExe", type: 1 },
+            { value: ReferenceEntry, name: "ReferenceEntry", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+        ])) return
+        if (ReferenceEntry === 0) return setReferenceShares((0))
+        //* End of validations
         calcReferenceShare();
+    }, [RelationRiskReward, SizeAvgPriceExe, ReferenceEntry, plannedLossExeObj, Reward]);
+
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcAveragePrice", [
+            { value: ReferenceShares, name: "ReferenceShares", type: 1 },
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            { value: SizeAvgPriceExe, name: "SizeAvgPriceExe", type: 1 },
+        ])) return
+        //* End of validations
         calcAveragePrice();
-        calcPlannedLoss();
+    }, [ReferenceShares, AveragePriceExe, SizeAvgPriceExe]);
+
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcTotalShares", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: ReferenceShares, name: "ReferenceShares", type: 1 },
+        ])) return
+        //* End of validations
         calcTotalShares();
+    }, [ReferenceShares, SharesTotalsExe]);
+
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcSizeAveragePrice", [
+            { value: SharesTotals, name: "SharesTotals", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+        ])) return
+        //* End of validations
         calcSizeAveragePrice();
+    }, [AveragePrice, SharesTotals]);
+
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedLoss", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+        ])) return
+        //* End of validations
+        calcPlannedLoss();
+    }, [AveragePrice, Risk, SharesTotals]);
+
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedReward", [
+            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+        ])) return
+        //* End of validations
         calcPlannedReward();
+    }, [AveragePrice, Reward, SharesTotals]);
+
+    useEffect(() => {
+        //* Init validations
+        if (!utils.validateInputs("calcPlannedRiskReward", [
+            { value: AveragePrice, name: "AveragePrice", type: 1 },
+            { value: Reward, name: "Reward", type: 1 },
+            { value: Risk, name: "Risk", type: 1 },
+        ])) return setRelationRiskReward(0)
+        //* End of validations
         calcPlannedRiskReward();
-    }, [averagePriceExe, Reward, sharesTotalsExe, Risk])
+    }, [AveragePrice, Reward, Risk]);
 
+    function removeAllData() {
+        //*We will skip only max size and max lose
+        setSizeAvgPriceExe(0)
+        setPlannedLossPercExe(0)
+        setReferenceShares(0)
+        setReferenceEntry(0)
+        setRisk(0)
+        setReward(0)
+        setAveragePrice(0)
+    }
 
-    //function that allow us to edit a execution value
+    //* Function that allow us to edit a execution value
     function ChangeStoredExecute(id, shares, price) {
-        const newExecuted = [...Executed];
+        const newExecuted = [...executed];
         const Execute = newExecuted.find(x => x.id === id);
+        if (!utils.validationsCheckAllExecutions(executed, id, shares, isLong)) return false
         Execute.shares = shares;
         Execute.price = price;
         setExecuted(newExecuted);
         calcAveragePriceExe();
+        return true
+    }
+
+    function DeleteStoredExecute(id) {
+
+        if (!utils.validationsCheckAllExecutions(executed, id, 0, isLong)) return false
+        const Executed_temp = utils.arrayWithDiferentIdThan(executed, id)
+        setExecuted(Executed_temp);
+        calcAveragePriceExe();
+        return true
     }
 
     // CALCULATION AREA
     function calcAveragePriceExe() {
-        const newExecuted = [...Executed];
+        const newExecuted = [...executed];
         let tempAvg = 0;
         let tempTotalSh = 0;
         newExecuted.forEach(executed => {
@@ -196,153 +245,116 @@ export default function PositionSizing() {
             }
             tempTotalSh += parseFloat(executed.shares);
         })
+        const isLongMultiplier = isLong ? 1 : -1
         setAveragePriceExe(tempAvg);
         setSharesTotalsExe(tempTotalSh);
-        setSizeAvgPriceExe((tempTotalSh * tempAvg));
+        setSizeAvgPriceExe((tempTotalSh * tempAvg) * isLongMultiplier);
     }
 
     function calcRewardExe() {
-        if (!utils.validateInputs("calcRewardExe", [
-            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
-            { value: Reward, name: "Reward", type: 1 },
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-        ])) return
-        setPlannedRewardPercExe(((AveragePriceExe - Reward) * 100 / AveragePriceExe))
+        //*if there are no shares, there are no rewards or loss, no matter the calculations
+        if (SharesTotalsExe === 0) {
+            setPlannedRewardExe(0);
+            setPlannedRewardPercExe(0);
+            return
+        }
+        const isLongMultiplier = isLong ? 1 : -1
+        setPlannedRewardPercExe(((Reward - AveragePriceExe) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
-    function calcLossExe() {
 
-        if (!utils.validateInputs("calcLossExe", [
-            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
-            { value: Risk, name: "Risk", type: 1 },
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-        ])) return
-        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 / AveragePriceExe))
+    function calcLossExe() {
+        //*if there are no shares, there are no rewards or loss, no matter the calculations
+        if (SharesTotalsExe === 0) {
+            setPlannedLossPercExe(0);
+            setPlannedLossExe(0);
+            return
+        }
+        const isLongMultiplier = isLong ? 1 : -1
+        setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
-    function calcRiskRewardMedia() {
-        //* Init validations
-        if (!utils.validateInputs("calcRiskRewardMedia", [
-            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
-            { value: Risk, name: "Risk", type: 1 },
-            { value: Reward, name: "Reward", type: 1 },
-        ])) return
-        if ((AveragePriceExe - Risk) == 0) return;
-        //* End of validations
-        setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)))
 
+    function calcRiskRewardMedia() {
+        //*if there are no shares, there are no rewards or loss, no matter the calculations
+        if (SharesTotalsExe === 0) return setRelationRiskRewardExe(0);
+        setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)))
     }
 
     function calcReferenceShare() {
-        if (isNaN(MaxLoss) && isNaN(PlannedLossExe) && isNaN(ReferenceEntry) && isNaN(Risk)) return console.log("no aplica")
-        let firstWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
-        let secondWay = (parseFloat(MaxSize) - parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
-        let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk))) + parseFloat(SizeAvgPriceExe);
-        if (compare > -MaxSize) {
-            console.log("%c ReferenceShare: Basado en la primera formula", "color: #bada55")
-            if (isNaN(secondWay)) return;
-            setReferenceShares(secondWay);
+        let maxLossWay = (MaxLoss - PlannedLossExe) / (ReferenceEntry - Risk);
+        let maxSizeWay = (parseFloat(MaxSize) - parseFloat(SizeAvgPriceExe)) / (ReferenceEntry);
+        const isLongMultiplier = isLong ? 1 : -1
+        let compare = ((ReferenceEntry * (MaxLoss - PlannedLossExe)) / ((ReferenceEntry - Risk) * isLongMultiplier)) + parseFloat(SizeAvgPriceExe);
+        let finalValue = 0;
+        if (compare > MaxSize) {
+            if (isNaN(maxSizeWay)) return;
+            finalValue = (maxSizeWay);
         } else {
-            console.log("%c ReferenceShare: Basado en la segunda formula", "color: blue")
-            if (isNaN(firstWay)) return;
-            setReferenceShares(firstWay);
+            if (isNaN(maxLossWay)) return;
+            finalValue = (maxLossWay);
         }
+        setReferenceShares(Math.trunc(utils.abs(finalValue)))
     }
 
     function calcAveragePrice() {
-        //* Init validations
-        if (!utils.validateInputs("calcAveragePrice", [
-            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
-            { value: SizeAvgPriceExe, name: "SizeAvgPriceExe", type: 1 },
-            { value: ReferenceEntry, name: "ReferenceEntry", type: 1 },
-        ])) return
-        //* End of validations
-        const avgPriceTemp = ((AveragePriceExe * SizeAvgPriceExe) + (ReferenceEntry * ReferenceShares)) / (ReferenceShares - SharesTotalsExe)
+        const isLongMultiplier = isLong ? 1 : -1
+        const avgPriceTemp = (SizeAvgPriceExe + (ReferenceEntry * ReferenceShares)) / (ReferenceShares + (SharesTotalsExe * isLongMultiplier))
         setAveragePrice(avgPriceTemp)
     }
 
     function calcTotalShares() {
-        //* Init validations
-        if (!utils.validateInputs("calcTotalShares", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: ReferenceShares, name: "ReferenceShares", type: 1 },
-        ])) return
-        //* End of validations
-        const totalSharesTemp = (SharesTotalsExe + ReferenceShares);
+        const isLongMultiplier = isLong ? 1 : -1
+        const totalSharesTemp = SharesTotalsExe + (ReferenceShares * isLongMultiplier);
         setSharesTotals(totalSharesTemp)
     }
+
     function calcSizeAveragePrice() {
-        //* Init validations
-        if (!utils.validateInputs("calcSizeAveragePrice", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: AveragePrice, name: "AveragePrice", type: 1 },
-        ])) return
-        //* End of validations
-        const size = (SharesTotals * AveragePrice);
+        const isLongMultiplier = isLong ? 1 : -1
+        const size = (SharesTotals * AveragePrice) * isLongMultiplier;
         setSizeAvgPrice(size)
     }
 
     function calcPlannedLoss() {
-        //* Init validations
-        if (!utils.validateInputs("calcPlannedLoss", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: AveragePrice, name: "AveragePrice", type: 1 },
-            { value: Risk, name: "Risk", type: 1 },
-        ])) return
-        //* End of validations
-        const plannedLossTemp = (AveragePrice - Risk) / SharesTotalsExe
-        setPlannedLoss(plannedLossTemp);
-        const plannedLossPercTemp = (AveragePrice - Risk) / AveragePrice
-        setPlannedLossPerc(plannedLossPercTemp * 100);
+        const isLongMultiplier = isLong ? 1 : -1
+        const plannedLossObjTemp = (AveragePrice - Risk) * SharesTotals
+        setPlannedLoss(plannedLossObjTemp);
+        const plannedLossObjPercTemp = (AveragePrice - Risk) / AveragePrice * isLongMultiplier
+        setPlannedLossPerc(plannedLossObjPercTemp * 100);
     }
 
     function calcPlannedReward() {
-        //* Init validations
-        if (!utils.validateInputs("calcPlannedReward", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: AveragePrice, name: "AveragePrice", type: 1 },
-            { value: Reward, name: "Reward", type: 1 },
-        ])) return
-        //* End of validations
-        const plannedRewardTemp = (Reward - AveragePrice) / SharesTotalsExe
-        setPlannedReward(plannedRewardTemp);
-        const plannedRewardPercTemp = (Reward - AveragePrice) / AveragePrice
-        setPlannedRewardPerc(plannedRewardPercTemp * 100);
+        const isLongMultiplier = isLong ? 1 : -1
+        const plannedRewardObjTemp = (Reward - AveragePrice) * SharesTotals
+        setPlannedReward(plannedRewardObjTemp);
+        const plannedRewardObjPercTemp = (Reward - AveragePrice) / AveragePrice * isLongMultiplier
+        setPlannedRewardPerc(plannedRewardObjPercTemp * 100);
     }
+
     function calcPlannedRiskReward() {
-        //* Init validations
-        if (!utils.validateInputs("calcPlannedRiskReward", [
-            { value: SharesTotalsExe, name: "SharesTotalsExe", type: 1 },
-            { value: AveragePrice, name: "AveragePrice", type: 1 },
-            { value: Reward, name: "Reward", type: 1 },
-            { value: Risk, name: "Risk", type: 1 },
-        ])) return
-        //* End of validations
+        if (AveragePrice === 0) return setRelationRiskReward(0);
         const plannedRiskRewardTemp = (Reward - AveragePrice) / (AveragePrice - Risk)
         setRelationRiskReward(plannedRiskRewardTemp);
 
     }
     // CALCULATION AREA
-
-    //todo stringInComponent -> remove all string passing throgh components and have them in each component whit the TRANS tag
     //todo useContext -> we need to use context to pass round values, to only have round in the visual components
-    //todo useEffect -> filter better the useeffect by each calculation and having it controlled
 
     return (
-        <Container>
+        <Container className={isLong ? "long" : "short"}>
             <Row>
                 <Col md="3">
-                    <PositionRules positionRules={positionRules} />
+                    <PositionRules positionRulesObj={positionRulesObj} />
                 </Col>
                 <Col>
                     <Row>
                         <Col>
-                            <PositionPlan positionPlan={positionPlan} />
+                            <PositionPlan positionPlanObj={positionPlanObj} />
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <PositionExecute positionExecute={positionExecute} />
+                            <PositionExecute positionExecuteObj={positionExecuteObj} />
                         </Col>
                     </Row>
                 </Col>

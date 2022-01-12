@@ -9,8 +9,8 @@ const resources = {
         translation: {
             "Welcome to React": "Las traducciones funcionan",
             "Add": "Agregar",
-            "Edit": "Editar",
             "Enable": "Habilitar",
+            "Are you sure?": "¿Estas segur@?",
 
             "LONG": "LARGO",
             "SHORT": "CORTO",
@@ -32,7 +32,6 @@ const resources = {
             "Price $/Sh": "Precio $/Sh",
             "BUY": "COMPRAR",
             "SELL": "VENDER",
-            "SHORT": "SHORT",
             "COVER": "CUBRIR",
             "Edit": "Editar",
             "TRADES RESULT": "RESULTADOS DEL TRADE",

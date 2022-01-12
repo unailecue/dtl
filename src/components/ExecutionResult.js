@@ -1,35 +1,35 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import ExecutionValue from './ExecutionValue'
 import { Row, Col } from 'react-bootstrap';
 import { Trans } from 'react-i18next';
 
-const title = <Trans>Executions</Trans>
-const sharesLabel = <Trans>Shares</Trans>
-const priceLabel = <Trans>Price</Trans>
+const TITLE = <Trans>Trades</Trans>
+const SHARES_LABEL = <Trans>Shares</Trans>
+const PRICE_LABEL = <Trans>Price</Trans>
+const NO_TRADES_ADDED = <Trans>Waiting for trades ...</Trans>
 
 
-export default function ExecutionResult({ executed, changeStoredExecute, typeValues }) {
-
+export default function ExecutionResult({ executionResult }) {
+    const executed = executionResult.executed;
     return (
         <div>
-
             <div className="personal-box-shadow">
                 <h5>
-                    {title}
+                    {TITLE}
                 </h5>
                 <Row>
                     <Col className="mb-3 align-items-center">
-                        {priceLabel}
+                        {PRICE_LABEL}
                     </Col>
                     <Col className="mb-3 align-items-center">
-                        {sharesLabel}
+                        {SHARES_LABEL}
                     </Col>
                     <Col className="mb-3 align-items-center">
                     </Col>
-                    {executed.length === 0 ? <div>Waiting for executions ...</div>
+                    {executed.length === 0 ? <div>{NO_TRADES_ADDED}</div>
                         : executed.map((values) => {
-                            return <ExecutionValue values={values} key={values.id} changeStoredExecute={changeStoredExecute} typeValues={typeValues} />
+                            return <ExecutionValue executionValue={executionResult} key={values.id} values={values} />
                         })}
                 </Row>
             </div>

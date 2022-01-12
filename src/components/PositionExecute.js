@@ -5,17 +5,18 @@ import ExecutionResult from './ExecutionResult';
 import PlanningResults from './PlanningResults';
 import { Trans } from 'react-i18next';
 
+const PLANNIN_RESULT_TITLE = <Trans>Plan results executed</Trans>
 const addButtonTextLong = <Trans>Buy</Trans>;
 const addButtonTextShort = <Trans>Short</Trans>
 const sellButtonTextLong = <Trans>Sell</Trans>
 const sellButtonTextShort = <Trans>Cover</Trans>
 
-export default function PositionExecute({ positionExecute }) {
+export default function PositionExecute({ positionExecuteObj }) {
     const [ButtonTextBuyValue, setButtonTextBuyValue] = useState(addButtonTextLong)
     const [ButtonTextSellValue, setButtonTextSellValue] = useState(sellButtonTextLong)
-    const isLong = positionExecute.isLong;
+    const isLong = positionExecuteObj.isLong;
     useEffect(() => {
-        if (isLong == true) {
+        if (isLong === true) {
             setButtonTextBuyValue(addButtonTextLong)
             setButtonTextSellValue(sellButtonTextLong)
         } else {
@@ -26,23 +27,28 @@ export default function PositionExecute({ positionExecute }) {
 
     const typeValues = { isLong: isLong, buyButton: ButtonTextBuyValue, sellButton: ButtonTextSellValue }
 
-    const addExecution = positionExecute.addExecution;
-    const executionResult = positionExecute.executionResult;
-    const executed = positionExecute.executed;
-    const setExecuted = positionExecute.setExecuted;
-    const changeStoredExecute = positionExecute.changeStoredExecute;
-    const planningResults = positionExecute.planningResults;
+    const executed = positionExecuteObj.executed;
+    const ChangeStoredExecute = positionExecuteObj.ChangeStoredExecute;
+    const DeleteStoredExecute = positionExecuteObj.DeleteStoredExecute;
+    const setExecuted = positionExecuteObj.setExecuted;
+    const planningResults = positionExecuteObj.planningResults;
+    planningResults.title = PLANNIN_RESULT_TITLE;
+    const executionResult = {
+        typeValues, executed, setExecuted, ChangeStoredExecute, DeleteStoredExecute,
+    }
+
+
 
     return (
         <div className="box">
-            <h5>Execute</h5>
+            <h5>Executed</h5>
             <Row>
                 <Col sm="6">
                     <Row>
-                        <AddExecution addExecution={addExecution} executed={executed} setExecuted={setExecuted} typeValues={typeValues} />
+                        <AddExecution executed={executed} setExecuted={setExecuted} typeValues={typeValues} />
                     </Row>
                     <Row>
-                        <ExecutionResult executionResult={executionResult} executed={executed} changeStoredExecute={changeStoredExecute} typeValues={typeValues} />
+                        <ExecutionResult executionResult={executionResult} />
                     </Row>
                 </Col>
                 <Col sm="6">

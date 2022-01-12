@@ -2,10 +2,13 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap';
 import PlanningInput from './PlanningInput';
 import PlanningResults from './PlanningResults';
+import { Trans } from 'react-i18next';
+const PLANNING_RESULT_TITLE = <Trans>Plan results</Trans>
 
-export default function PositionPlan({ positionPlan }) {
-    const planningResults = positionPlan.planningResults;
-    const planningInput = positionPlan.planningInput;
+export default function PositionPlan({ positionPlanObj }) {
+    const planningInput = positionPlanObj.planningInput;
+    const planningResults = positionPlanObj.planningResults;
+    planningResults.title = PLANNING_RESULT_TITLE;
     return (
         <div className="box">
             <Row>
@@ -16,7 +19,6 @@ export default function PositionPlan({ positionPlan }) {
                     <PlanningResults planningResults={planningResults} />
                 </Col>
             </Row>
-
         </div>
     )
 }

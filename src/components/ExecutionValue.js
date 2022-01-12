@@ -1,16 +1,21 @@
 import React, { useRef, useState } from 'react'
-import { Button, ButtonGroup, ToggleButton, Form, Row, Col, Table, Container, InputGroup } from 'react-bootstrap';
+import { Button, Form, Row, Col } from 'react-bootstrap';
 import { Trans } from 'react-i18next';
-const enableButtonText = <Trans>Enable</Trans>;
+const enableButtonText = <Trans>Edit</Trans>;
+const deleteButton = <Trans>Delete</Trans>
 
 
-export default function ExecutionValue({ values, changeStoredExecute, typeValues }) {
+export default function ExecutionValue({ executionValue, values }) {
 
 
     const sharesInput = useRef()
     const priceInput = useRef()
     const [isLocked, setisLocked] = useState(true)
-    const key = values.id;
+
+    const ChangeStoredExecute = executionValue.ChangeStoredExecute
+    const DeleteStoredExecute = executionValue.DeleteStoredExecute
+    const typeValues = executionValue.typeValues
+
     const shares = values.shares;
     const price = values.price;
     const isLong = typeValues.isLong;
@@ -28,20 +33,26 @@ export default function ExecutionValue({ values, changeStoredExecute, typeValues
         let sharesInputValue = Math.abs(sharesInput.current.value);
         isLong ? handleEdit(sharesInputValue) : handleEdit(sharesInputValue * -1)
     }
+
     function handleEditSell(e) {
         let sharesInputValue = Math.abs(sharesInput.current.value);
         isLong ? handleEdit(sharesInputValue * -1) : handleEdit(sharesInputValue)
     }
-    // function that will try to edit the value of this execution
-    function handleEdit(sharesInputValue) {
 
+    function handleEdit(sharesInputValue) {
         if (sharesInputValue !== values.shares || priceInput.current.value !== values.price) {
-            changeStoredExecute(values.id, sharesInputValue, priceInput.current.value)
+            const isChangeExecuted = ChangeStoredExecute(values.id, sharesInputValue, priceInput.current.value)
+            if (!isChangeExecuted) return
+            sharesInput.current.value = sharesInputValue;
         }
         priceInput.current.disabled = true;
-        sharesInput.current.value = sharesInputValue;
         sharesInput.current.disabled = true;
         setisLocked(true);
+    }
+
+    function handleDelete(e) {
+        const idToDelete = values.id;
+        DeleteStoredExecute(idToDelete)
     }
     return (
         <div>
@@ -67,6 +78,9 @@ export default function ExecutionValue({ values, changeStoredExecute, typeValues
                 </Col>
                 <Col hidden={isLocked}>
                     <Button className="edit" onClick={handleEditSell} variant="secondary" hidden={isLocked}>{sellButton}</Button>
+                </Col>
+                <Col hidden={isLocked}>
+                    <Button className="edit" onClick={handleDelete} variant="warning" hidden={isLocked}>{deleteButton}</Button>
                 </Col>
             </Row>
 
