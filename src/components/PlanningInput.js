@@ -3,20 +3,25 @@ import React, { useRef, useEffect } from 'react'
 import { Form, Row, Col, InputGroup } from 'react-bootstrap';
 import * as utils from "../utils/utils";
 import { Trans } from 'react-i18next';
-import { useState } from 'react';
+
 const TITLE = <Trans>Plan</Trans>
 const REFERENCE_ENTRY_NAME = <Trans>Reference Entry</Trans>
 const REFERENCE_SHARES_NAME = <Trans>Reference Shares</Trans>
-const RISK_REWARD_VALIDATION = <Trans>The reference value should be between reward and risk</Trans>
+const RISK_REWARD_VALIDATION = <Trans>The reference value should be between reward level and risk level</Trans>
 
 export default function PlanningInput({ planningInput }) {
     const refEntry = useRef()
     const referenceShare = planningInput.referenceSharesObj.referenceShare;
-    // const [invalidValue, setInvalidValue] = useState(false)
     const invalidValue = planningInput.invalidValueReferenceEntry;
 
     function handleChangeRefenceEntry(e) {
-        planningInput.referenceEntryObj.setState(parseFloat(refEntry.current.value));
+        let val = refEntry.current.value;
+        if (val < 0) {
+            val = utils.abs(val);
+            refEntry.current.value = val
+        }
+        if (val === '') return planningInput.referenceEntryObj.setState(0);
+        planningInput.referenceEntryObj.setState((val));
     }
     return (
         <div className="personal-box-shadow">
