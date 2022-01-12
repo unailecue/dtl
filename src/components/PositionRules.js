@@ -11,8 +11,8 @@ const SHORT_VALIDATION_MESSAGE = <Trans>In Short the risk level should be higher
 const LONG_VALIDATION_MESSAGE = <Trans>In Long reward level should be higher than risk level</Trans>;
 const MAX_SIZE_OBJ = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true };
 const MAX_LOSS_OBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true };
-const REWARD_OBJ = { name: <Trans>Risk level price</Trans>, onlyDolarSymbol: true };
-const RISK_OBJ = { name: <Trans>Reward level price</Trans>, onlyDolarSymbol: true };
+const REWARD_OBJ = { name: <Trans>Reward level price</Trans>, onlyDolarSymbol: true };
+const RISK_OBJ = { name: <Trans>Risk level price</Trans>, onlyDolarSymbol: true };
 
 
 export default function PositionRules({ positionRulesObj }) {
