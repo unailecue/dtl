@@ -69,7 +69,6 @@ export default function PositionSizing() {
     const plannedLossExeObj = { dolars: PlannedLossExe, percent: PlannedLossPercExe };
     const relationRiskRewardExeObj = { val: RelationRiskRewardExe };
 
-
     const [invalidValueReferenceEntry, setInvalidValueReferenceEntry] = useState(false)
     useEffect(() => {
         if (isNaN(Risk) || isNaN(Reward) || isNaN(ReferenceEntry)) return setInvalidValueReferenceEntry(false);
@@ -79,7 +78,7 @@ export default function PositionSizing() {
 
     }, [Risk, Reward, ReferenceEntry])
 
-    //Unify objects by component
+    //* Unify objects by component
     const positionRulesObj = { MaxSizeObj, PositionTypeObj, MaxLossObj, RewardObj, RiskObj }
     const positionPlanObj = { planningResults: { averagePriceObj, sharesTotalsObj, sizeAvgPriceObj, plannedRewardObj, plannedLossObj, relationRiskRewardObj }, planningInput: { referenceEntryObj, referenceSharesObj, invalidValueReferenceEntry } };
     const positionExecuteObj = {
@@ -91,6 +90,7 @@ export default function PositionSizing() {
     useEffect(() => {
         calcAveragePriceExe();
     }, [executed]);
+
     useEffect(() => {
         if (!utils.validateInputs("calcRewardExe", [
             { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
@@ -99,6 +99,7 @@ export default function PositionSizing() {
         ])) return
         calcRewardExe();
     }, [AveragePriceExe, Reward, SharesTotalsExe]);
+
     useEffect(() => {
         if (!utils.validateInputs("calcLossExe", [
             { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
@@ -107,6 +108,7 @@ export default function PositionSizing() {
         ])) return
         calcLossExe();
     }, [AveragePriceExe, Risk, SharesTotalsExe]);
+
     useEffect(() => {
         //* Init validations
         if (!utils.validateInputs("calcRiskRewardMedia", [
@@ -119,6 +121,7 @@ export default function PositionSizing() {
         //* End of validations
         calcRiskRewardMedia();
     }, [AveragePriceExe, Risk, Reward]);
+
     useEffect(() => {
         //* Init validations
         if (!utils.validateInputs("calcReferenceShare", [
@@ -131,6 +134,7 @@ export default function PositionSizing() {
         //* End of validations
         calcReferenceShare();
     }, [RelationRiskReward, SizeAvgPriceExe, ReferenceEntry, plannedLossExeObj, Reward]);
+
     useEffect(() => {
         //* Init validations
         if (!utils.validateInputs("calcAveragePrice", [
@@ -141,6 +145,7 @@ export default function PositionSizing() {
         //* End of validations
         calcAveragePrice();
     }, [ReferenceShares, AveragePriceExe, SizeAvgPriceExe]);
+
     useEffect(() => {
         //* Init validations
         if (!utils.validateInputs("calcTotalShares", [
@@ -150,6 +155,7 @@ export default function PositionSizing() {
         //* End of validations
         calcTotalShares();
     }, [ReferenceShares, SharesTotalsExe]);
+
     useEffect(() => {
         //* Init validations
         if (!utils.validateInputs("calcSizeAveragePrice", [
@@ -159,6 +165,7 @@ export default function PositionSizing() {
         //* End of validations
         calcSizeAveragePrice();
     }, [AveragePrice, SharesTotals]);
+
     useEffect(() => {
         //* Init validations
         if (!utils.validateInputs("calcPlannedLoss", [
@@ -169,6 +176,7 @@ export default function PositionSizing() {
         //* End of validations
         calcPlannedLoss();
     }, [AveragePrice, Risk, SharesTotals]);
+
     useEffect(() => {
         //* Init validations
         if (!utils.validateInputs("calcPlannedReward", [
@@ -179,6 +187,7 @@ export default function PositionSizing() {
         //* End of validations
         calcPlannedReward();
     }, [AveragePrice, Reward, SharesTotals]);
+
     useEffect(() => {
         //* Init validations
         if (!utils.validateInputs("calcPlannedRiskReward", [
@@ -190,12 +199,8 @@ export default function PositionSizing() {
         calcPlannedRiskReward();
     }, [AveragePrice, Reward, Risk]);
 
-
-
-
     function removeAllData() {
         //*We will skip only max size and max lose
-        console.log("remove all")
         setSizeAvgPriceExe(0)
         setPlannedLossPercExe(0)
         setReferenceShares(0)
@@ -204,7 +209,6 @@ export default function PositionSizing() {
         setReward(0)
         setAveragePrice(0)
     }
-
 
     //* Function that allow us to edit a execution value
     function ChangeStoredExecute(id, shares, price) {
@@ -217,7 +221,6 @@ export default function PositionSizing() {
         calcAveragePriceExe();
         return true
     }
-
 
     function DeleteStoredExecute(id) {
 
@@ -248,18 +251,32 @@ export default function PositionSizing() {
     }
 
     function calcRewardExe() {
+        //*if there are no shares, there are no rewards or loss, no matter the calculations
+        if (SharesTotalsExe === 0) {
+            setPlannedRewardExe(0);
+            setPlannedRewardPercExe(0);
+            return
+        }
         const isLongMultiplier = isLong ? 1 : -1
         setPlannedRewardPercExe(((Reward - AveragePriceExe) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedRewardExe(((Reward - AveragePriceExe) * SharesTotalsExe))
     }
 
     function calcLossExe() {
+        //*if there are no shares, there are no rewards or loss, no matter the calculations
+        if (SharesTotalsExe === 0) {
+            setPlannedLossPercExe(0);
+            setPlannedLossExe(0);
+            return
+        }
         const isLongMultiplier = isLong ? 1 : -1
         setPlannedLossPercExe(((AveragePriceExe - Risk) * 100 * isLongMultiplier / AveragePriceExe))
         setPlannedLossExe(((AveragePriceExe - Risk) * SharesTotalsExe));
     }
 
     function calcRiskRewardMedia() {
+        //*if there are no shares, there are no rewards or loss, no matter the calculations
+        if (SharesTotalsExe === 0) return setRelationRiskRewardExe(0);
         setRelationRiskRewardExe(((Reward - AveragePriceExe) / (AveragePriceExe - Risk)))
     }
 
