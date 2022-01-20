@@ -81,7 +81,7 @@ export default function PositionSizing() {
 
     //* Unify objects by component
     const positionRulesObj = { MaxSizeObj, PositionTypeObj, MaxLossObj, RewardObj, RiskObj }
-    const positionPlanObj = { planningResults: { averagePriceObj, sharesTotalsObj, sizeAvgPriceObj, plannedRewardObj, plannedLossObj, relationRiskRewardObj }, planningInput: { referenceEntryObj, referenceSharesObj, invalidValueReferenceEntry } };
+    const positionPlanObj = { planningResults: { averagePriceObj, sharesTotalsObj, sizeAvgPriceObj, plannedRewardObj, plannedLossObj, relationRiskRewardObj }, planningInput: { referenceEntryObj, referenceSharesObj, invalidValueReferenceEntry, isLong } };
     const positionExecuteObj = {
         isLong, executed, setExecuted, ChangeStoredExecute, DeleteStoredExecute,
         planningResults: { averagePriceObj: averagePriceExeObj, sharesTotalsObj: sharesTotalsExeObj, sizeAvgPriceObj: sizeAvgPriceExeObj, plannedRewardObj: plannedRewardExeObj, plannedLossObj: plannedLossExeObj, relationRiskRewardObj: relationRiskRewardExeObj }

@@ -13,6 +13,11 @@ export default function PlanningInput({ planningInput }) {
     const refEntry = useRef()
     const referenceShare = planningInput.referenceSharesObj.referenceShare;
     const invalidValue = planningInput.invalidValueReferenceEntry;
+    const isLong = planningInput.isLong;
+
+    useEffect(() => { //*Effect used to delete current value when type is changed
+        refEntry.current.value = null;
+    }, [isLong]);
 
     function handleChangeRefenceEntry(e) {
         let val = refEntry.current.value;
