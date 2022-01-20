@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { v4 as uniqueId } from "uuid";
 import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
 import * as utils from "../utils/utils";
@@ -26,6 +26,11 @@ export default function AddExecution({ executed, setExecuted, typeValues }) {
     const sharesInput = useRef()
     const priceInput = useRef()
 
+    useEffect(() => { //*Effect that errase the values of unexecuted transactions when type changes
+        sharesInput.current.value = null;
+        priceInput.current.value = null;
+    }, [isLong]);
+
     function handleBuyExecution(e) {
         const shares = utils.abs(sharesInput.current.value);
         isLong ? handleAddExecutions(shares) : handleAddExecutions((shares) * -1)
@@ -36,8 +41,7 @@ export default function AddExecution({ executed, setExecuted, typeValues }) {
         isLong ? handleAddExecutions((shares) * -1) : handleAddExecutions(shares)
     }
 
-    //*Fuction that add the value of the execution to the executions obj
-    function handleAddExecutions(shares) {
+    function handleAddExecutions(shares) { //*Fuction that add the value of the execution to the executions obj
         if (!utils.validationsCheckExecutions(isLong, executed, shares)) return
         const price = utils.abs(priceInput.current.value);
         if (shares === "" || price === "" || shares === 0 || price === 0) return
@@ -47,8 +51,7 @@ export default function AddExecution({ executed, setExecuted, typeValues }) {
     }
 
     function handleDeleteExecutions(e) {
-        //* Confirmation that you will delete all reacords
-        const confirmFunctions = () => setExecuted([]);
+        const confirmFunctions = () => setExecuted([]);//* Confirmation that you will delete all reacords
         utils.confirmationsModal(confirmationValues, [confirmFunctions]);
     }
 
