@@ -96,3 +96,25 @@ button.btn {
   transition: 1s;
   border-radius: 2px;
 }
+@media (min-width: 768px) {
+
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+
+    padding-top: 10px;
+  }
+  * label {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+  .container-width {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 745px;
+  }
+}

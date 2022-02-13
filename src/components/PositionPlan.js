@@ -11,11 +11,14 @@ export default function PositionPlan({ positionPlanObj }) {
     planningResults.title = PLANNING_RESULT_TITLE;
     return (
         <div className="box">
+            <h5>Plan</h5>
             <Row>
-                <Col sm="6">
+                <Col sm="6" lg="12" xl="6">
                     <PlanningInput planningInput={planningInput} />
                 </Col>
-                <Col sm="6">
+                <Col sm="6"
+                    lg={{ order: 'first', span: 12 }}
+                    xl="6">
                     <PlanningResults planningResults={planningResults} />
                 </Col>
             </Row>
