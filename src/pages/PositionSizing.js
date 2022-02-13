@@ -339,8 +339,6 @@ export default function PositionSizing() {
                             <PositionPlan positionPlanObj={positionPlanObj} />
                         </Col>
                         <Col md="12" lg="6" xl="12">
-                    <Row>
-                        <Col>
                             <PositionExecute positionExecuteObj={positionExecuteObj} />
                         </Col>
                     </Row>

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+
 }
 
 .App-logo {
@@ -96,6 +97,15 @@ button.btn {
   transition: 1s;
   border-radius: 2px;
 }
+
+#footer {
+  margin-top: 10px;
+  padding: 25px;
+  background: rgb(32, 31, 52);
+  background: linear-gradient(132deg, rgba(32, 31, 52, 1) 0%, rgba(74, 74, 74, 1) 35%);
+  color: #f1f1f1;
+}
+
 @media (min-width: 768px) {
 
 
@@ -108,13 +118,27 @@ button.btn {
 
     padding-top: 10px;
   }
+
   * label {
     padding-top: 3px;
     padding-bottom: 3px;
   }
+
   .container-width {
     padding-left: 0 !important;
     padding-right: 0 !important;
     max-width: 745px;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    /* background-color: blue !important; */
+  }
+}
+
+@media (min-width: 1200px) {
+  body {
+    /* background-color: yellow !important; */
   }
 }
