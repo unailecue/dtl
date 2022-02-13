@@ -43,7 +43,7 @@ export default function PositionExecute({ positionExecuteObj }) {
         <div className="box">
             <h5>Executed</h5>
             <Row>
-                <Col sm="6">
+                <Col sm="6" lg="12" xl="6">
                     <Row>
                         <AddExecution executed={executed} setExecuted={setExecuted} typeValues={typeValues} />
                     </Row>
@@ -51,7 +51,9 @@ export default function PositionExecute({ positionExecuteObj }) {
                         <ExecutionResult executionResult={executionResult} />
                     </Row>
                 </Col>
-                <Col sm="6">
+                <Col sm="6" lg="12"
+                    lg={{ order: 'first', span: 12 }}
+                    xl="6">
                     <PlanningResults planningResults={planningResults} />
                 </Col>
 

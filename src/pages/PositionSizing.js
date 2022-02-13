@@ -328,19 +328,17 @@ export default function PositionSizing() {
     //todo useContext -> we need to use context to pass round values, to only have round in the visual components
 
     return (
-        <Container className={isLong ? "long" : "short"}>
-            <Row>
+        <Container className="container-width">
+            <Row className={isLong ? "long" : "short"}>
                 <Col md="3">
                     <PositionRules positionRulesObj={positionRulesObj} />
                 </Col>
-                <Col>
+                <Col md="9">
                     <Row>
-                        <Col>
+                        <Col md="12" lg="6" xl="12">
                             <PositionPlan positionPlanObj={positionPlanObj} />
                         </Col>
-                    </Row>
-                    <Row>
-                        <Col>
+                        <Col md="12" lg="6" xl="12">
                             <PositionExecute positionExecuteObj={positionExecuteObj} />
                         </Col>
                     </Row>

@@ -9,6 +9,7 @@ import PositionSizing from "./PositionSizing";
 // import TradingData from "./tradingData";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from "./Footer";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +34,7 @@ class App extends Component {
         <PositionSizing />
 
 
-        <hr />
+
         {/* <PostionSizingOld /> */}
         <ToastContainer
           position="bottom-right"
@@ -46,6 +47,7 @@ class App extends Component {
           draggable
           pauseOnHover
         />
+        <Footer />
       </div>
     );
   }
