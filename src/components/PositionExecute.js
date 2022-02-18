@@ -51,9 +51,10 @@ export default function PositionExecute({ positionExecuteObj }) {
                         <ExecutionResult executionResult={executionResult} />
                     </Row>
                 </Col>
-                <Col sm="6" lg="12"
+                <Col sm="6"
                     lg={{ order: 'first', span: 12 }}
-                    xl="6">
+                    xl={{ order: 'last', span: 6 }}
+                >
                     <PlanningResults planningResults={planningResults} />
                 </Col>
 
