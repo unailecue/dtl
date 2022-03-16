@@ -7,6 +7,7 @@ import PositionExecute from '../components/PositionExecute';
 import utils from '../utils/utils';
 import { useSessionStorage } from "../customHooks/useStorage"
 
+
 const LOCAL_STORAGE_INIT_VALUE = "storage.";
 
 export default function PositionSizing() {
@@ -79,6 +80,7 @@ export default function PositionSizing() {
     useEffect(() => {
         setisLongMultiplier(isLong ? 1 : -1)
     }, [isLong]);
+
 
     //* Unify objects by component
     const positionRulesObj = { MaxSizeObj, PositionTypeObj, MaxLossObj, RewardObj, RiskObj }
@@ -324,9 +326,7 @@ export default function PositionSizing() {
         setRelationRiskReward(plannedRiskRewardTemp);
 
     }
-    // CALCULATION AREA
-    //todo useContext -> we need to use context to pass round values, to only have round in the visual components
-
+    // CALCULATION AREA END
     return (
         <Container className="container-width">
             <Row className={isLong ? "long" : "short"}>

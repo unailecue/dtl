@@ -90,12 +90,19 @@
 
 button.btn:hover {
   border-radius: 10px;
-  transition: 3s;
+  transition: 0.3s;
+  /* border: 0; */
+  /* margin: 2px; */
 }
 
 button.btn {
-  transition: 1s;
-  border-radius: 2px;
+  transition: 0.3s;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.27);
+}
+
+.btn-link {
+  border: 0px !important;
 }
 
 #footer {

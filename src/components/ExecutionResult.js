@@ -1,33 +1,33 @@
 import React from 'react'
-
 import ExecutionValue from './ExecutionValue'
 import { Row, Col } from 'react-bootstrap';
-import { Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const TITLE = <Trans>Trades</Trans>
-const SHARES_LABEL = <Trans>Shares</Trans>
-const PRICE_LABEL = <Trans>Price</Trans>
-const NO_TRADES_ADDED = <Trans>Waiting for trades ...</Trans>
+const TITLE = "Trades"
+const SHARES_LABEL = "Shares"
+const PRICE_LABEL = "Price"
+const NO_TRADES_ADDED = "Waiting for trades ..."
 
 
 export default function ExecutionResult({ executionResult }) {
+    const { t } = useTranslation();
     const executed = executionResult.executed;
     return (
         <div>
             <div className="personal-box-shadow">
                 <h5>
-                    {TITLE}
+                    {t(TITLE)}
                 </h5>
                 <Row>
                     <Col className="mb-3 align-items-center">
-                        {PRICE_LABEL}
+                        {t(PRICE_LABEL)}
                     </Col>
                     <Col className="mb-3 align-items-center">
-                        {SHARES_LABEL}
+                        {t(SHARES_LABEL)}
                     </Col>
                     <Col className="mb-3 align-items-center">
                     </Col>
-                    {executed.length === 0 ? <div>{NO_TRADES_ADDED}</div>
+                    {executed.length === 0 ? <div>{t(NO_TRADES_ADDED)}</div>
                         : executed.map((values) => {
                             return <ExecutionValue executionValue={executionResult} key={values.id} values={values} />
                         })}

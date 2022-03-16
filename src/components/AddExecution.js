@@ -2,26 +2,33 @@ import React, { useRef, useEffect } from 'react'
 import { v4 as uniqueId } from "uuid";
 import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
 import * as utils from "../utils/utils";
-import { Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const confirmationValues = {
-    title: <Trans>Are you sure?</Trans>,
-    text: <Trans>You won't be able to revert this!</Trans>,
-    confirmButtonText: <Trans>Yes, delete it!</Trans>,
-    cancelButtonText: <Trans>Cancel</Trans>,
-    deletedTitle: <Trans>Deleted!</Trans>,
-    deletedText: <Trans>Your inputs has been deleted.</Trans>
+let confirmationValues = {
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "Cancel",
+    deletedTitle: "Deleted!",
+    deletedText: "Your inputs has been deleted."
 };
-const TITLE = <Trans>Add trade</Trans>;
-const DELETE_ALL_TEXT = <Trans>delete all</Trans>;
-const SHARES_LABEL = <Trans>Shares</Trans>;
-const PRICE_LABEL = <Trans>Price</Trans>;
+const TITLE = "Add trade";
+const DELETE_ALL_TEXT = "delete all";
+const SHARES_LABEL = "Shares";
+const PRICE_LABEL = "Price";
 
 export default function AddExecution({ executed, setExecuted, typeValues }) {
-
+    const { t } = useTranslation();
     const isLong = typeValues.isLong;
     const buyButton = typeValues.buyButton;
     const sellButton = typeValues.sellButton;
+
+    confirmationValues.title = t(confirmationValues.title)
+    confirmationValues.text = t(confirmationValues.text)
+    confirmationValues.confirmButtonText = t(confirmationValues.confirmButtonText)
+    confirmationValues.cancelButtonText = t(confirmationValues.cancelButtonText)
+    confirmationValues.deletedTitle = t(confirmationValues.deletedTitle)
+    confirmationValues.deletedText = t(confirmationValues.deletedText)
 
     const sharesInput = useRef()
     const priceInput = useRef()
@@ -61,18 +68,18 @@ export default function AddExecution({ executed, setExecuted, typeValues }) {
                 <Row>
                     <Col>
                         <h5>
-                            {TITLE}
+                            {t(TITLE)}
                         </h5>
                     </Col>
                     <Col className="align-right">
-                        <Button className="justify-content-end delete-all" variant="link" onClick={handleDeleteExecutions} >{DELETE_ALL_TEXT}</Button>
+                        <Button className="justify-content-end delete-all" variant="link" onClick={handleDeleteExecutions} >{t(DELETE_ALL_TEXT)}</Button>
                     </Col>
                 </Row>
                 <Row>
                     <Col xs="6">
                         <Form.Group as={Row} className="mb-3 align-items-center">
                             <Col>
-                                {PRICE_LABEL}
+                                {t(PRICE_LABEL)}
                                 <InputGroup>
                                     <Form.Control type="number" ref={priceInput} />
                                     <InputGroup.Text> $/sh</InputGroup.Text>
@@ -83,7 +90,7 @@ export default function AddExecution({ executed, setExecuted, typeValues }) {
                     <Col xs="6">
                         <Form.Group as={Row} className="mb-3 align-items-center">
                             <Col>
-                                {SHARES_LABEL}
+                                {t(SHARES_LABEL)}
                                 <InputGroup>
                                     <Form.Control type="number" ref={sharesInput} />
                                     <InputGroup.Text> sh</InputGroup.Text>
@@ -93,12 +100,12 @@ export default function AddExecution({ executed, setExecuted, typeValues }) {
                     </Col>
                     <Col xs="6" className="center">
                         <div className="d-grid gap-2">
-                            <Button className="add-button" variant={isLong ? "success" : "danger"} onClick={handleBuyExecution} >{buyButton}</Button>
+                            <Button className="add-button" variant={isLong ? "success" : "danger"} onClick={handleBuyExecution} >{t(buyButton)}</Button>
                         </div>
                     </Col>
                     <Col xs="6 " className="center">
                         <div className="d-grid gap-2">
-                            <Button className="add-button" variant="secondary" onClick={handleSellExecution} >{sellButton}</Button>
+                            <Button className="add-button" variant="secondary" onClick={handleSellExecution} >{t(sellButton)}</Button>
                         </div>
                     </Col>
                 </Row>

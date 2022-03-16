@@ -3,25 +3,27 @@ import { Row, Col } from 'react-bootstrap';
 import AddExecution from './AddExecution';
 import ExecutionResult from './ExecutionResult';
 import PlanningResults from './PlanningResults';
-import { Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const PLANNIN_RESULT_TITLE = <Trans>Plan results executed</Trans>
-const addButtonTextLong = <Trans>Buy</Trans>;
-const addButtonTextShort = <Trans>Short</Trans>
-const sellButtonTextLong = <Trans>Sell</Trans>
-const sellButtonTextShort = <Trans>Cover</Trans>
+const PLANNIN_RESULT_TITLE = "Plan results executed"
+const ADD_BUTTOM_TEXT_LONG = "Buy";
+const ADD_BUTTOM_TEXT_SHORT = "Short"
+const SELL_BUTTON_TEXT_LONG = "Sell"
+const SELL_BUTTON_TEXT_SHORT = "Cover"
+const HEADING_POSITION_EXECUTED = "Executed"
 
 export default function PositionExecute({ positionExecuteObj }) {
-    const [ButtonTextBuyValue, setButtonTextBuyValue] = useState(addButtonTextLong)
-    const [ButtonTextSellValue, setButtonTextSellValue] = useState(sellButtonTextLong)
+    const { t } = useTranslation();
+    const [ButtonTextBuyValue, setButtonTextBuyValue] = useState(ADD_BUTTOM_TEXT_LONG)
+    const [ButtonTextSellValue, setButtonTextSellValue] = useState(SELL_BUTTON_TEXT_LONG)
     const isLong = positionExecuteObj.isLong;
     useEffect(() => {
         if (isLong === true) {
-            setButtonTextBuyValue(addButtonTextLong)
-            setButtonTextSellValue(sellButtonTextLong)
+            setButtonTextBuyValue(ADD_BUTTOM_TEXT_LONG)
+            setButtonTextSellValue(SELL_BUTTON_TEXT_LONG)
         } else {
-            setButtonTextBuyValue(addButtonTextShort)
-            setButtonTextSellValue(sellButtonTextShort)
+            setButtonTextBuyValue(ADD_BUTTOM_TEXT_SHORT)
+            setButtonTextSellValue(SELL_BUTTON_TEXT_SHORT)
         }
     }, [isLong])
 
@@ -41,7 +43,7 @@ export default function PositionExecute({ positionExecuteObj }) {
 
     return (
         <div className="box">
-            <h5>Executed</h5>
+            <h5>{t(HEADING_POSITION_EXECUTED)}</h5>
             <Row>
                 <Col sm="6" lg="12" xl="6">
                     <Row>

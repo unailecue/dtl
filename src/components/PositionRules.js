@@ -2,23 +2,22 @@ import React, { useState, useEffect } from 'react'
 import PositionType from './PositionType'
 import { Row, Container } from 'react-bootstrap';
 import PositionRulesInput from './PositionRulesInput';
-import { Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Alert from 'react-bootstrap/Alert'
 
 
-const TITLE = <Trans>Rules</Trans>;
-const SHORT_VALIDATION_MESSAGE = <Trans>In Short the risk level should be higher than reward level</Trans>;
-const LONG_VALIDATION_MESSAGE = <Trans>In Long reward level should be higher than risk level</Trans>;
-const MAX_SIZE_OBJ = { name: <Trans>Max Size</Trans>, onlyDolarSymbol: true };
-const MAX_LOSS_OBJ = { name: <Trans>Max Loss</Trans>, onlyDolarSymbol: true };
-const REWARD_OBJ = { name: <Trans>Reward level price</Trans>, onlyDolarSymbol: true };
-const RISK_OBJ = { name: <Trans>Risk level price</Trans>, onlyDolarSymbol: true };
+const TITLE = "Rules";
+const SHORT_VALIDATION_MESSAGE = "In Short the risk level should be higher than reward level";
+const LONG_VALIDATION_MESSAGE = "In Long reward level should be higher than risk level";
+const MAX_SIZE_OBJ = { name: "Max Size", onlyDolarSymbol: true };
+const MAX_LOSS_OBJ = { name: "Max Loss", onlyDolarSymbol: true };
+const REWARD_OBJ = { name: "Reward level price", onlyDolarSymbol: true };
+const RISK_OBJ = { name: "Risk level price", onlyDolarSymbol: true };
 
 
 export default function PositionRules({ positionRulesObj }) {
-
+    const { t } = useTranslation();
     const [showAlert, setShowAlert] = useState(false);
-
     const positionType = positionRulesObj.PositionTypeObj;
     const MaxSize = { ...positionRulesObj.MaxSizeObj, ...MAX_SIZE_OBJ };
     const MaxLoss = { ...positionRulesObj.MaxLossObj, ...MAX_LOSS_OBJ };
@@ -41,7 +40,7 @@ export default function PositionRules({ positionRulesObj }) {
         <div className="box">
             <Container>
                 <h3>
-                    {TITLE}
+                    {t(TITLE)}
                 </h3>
                 <hr />
                 <Row>
@@ -56,10 +55,9 @@ export default function PositionRules({ positionRulesObj }) {
                 </Row>
                 <hr />
                 <Alert variant="danger" hidden={!showAlert}>
-                    {isLong ? LONG_VALIDATION_MESSAGE : SHORT_VALIDATION_MESSAGE}
+                    {isLong ? t(LONG_VALIDATION_MESSAGE) : t(SHORT_VALIDATION_MESSAGE)}
                 </Alert>
-                {
-                    //*to top the reward only in long
+                {//*to top the reward only in long
                     isLong &&
                     <Row>
                         <PositionRulesInput data={Reward} />
@@ -68,8 +66,7 @@ export default function PositionRules({ positionRulesObj }) {
                 <Row>
                     <PositionRulesInput data={Risk} />
                 </Row>
-                {
-                    //*to put reward on bottom in short
+                {//*to put reward on bottom in short
                     !isLong &&
                     <Row>
                         <PositionRulesInput data={Reward} />

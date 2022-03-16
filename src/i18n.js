@@ -12,8 +12,8 @@ const resources = {
             "Enable": "Habilitar",
             "Are you sure?": "¿Estas segur@?",
 
-            "LONG": "LARGO",
-            "SHORT": "CORTO",
+            "Long": "Largo",
+            "Short": "Corto",
             "Max Size $": "Posición Máxima $",
             "Risk Level $/sh": "Nivel de Riesgo $/Sh",
             "Reward Level $/Sh": "Nivel de Recompensa $/Sh",
@@ -35,6 +35,11 @@ const resources = {
             "COVER": "CUBRIR",
             "Edit": "Editar",
             "TRADES RESULT": "RESULTADOS DEL TRADE",
+            "Give us your feedback": " En que podemos mejorar",
+            "Spanish": "Español",
+            "English": "Inglés",
+            "Rules": "Reglas",
+            "Cancel": "Cancelar",
         }
     }
 };
