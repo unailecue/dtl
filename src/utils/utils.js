@@ -12,8 +12,6 @@ const ROUND = {
 }
 const PRINT_VALIDATIONS = false;
 
-
-
 module.exports = {
     roundBy(num, round) {
         return num.toFixed(round)
@@ -31,7 +29,13 @@ module.exports = {
         return num.toFixed(ROUND.relationRiskReward)
     },
     abs(num) {
-        return Math.abs(parseFloat(num));
+        let number = this.forceDot(num)
+        return Math.abs(parseFloat(number));
+    },
+    forceDot(numero) {
+        let num = numero;
+        if (num.includes(",")) num = num.replace(",", ".")
+        return num
     },
     checkIfHaveValidPositiveNumber(number) {
         if (!this.checkIfHaveValidNumber(number)) return false
