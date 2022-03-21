@@ -91,18 +91,23 @@
 button.btn:hover {
   border-radius: 10px;
   transition: 0.3s;
+
   /* border: 0; */
   /* margin: 2px; */
+  box-shadow: 0 0 2px 1px #444444;
 }
 
 button.btn {
   transition: 0.3s;
   border-radius: 10px;
+  box-shadow: none;
+  /* opacity: 0; */
   border: 2px solid rgba(0, 0, 0, 0.27);
 }
 
-.btn-link {
-  border: 0px !important;
+button.btn.btn-link {
+  border: 0px;
+  box-shadow: none;
 }
 
 #footer {

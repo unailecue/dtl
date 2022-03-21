@@ -29,12 +29,16 @@ module.exports = {
         return num.toFixed(ROUND.relationRiskReward)
     },
     abs(num) {
-        let number = this.forceDot(num)
-        return Math.abs(parseFloat(number));
+        return Math.abs(parseFloat(num));
     },
-    forceDot(numero) {
-        let num = numero;
+    forceDot(number) {
+        let num = number;
         if (num.includes(",")) num = num.replace(",", ".")
+        return num
+    },
+    forceColon(number) {
+        let num = number;
+        if (num.includes(".")) num = num.replace(".", ",")
         return num
     },
     checkIfHaveValidPositiveNumber(number) {
