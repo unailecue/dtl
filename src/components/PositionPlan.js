@@ -11,7 +11,7 @@ export default function PositionPlan({ positionPlanObj }) {
     const { t } = useTranslation();
     const planningInput = positionPlanObj.planningInput;
     const planningResults = positionPlanObj.planningResults;
-    planningResults.title = PLANNING_RESULT_TITLE;
+    planningResults.title = t(PLANNING_RESULT_TITLE);
     return (
         <div className="box">
             <h5>{t(PLANNING_TITLE)}</h5>

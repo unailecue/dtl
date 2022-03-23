@@ -34,7 +34,7 @@ export default function PositionExecute({ positionExecuteObj }) {
     const DeleteStoredExecute = positionExecuteObj.DeleteStoredExecute;
     const setExecuted = positionExecuteObj.setExecuted;
     const planningResults = positionExecuteObj.planningResults;
-    planningResults.title = PLANNIN_RESULT_TITLE;
+    planningResults.title = t(PLANNIN_RESULT_TITLE);
     const executionResult = {
         typeValues, executed, setExecuted, ChangeStoredExecute, DeleteStoredExecute,
     }
