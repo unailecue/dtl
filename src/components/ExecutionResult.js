@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ExecutionValue from './ExecutionValue'
 import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,16 @@ const NO_TRADES_ADDED = "Waiting for trades ..."
 export default function ExecutionResult({ executionResult }) {
     const { t } = useTranslation();
     const executed = executionResult.executed;
+    const [invertedArray, setInvertedArray] = useState([]);//value that help us to show the executions in inverted order
+    useEffect(() => { //every time execution change we invert the array for the visualization
+        invertExecutions();
+    }, [executed]);
+    function invertExecutions() {
+        let invertedArrayTemp = []
+        for (var i = executed.length - 1; i >= 0; i--) invertedArrayTemp.push(executed[i]);
+        setInvertedArray(invertedArrayTemp)
+    }
+
     return (
         <div>
             <div className="personal-box-shadow">
@@ -28,7 +38,7 @@ export default function ExecutionResult({ executionResult }) {
                     <Col className="mb-3 align-items-center">
                     </Col>
                     {executed.length === 0 ? <div>{t(NO_TRADES_ADDED)}</div>
-                        : executed.map((values) => {
+                        : invertedArray.map((values) => {
                             return <ExecutionValue executionValue={executionResult} key={values.id} values={values} />
                         })}
                 </Row>
