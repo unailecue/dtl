@@ -88,27 +88,67 @@
   text-align: center;
 }
 
-button.btn:hover {
-  border-radius: 10px;
-  transition: 0.3s;
+button.btn,
+label.btn,
+a.btn {
 
-  /* border: 0; */
-  /* margin: 2px; */
-  box-shadow: 0 0 2px 1px #444444;
-}
-
-button.btn {
   transition: 0.3s;
   border-radius: 10px;
   box-shadow: none;
-  /* opacity: 0; */
   border: 2px solid rgba(0, 0, 0, 0.27);
+
+
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  background-position-x: right;
+  margin-top: 10px;
+  border-radius: 3px;
+  transition: background-size 500ms;
+}
+
+button.btn {
+  border: none;
+}
+
+button.btn-danger,
+label.btn-danger,
+label.btn-outline-danger {
+  background-image: linear-gradient(#dc3545, #ef4354);
+
+}
+
+button.btn-secondary,
+label.btn-secondary,
+a.btn-secondary {
+  background-image: linear-gradient(#6c757d, #747d85);
+}
+
+button.btn-success,
+label.btn-outline-success {
+  background-image: linear-gradient(#198754, #1a965c);
+}
+
+button.btn-dark {
+  background-image: linear-gradient(#212529, #292d32);
+}
+
+label.btn-outline-success:hover,
+label.btn-outline-danger:hover {
+  background-color: transparent;
+}
+
+button.btn:hover,
+label.btn:hover,
+a.btn:hover {
+  background-size: 100% 100%;
+  background-position-x: left;
 }
 
 button.btn.btn-link {
   border: 0px;
   box-shadow: none;
 }
+
 
 #footer {
   margin-top: 10px;
