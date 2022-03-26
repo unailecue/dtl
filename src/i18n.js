@@ -68,6 +68,7 @@ const resources = {
             "Yes, delete it!": "Si, eliminalo!",
             "Your feedback is important for us, if you want to tell us how can we get better please click here and fill the next form":
                 "Tu opinion es importante para nosotros, si quieres recomendarnos como podemos mejorar por favor da click aqui y danos la información en el siguiente formulario",
+            "Tutorial video": "Video tutorial"
         }
     }
 };

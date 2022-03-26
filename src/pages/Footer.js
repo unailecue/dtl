@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row, Col, Container, OverlayTrigger, Tooltip, Button, Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSessionStorage } from "../customHooks/useStorage"
 
+
+const TUTORIAL_VIDEO = "Tutorial video"
 const FEEDBACK_BUTTON_TEXT = "Give us your feedback"
 const FEEDBACK_TOOLTIP_TEXT = "Your feedback is important for us, if you want to tell us how can we get better please click here and fill the next form";
 const FEEDBACK_URL = "https://app.bluecatforms.com/XNNbzW5G/new-form"
 
 
 
-export default function Footer() {
+export default function Footer({ setTutorialVideoVisible }) {
+
     const [Lang, setLang, removeLang] = useSessionStorage(`lang`, "")
     const { t, i18n } = useTranslation();
 
@@ -35,9 +38,10 @@ export default function Footer() {
 
     return (
         <div id='footer'>
+
             <Row>
                 <Col>
-                    {/* TBD */}
+                    <Button variant="secondary" onClick={() => setTutorialVideoVisible(true)}>{t(TUTORIAL_VIDEO)}</Button>
                 </Col>
                 <Col>
                     <OverlayTrigger
