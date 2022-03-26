@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+
 }
 
 .App-logo {
@@ -87,12 +88,188 @@
   text-align: center;
 }
 
-button.btn:hover {
+button.btn,
+label.btn,
+a.btn {
+
+  transition: 0.3s;
   border-radius: 10px;
-  transition: 3s;
+  box-shadow: none;
+  border: 2px solid rgba(0, 0, 0, 0.27);
+
+
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  background-position-x: right;
+  margin-top: 10px;
+  border-radius: 3px;
+  transition: background-size 500ms;
 }
 
 button.btn {
+  border: none;
+}
+
+button.btn-danger,
+label.btn-danger,
+label.btn-outline-danger {
+  background-image: linear-gradient(#dc3545, #ef4354);
+
+}
+
+button.btn-secondary,
+label.btn-secondary,
+a.btn-secondary {
+  background-image: linear-gradient(#6c757d, #747d85);
+}
+
+button.btn-success,
+label.btn-outline-success {
+  background-image: linear-gradient(#198754, #1a965c);
+}
+
+button.btn-dark {
+  background-image: linear-gradient(#212529, #292d32);
+}
+
+label.btn-outline-success:hover,
+label.btn-outline-danger:hover {
+  background-color: transparent;
+}
+
+button.btn:hover,
+label.btn:hover,
+a.btn:hover {
+  background-size: 100% 100%;
+  background-position-x: left;
+}
+
+button.btn.btn-link {
+  border: 0px;
+  box-shadow: none;
+}
+
+
+#footer {
+  margin-top: 10px;
+  padding: 25px;
+  background: rgb(32, 31, 52);
+  background: linear-gradient(132deg, rgba(32, 31, 52, 1) 0%, rgba(74, 74, 74, 1) 35%);
+  color: #f1f1f1;
+}
+
+@media (min-width: 768px) {
+
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+
+    padding-top: 10px;
+  }
+
+  * label {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+
+  .container-width {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 745px;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    /* background-color: blue !important; */
+  }
+}
+
+@media (min-width: 1200px) {
+  body {
+    /* background-color: yellow !important; */
+  }
+}
+
+div#video-container-full {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  /* background-color: black; */
+  background-color: rgba(53, 53, 53, 0.5);
+  z-index: 99;
+  top: 00;
+  overflow: hidden;
+  vertical-align: middle;
   transition: 1s;
-  border-radius: 2px;
+}
+
+video {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#closeVideo {
+  position: absolute;
+  padding: 15px;
+  top: calc(50% - 250px);
+  transform: translateY(-50%);
+
+  right: calc(50% - 466px);
+  transform: translatex(50%);
+
+}
+
+.close {
+  position: absolute;
+  right: 32px;
+  top: 32px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.3;
+}
+
+.close:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.close:before,
+.close:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 55px;
+  width: 4px;
+  background-color: rgb(0, 0, 0);
+}
+
+.close:before {
+  transform: rotate(40deg);
+  transition: 0.3s;
+}
+
+.close:after {
+  transform: rotate(-40deg);
+  transition: 0.3s;
+}
+
+.close:hover:before {
+  transform: rotate(50deg);
+  transition: 0.3s;
+}
+
+.close:hover:after {
+  transform: rotate(-50deg);
+  transition: 0.3s;
+}
+
+#tutorial-video {
+  width: 750px;
+  height: 500px
 }

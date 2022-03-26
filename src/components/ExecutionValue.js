@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react'
 import { Button, Form, Row, Col } from 'react-bootstrap';
-import { Trans } from 'react-i18next';
-const enableButtonText = <Trans>Edit</Trans>;
-const deleteButton = <Trans>Delete</Trans>
+import { useTranslation } from 'react-i18next';
+
+const ENABLE_BUTTON_TEXT = "Edit";
+const DELETE_BUTTON = "Delete"
 
 
 export default function ExecutionValue({ executionValue, values }) {
-
+    const { t } = useTranslation();
 
     const sharesInput = useRef()
     const priceInput = useRef()
@@ -73,14 +74,14 @@ export default function ExecutionValue({ executionValue, values }) {
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Button className="edit" onClick={handleUnlock} variant="secondary" hidden={!isLocked}>{enableButtonText}</Button>
-                    <Button className="edit" onClick={handleEditBuy} variant={isLong ? "success" : "danger"} hidden={isLocked}>{buyButton}</Button>
+                    <Button className="edit" onClick={handleUnlock} variant="secondary" hidden={!isLocked}>{t(ENABLE_BUTTON_TEXT)}</Button>
+                    <Button className="edit" onClick={handleEditBuy} variant={isLong ? "success" : "danger"} hidden={isLocked}>{t(buyButton)}</Button>
                 </Col>
                 <Col hidden={isLocked}>
-                    <Button className="edit" onClick={handleEditSell} variant="secondary" hidden={isLocked}>{sellButton}</Button>
+                    <Button className="edit" onClick={handleEditSell} variant="secondary" hidden={isLocked}>{t(sellButton)}</Button>
                 </Col>
                 <Col hidden={isLocked}>
-                    <Button className="edit" onClick={handleDelete} variant="warning" hidden={isLocked}>{deleteButton}</Button>
+                    <Button className="edit" onClick={handleDelete} variant="warning" hidden={isLocked}>{t(DELETE_BUTTON)}</Button>
                 </Col>
             </Row>
 
