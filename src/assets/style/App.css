@@ -179,7 +179,7 @@ button.btn.btn-link {
   .container-width {
     padding-left: 0 !important;
     padding-right: 0 !important;
-    max-width: 745px;
+    /* max-width: 745px; */
   }
 }
 
