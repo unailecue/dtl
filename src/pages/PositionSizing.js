@@ -19,6 +19,8 @@ export default function PositionSizing() {
     const [Risk, setRisk, removeRisk] = useSessionStorage(`${LOCAL_STORAGE_INIT_VALUE}Risk`, "")
 
 
+
+
     const [AveragePrice, setAveragePrice] = useState(0);
     const [SharesTotals, setSharesTotals] = useState(0);
     const [SizeAvgPrice, setSizeAvgPrice] = useState(0);
