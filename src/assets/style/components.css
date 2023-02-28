@@ -4,6 +4,12 @@
       url("../media/fonts/Pacifico-Regular.ttf") format("truetype");
       /* url("./font/AirbnbCerealLight.ttf") format("truetype"); */
   }
+@font-face {
+    font-family: "Play";   /*Can be any text*/
+    src: local("Play"),
+      url("../media/fonts/Play-Bold.ttf") format("truetype");
+      /* url("./font/AirbnbCerealLight.ttf") format("truetype"); */
+  }
 
 /* Header component */
 #main-header {
@@ -14,9 +20,10 @@
     font-family: "Oswald", sans-serif;
 }
 
-@media (max-width: 800px)
-.section-inner {
-    max-width: 92%;
+@media (max-width: 800px){
+    .section-inner {
+        max-width: 92%;
+    }
 }
 .header-inner {
     position: relative;
@@ -41,9 +48,9 @@
 }
 
 .site-title {
-    font-family: "Pacifico",sans-serif;
+    font-family: "Play",sans-serif;
     font-size: 40.5px;
-    font-wigth: 400;
+    font-weight: 400;
     text-align: center;
     text-shadow: 1px 1px 2px rgb(0 0 0 / 25%);
     transition: 0.5s;
@@ -84,9 +91,7 @@ transition: 0.5s;
     padding: 7px 10px;
     margin: 10px;
     border-radius: 25%;
-    border: 3px solid#ededed;
-
-
+    border: 3px solid #ededed;
 }
 
 .button-container {
