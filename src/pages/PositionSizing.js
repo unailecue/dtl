@@ -86,6 +86,7 @@ export default function PositionSizing() {
 
     //* Unify objects by component
     const positionRulesObj = { MaxSizeObj, PositionTypeObj, MaxLossObj, RewardObj, RiskObj }
+    //! aqui esta el error, buscar donde esta la formul DETONADA Y ATACAR AQUI
     const positionPlanObj = { planningResults: { averagePriceObj, sharesTotalsObj, sizeAvgPriceObj, plannedRewardObj, plannedLossObj, relationRiskRewardObj }, planningInput: { referenceEntryObj, referenceSharesObj, invalidValueReferenceEntry, isLong } };
     const positionExecuteObj = {
         isLong, executed, setExecuted, ChangeStoredExecute, DeleteStoredExecute,
@@ -143,14 +144,27 @@ export default function PositionSizing() {
 
     useEffect(() => {
         // Init validations
-        if (!utils.validateInputs("calcAveragePrice", [
+        //todo este es el UseEffect1
+
+
+        console.log('ReferenceShares', ReferenceShares)
+        console.log('AveragePriceExe', AveragePriceExe)
+        console.log('SizeAvgPriceExe', SizeAvgPriceExe)
+        let validation = !utils.validateInputs("calcAveragePrice", [
             { value: ReferenceShares, name: "ReferenceShares", type: 1 },
             { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
             { value: SizeAvgPriceExe, name: "SizeAvgPriceExe", type: 1 },
+        ])
+        console.log("esto es lo que devuelve la validaci'on", validation)
+
+        if (!utils.validateInputs("calcAveragePrice", [
+            { value: ReferenceShares, name: "ReferenceShares", type: 1 },
+            { value: AveragePriceExe, name: "AveragePriceExe", type: 1 },
+            // { value: SizeAvgPriceExe, name: "SizeAvgPriceExe", type: 1 },
         ])) return
         // End of validations
         calcAveragePrice();
-    }, [ReferenceShares, AveragePriceExe, SizeAvgPriceExe]);
+    }, [ReferenceEntry, ReferenceShares, AveragePriceExe, SizeAvgPriceExe]);
 
     useEffect(() => {
         // Init validations
@@ -227,7 +241,6 @@ export default function PositionSizing() {
     }
 
     function DeleteStoredExecute(id) {
-
         if (!utils.validationsCheckAllExecutions(executed, id, 0, isLong)) return false
         const Executed_temp = utils.arrayWithDiferentIdThan(executed, id)
         setExecuted(Executed_temp);
@@ -237,6 +250,8 @@ export default function PositionSizing() {
 
     // CALCULATION AREA
     function calcAveragePriceExe() {
+        console.log("entrando a funcion calcAveragePriceExe")
+        //! aqui es donde al parecer puede haber un error
         const newExecuted = [...executed];
         let tempAvg = 0;
         let tempTotalSh = 0;
@@ -246,8 +261,14 @@ export default function PositionSizing() {
             } else {
                 if (parseFloat(executed.shares) < 0) (tempAvg = ((tempAvg * tempTotalSh) + (parseFloat(executed.shares) * parseFloat(executed.price))) / (tempTotalSh + parseFloat(executed.shares)))
             }
+            console.log("1/ executed.shares", executed.shares)
+
             tempTotalSh += parseFloat(executed.shares);
+            console.log("2/ tempTotalSh", tempTotalSh)
         })
+        console.log("resultado de newExecuted", newExecuted)
+
+
         setAveragePriceExe(tempAvg);
         setSharesTotalsExe(tempTotalSh);
         setSizeAvgPriceExe((tempTotalSh * tempAvg) * isLongMultiplier);

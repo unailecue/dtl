@@ -64,13 +64,13 @@ module.exports = {
             const value = element.value;
             const name = element.name;
             const type = element.type;
-            if (type == 1) {
+            if (type === 1) {
                 if (!this.checkIfHaveValidNumber(value)) {
                     if (PRINT_VALIDATIONS) console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: yellow")
                     return false;
                 }
             }
-            if (type == 2) {
+            if (type === 2) {
                 if (!this.checkIfHaveValidPositiveNumber(value)) {
                     if (PRINT_VALIDATIONS) console.log(`%c ${funct}: validation not passed by ${name}, value ${value}`, "color: orange")
                     return false;
