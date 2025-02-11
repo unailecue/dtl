@@ -40,7 +40,9 @@ export default function PlanningInput({ planningInput }) {
                         </Form.Label>
                         <Col xs="12">
                             <InputGroup>
-                                <Form.Control type="number" ref={refEntry} onChange={handleChangeRefenceEntry} isInvalid={invalidValue} onKeyPress={handleKeyPress} />
+                                <Form.Control type="number" ref={refEntry} onChange={handleChangeRefenceEntry} isInvalid={invalidValue}
+                                // onKeyPress={handleKeyPress} 
+                                />
                                 <InputGroup.Text> $/sh</InputGroup.Text>
                                 <Form.Control.Feedback type="invalid">{t(RISK_REWARD_VALIDATION)}</Form.Control.Feedback>
                             </InputGroup>
